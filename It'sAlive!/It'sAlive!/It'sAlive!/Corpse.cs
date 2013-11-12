@@ -14,7 +14,7 @@ namespace It_sAlive_
 {
     class Corpse
     {
-        public Vector2 position = new Vector2(430, 560);
+        public Vector2 position;
         public float layer = 0.29f;
         private Texture2D tex;
         private Rectangle rect;
@@ -40,9 +40,26 @@ namespace It_sAlive_
         public bool alive = false;
         public bool talking = false;
 
-        public Corpse(Texture2D itemTex, List<MenuAction> deadMenuActions, List<MenuAction> aliveMenuActions)
+        // menu
+        public bool corpseMenu = false;
+        public bool menuOpen = false;
+        public bool menuMouseover = false;
+        private Vector2 menuPosition;
+        private MenuAction menuHighlightAction;
+        private List<MenuAction> menuActions;
+        private List<Tuple<string, Color, Color, Color>> actions;
+
+        private Rectangle menuRectangle;
+        private Texture2D dummyTexture;
+
+        private Color textColour;
+        private Color boxColour;
+        private Color lineColour;
+
+
+        public Corpse(Vector2 position,Texture2D itemTex, List<MenuAction> deadMenuActions, List<MenuAction> aliveMenuActions,GraphicsDevice graphicsDevice)
         {
-            
+            this.position = position;
             this.tex = itemTex;
             this.width = tex.Width/3;
             this.height = tex.Height/3;
@@ -51,12 +68,84 @@ namespace It_sAlive_
             this.rect.Height = height;
             this.aliveMenuActions = aliveMenuActions;
             this.deadMenuActions = deadMenuActions;
+
+            // menu text
+            dummyTexture = new Texture2D(graphicsDevice, 1, 1);
+            dummyTexture.SetData(new Color[] { Color.Gray });
         }
 
-        public void Update(GameTime gameTime, MenuAction dissect, MenuAction study,NumericalCounter longevity, NumericalCounter humanity, NumericalCounter lifeforce, Scientist scientist, MenuAction talk)
+        public void Update(GameTime gameTime, MenuAction dissect, MenuAction study,NumericalCounter longevity, NumericalCounter humanity, NumericalCounter lifeforce, Scientist scientist, MenuAction talk, Cursor cursor,List<MiniProgressBar> bars)
         {
             if (this.visible == true)
             {
+                MouseState mouseState = Mouse.GetState();
+
+                if (cursor.position.X >= position.X && cursor.position.X <= position.X + fwidth
+                           && cursor.position.Y >= position.Y && cursor.position.Y <= position.Y + height && visible == true && corpseMenu == false)
+                {
+
+                    cursor.corpseMouseover = true; // add object mouseover text
+
+                    // turn on menu when object is clicked
+
+                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                    {
+                        if (cursor.click == false)
+                        {
+                            corpseMenu = true;
+                            menuOpen = true;
+                            cursor.corpseMouseover = false;
+                        }
+
+                        cursor.click = true;
+
+                    }
+
+                    
+                }
+
+                if (corpseMenu == true)
+                {
+
+
+                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                    {
+                        if (cursor.click == false)
+                        {
+
+                            corpseMenu = false;
+
+                            if (menuMouseover == true)
+                            {
+                                if (scientist.walking == true)
+                                {
+                                    scientist.walking = false;
+                                    scientist.floorObject = null;
+                                    scientist.action = null;
+                                }
+
+                                else if (scientist.doing == true)
+                                {
+                                    scientist.doing = false;
+                                    scientist.corpseWork = false;
+                                    scientist.floorObject = null;
+                                    bars.Remove(scientist.progBar);
+                                    scientist.action = null;
+                                    scientist.animStart = true;
+                                }
+
+
+                                scientist.action = menuHighlightAction;
+                                scientist.corpseWork = true;
+                            }
+
+                        }
+
+                        cursor.click = true;
+                    }
+
+                }
+
 
                 timer += gameTime.ElapsedGameTime.Milliseconds;
                 rotTimer += gameTime.ElapsedGameTime.Milliseconds;
@@ -70,7 +159,7 @@ namespace It_sAlive_
                         rot -= 1;
                         dissect.research -= 18;
                         dissect.madness -= 10;
-                        
+
                     }
 
                     else
@@ -92,7 +181,7 @@ namespace It_sAlive_
                         visible = false;
                     }
 
-                    if (scientist.action == talk && scientist.doing == true   )
+                    if (scientist.action == talk && scientist.doing == true)
                     {
 
                         talking = true;
@@ -105,11 +194,11 @@ namespace It_sAlive_
                         anim = 1;
                         frames = nframes[1];
                     }
-                    
+
                 }
 
                 else
-                {                    
+                {
                     longevity.valueChange = 0;
 
                     anim = 0;
@@ -127,7 +216,7 @@ namespace It_sAlive_
                     study.count = 0;
                     this.visible = false;
                 }
-                
+
                 if (timer >= frate)
                 {
                     timer = 0;
@@ -137,18 +226,208 @@ namespace It_sAlive_
                         currentFrame = 0;
                     }
 
-                    rect.X = (3 - rot)*width + currentFrame* fwidth;
+                    rect.X = (3 - rot) * width + currentFrame * fwidth;
                     rect.Y = anim * height;
                 }
 
+
+
+                // menu setup
+
+                if (corpseMenu == true && menuOpen == true)
+                {
+                    menuPosition = cursor.position;
+                    menuOpen = false;
+
+                    // find longest string in menu
+
+                    int boxWidth = 0;
+                    actions = new List<Tuple<string, Color, Color, Color>> { };
+
+                    if (alive == false)
+                    {
+                        menuActions = deadMenuActions;
+
+                        foreach (MenuAction action in deadMenuActions)
+                        {  
+                            // add
+                            actions.Add(new Tuple<string, Color, Color, Color>(action.name, Color.White, Color.Gray, Color.DarkGray));
+
+                            if (action.name.Length > boxWidth)
+                            {
+                                boxWidth = action.name.Length; // set box width for below
+
+                            }
+                        }
+                    }
+
+                    if (alive == true)
+                    {
+                        menuActions = aliveMenuActions;
+                                                
+                        foreach (MenuAction action in aliveMenuActions)
+                        {
+                            // add
+                            actions.Add(new Tuple<string, Color, Color, Color>(action.name, Color.White, Color.Gray, Color.DarkGray));
+
+                            if (action.name.Length > boxWidth)
+                            {
+                                boxWidth = action.name.Length; // set box width for below
+
+                            }
+                        }
+                    }
+
+                    // boxes and outlines
+
+                    menuRectangle.Width = boxWidth * 12 + 10;  // set width to widest text from above
+                    menuRectangle.Height = 30;                  // menu item height spread
+                }
+
+                // menu update
+
+                if (corpseMenu == true)
+                {
+
+                    menuMouseover = false;
+                    Vector2 menuItemPosition = menuPosition;
+
+                    foreach (MenuAction action in menuActions)
+                    {
+
+
+                        // IF MOUSE-OVERED change colours, set to highlighted item
+
+                        if (cursor.position.X >= menuItemPosition.X && cursor.position.X < (menuItemPosition.X + menuRectangle.Width) && cursor.position.Y >= menuItemPosition.Y && cursor.position.Y < (menuItemPosition.Y + menuRectangle.Height))
+                        {
+                            textColour = Color.Black;
+                            boxColour = Color.LightGray;
+                            lineColour = Color.LimeGreen;
+
+                            menuHighlightAction = action;
+                            menuMouseover = true;
+                        }
+
+                        else
+                        {
+                            textColour = Color.White;
+                            boxColour = Color.Gray;
+                            lineColour = Color.DarkGray;
+                        }
+
+                        int index = menuActions.IndexOf(action);
+                        actions[index] = new Tuple<string, Color, Color, Color>(actions[index].Item1, textColour, boxColour, lineColour);
+
+                        if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                        {
+                            if (cursor.click == false)
+                            {
+                                corpseMenu = false;
+
+                                if (menuMouseover == true)
+                                {
+                                        if (scientist.walking == true)
+                                        {
+                                            scientist.walking = false;
+                                            scientist.floorObject = null;
+                                            scientist.action = null;
+                                        }
+
+                                        else if (scientist.doing == true)
+                                        {
+                                            scientist.doing = false;
+                                            scientist.corpseWork = false;
+                                            scientist.floorObject = null;
+                                            bars.Remove(scientist.progBar);
+                                            scientist.action = null;
+                                            scientist.animStart = true;
+                                        }
+
+                                        scientist.action = menuHighlightAction;
+                                        scientist.corpseWork = true;    
+                                    
+                                                                      
+                                }
+
+                            }
+
+                            cursor.click = true;
+                        }
+
+                        menuItemPosition = menuItemPosition + new Vector2(0, menuRectangle.Height);
+
+                    }
+                }
             }
         }
 
-        public void Render(SpriteBatch sbatch)
+        public void Render(SpriteBatch sbatch,SpriteFont font)
         {
+            // corpse
             if (visible == true)
             {
                 sbatch.Draw(tex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, layer);
+            }
+
+            // menu
+
+            if (corpseMenu == true)
+            {
+                Vector2 menuItemPosition = menuPosition;    // position of first text menu item
+
+                foreach (Tuple<string, Color, Color, Color> item in actions)
+                {
+                    textColour = item.Item2;
+                    boxColour = item.Item3;
+                    lineColour = item.Item4;
+
+                    string actionName = item.Item1;
+
+                    // text
+
+                    sbatch.DrawString(font, actionName, menuItemPosition + new Vector2(5, 0), textColour, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.13f);
+
+
+                    // text rectangle
+                    sbatch.Draw(dummyTexture, menuItemPosition, menuRectangle, boxColour, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.17f);
+
+                    // top line
+                    Tuple<Vector2, Vector2> line = new Tuple<Vector2, Vector2>(menuItemPosition, (menuItemPosition + new Vector2(menuRectangle.Width, 0)));
+
+                    float angle = (float)Math.Atan2(line.Item2.Y - line.Item1.Y, line.Item2.X - line.Item1.X);
+                    float length = Vector2.Distance(line.Item1, line.Item2);
+
+                    sbatch.Draw(dummyTexture, line.Item1 + new Vector2(0, 0), null, lineColour, angle, Vector2.Zero, new Vector2(length, 3.0f), SpriteEffects.None, 0.15f);
+
+                    // right line
+                    Tuple<Vector2, Vector2> line2 = new Tuple<Vector2, Vector2>((menuItemPosition + new Vector2(menuRectangle.Width, menuRectangle.Height)), (menuItemPosition + new Vector2(menuRectangle.Width, 0)));
+
+                    float angle2 = (float)Math.Atan2(line2.Item2.Y - line2.Item1.Y, line2.Item2.X - line2.Item1.X);
+                    float length2 = Vector2.Distance(line2.Item1, line2.Item2);
+
+                    sbatch.Draw(dummyTexture, line2.Item1 + new Vector2(0, 0), null, lineColour, angle2, Vector2.Zero, new Vector2(length2, 3.0f), SpriteEffects.None, 0.15f);
+
+                    // left line
+                    Tuple<Vector2, Vector2> line3 = new Tuple<Vector2, Vector2>(menuItemPosition, (menuItemPosition + new Vector2(0, menuRectangle.Height)));
+
+                    float angle3 = (float)Math.Atan2(line3.Item2.Y - line3.Item1.Y, line3.Item2.X - line3.Item1.X);
+                    float length3 = Vector2.Distance(line3.Item1, line3.Item2);
+
+                    sbatch.Draw(dummyTexture, line3.Item1 + new Vector2(0, 0), null, lineColour, angle3, Vector2.Zero, new Vector2(length3, 3.0f), SpriteEffects.None, 0.15f);
+
+                    // bottom line
+                    Tuple<Vector2, Vector2> line4 = new Tuple<Vector2, Vector2>((menuItemPosition + new Vector2(menuRectangle.Width, menuRectangle.Height)), (menuItemPosition + new Vector2(0, menuRectangle.Height)));
+
+                    float angle4 = (float)Math.Atan2(line4.Item2.Y - line4.Item1.Y, line4.Item2.X - line4.Item1.X);
+                    float length4 = Vector2.Distance(line4.Item1, line4.Item2);
+
+                    sbatch.Draw(dummyTexture, line4.Item1 + new Vector2(0, 0), null, lineColour, angle4, Vector2.Zero, new Vector2(length4, 3.0f), SpriteEffects.None, 0.15f);
+
+                    // set to height of next text item
+                    menuItemPosition += new Vector2(0, menuRectangle.Height);
+
+                }
+
             }
         }
     }

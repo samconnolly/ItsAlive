@@ -33,12 +33,13 @@ namespace It_sAlive_
 
         public bool walking = false;
         public bool doing = false;
-        public bool corpseWork = false;
         public bool animStart = true;
         public bool digging = false;
         public bool dug = false;
         public bool outside = false;
         public bool corpseCarrying = false;
+        public bool animating = false;
+        public bool twoWork = false;
         
 
         public Vector2 gridPosition = Vector2.Zero;
@@ -54,12 +55,17 @@ namespace It_sAlive_
         public Vector2 offset = Vector2.Zero;
         public int pathStep = 0;
 
+        public Grid grid;
+        public Path path;
+        public List<Vector2> drawPath;
+
         public MenuAction action = null;
         public FloorObject floorObject = null;
+        public MiniProgressBar progBar;
 
         // The public instance of the object
 
-        public Assistant(Texture2D texture, Vector2 startGridPosition, Grid grid)
+        public Assistant(Texture2D texture, Vector2 startGridPosition, Grid grid, ReachableArea reachable)
         {
 
             this.charTex = texture;
@@ -69,6 +75,11 @@ namespace It_sAlive_
             this.gridPosition = startGridPosition;
             this.defaultGridPosition = startGridPosition;
             this.layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y;
+
+            // walking path
+            this.path = new Path(reachable);
+            this.grid = grid;
+
             // Create rectangle for animation
 
             rect.X = 0;
@@ -79,25 +90,50 @@ namespace It_sAlive_
 
         }
 
+        // dig up corpse!
         public void DigUpCorpse(Corpse corpse)
         {
             if (corpse.visible == false)
             {
                 digging = true;
+                walking = true;
+                drawPath = path.PathList(gridPosition, doorLocation, grid);
+                pathStep = 1;
+                walkingTarget = drawPath[pathStep];
                 corpse.rot = 3;
             }          
 
         }
 
 
-        public List<Vector2> Update(GameTime gametime, GraphicsDevice graphicsDevice, Grid grid, Cursor cursor, Path path, List<Vector2> drawPath, NumericalCounter research, NumericalCounter money, 
-                                        NumericalCounter madness, List<MiniProgressBar> proglist, Corpse corpse,NonInteractive door,NonInteractive digger)
+        public void Animate(Resurrect resurrect)
+        {
+            animating = true;
+            walking = true;
+            drawPath = path.PathList(gridPosition, resurrect.assPos, grid);
+            pathStep = 1;
+            walkingTarget = drawPath[pathStep];
+
+        }
+
+        
+        // carryng a corpse back
+        public void CarryCorpse()             
+        {
+            corpseCarrying = true;
+            walking = true;
+            drawPath = path.PathList(gridPosition,tableLocation , grid);
+            pathStep = 1;
+            walkingTarget = drawPath[pathStep];
+        }
+
+        public void Update(GameTime gametime, GraphicsDevice graphicsDevice, Grid grid, Cursor cursor, NumericalCounter research, NumericalCounter money, 
+                                        NumericalCounter madness, List<MiniProgressBar> proglist, Corpse corpse,NonInteractive door,NonInteractive digger, Resurrect resurrect, NonInteractive Switch,
+                                        NumericalCounter humanity, NumericalCounter longevity, Random random, ReachableArea reachable)
         {
 
-
-            // update position from grid position
-
-
+            path.Update(reachable);            
+            
             if (outside == false)
             {
                 position = grid.CartesianCoords(gridPosition);
@@ -114,11 +150,11 @@ namespace It_sAlive_
 
                 
 
-                if (gridPosition != cursor.menuObject.gridPosition + new Vector2(0, -1))
+                if (gridPosition != floorObject.gridPosition + new Vector2(0, -1))
                 {
                     walking = true;
 
-                    drawPath = path.PathList(gridPosition, cursor.menuObject.gridPosition + new Vector2(0, -1), grid);
+                    drawPath = path.PathList(gridPosition, floorObject.gridPosition + new Vector2(0, -1), grid);
 
                     pathStep = 1;
 
@@ -133,28 +169,10 @@ namespace It_sAlive_
                     position = grid.CartesianCoords(gridPosition);
                 }
 
-                //cursor.scientistAction = "none";
             }
 
-            // to dig up corpse
-
-            else if (digging == true && walking == false && doing == false)
-            {
-                walking = true;
-                drawPath = path.PathList(gridPosition, doorLocation, grid);
-                pathStep = 1;
-                walkingTarget = drawPath[pathStep];
-            }
-
-            // carryng a corpse
-
-            else if (corpseCarrying == true && walking == false && doing == false)
-            {
-                walking = true;
-                drawPath = path.PathList(gridPosition,tableLocation , grid);
-                pathStep = 1;
-                walkingTarget = drawPath[pathStep];
-            }
+            
+            
 
             else if (gridPosition != defaultGridPosition && walking == false && doing == false)
             {
@@ -163,8 +181,10 @@ namespace It_sAlive_
                 pathStep = 1;
                 walkingTarget = drawPath[pathStep];
             }
+
+            
                         
-            // if he's walkig, make him walk!
+            // if he's walking, make him walk!
 
             if (walking == true)
             {
@@ -198,8 +218,7 @@ namespace It_sAlive_
 
                     else
                     {
-                        walking = false;
-                        
+                        walking = false;                        
                         doing = true;
                         currentFrame = 0;
                         gridPosition = drawPath[pathStep - 1];
@@ -266,9 +285,8 @@ namespace It_sAlive_
 
                 // start up menu action if doing is done, animate doing
                 if (doing == true)
-                {
-
-                    
+                {    
+                    // opening door
                     if (digging == true)
                     {
                         anim = 4;
@@ -277,10 +295,7 @@ namespace It_sAlive_
                         {
                             door.SetAnim(1);
                         }
-
-                       
-                        
-
+                           
                         if (currentFrame++ == 2)
                         {
                             
@@ -288,32 +303,28 @@ namespace It_sAlive_
 
                             if (dug == true)
                             {
-                                corpseCarrying = true;
+                                CarryCorpse();
                                 doing = false;
                                 dug = false;
-
                             }
 
                             else
                             {
                                 outside = true;
-                                layer = 0.61f;
-                                
+                                layer = 0.61f;                                
                             }
 
                             currentFrame = 0;
                             door.SetAnim(0);
-                        }
-
-                        
+                        }                        
                     }
 
+                    // animate digging outside
                     else if (outside == true)
                     {
                         outTimer += gametime.ElapsedGameTime.Milliseconds;
 
-                        position += new Vector2(0, -20);
-                        
+                        position += new Vector2(0, -20);                        
 
                         if (outTimer >= 100 && dug == false)
                         {
@@ -325,15 +336,11 @@ namespace It_sAlive_
                         if (dug == true && digger.anim == false && outTimer >= 150)
                         {
                             digging = true;
-                            outside = false;
-                            
-                            
+                            outside = false; 
                         }
-
-
-
                     }
 
+                    // animate putting corpse on table
                     else if (corpseCarrying == true)
                     {
 
@@ -342,41 +349,50 @@ namespace It_sAlive_
                         corpse.visible = true;
                     }
 
+                    // animate animation!
+                    else if (animating == true)
+                    {
+                        anim = 4;
 
+                        if (currentFrame++ == numberOfFrames - 1)
+                        {
+                            doing = false;
+                            animating = false;
+                            Switch.SetAnim(1);
+                            resurrect.Alive(corpse, humanity, longevity, research, random, this);                           
+                        }                        
+                    }
+
+                    // if not in the usual spot...
                     else if (gridPosition != defaultGridPosition)
                     {
                         anim = 4;
 
+                        // if not staying to run machine, run doing anim once, create mini progress bar
                         if (action.remain == false)
                         {
                             if (currentFrame++ == numberOfFrames - 1)
                             {
                                 doing = false;
-                                proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action,floorObject));
-
+                                proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action, floorObject));
+                                progBar = proglist[proglist.Count - 1];
                                 action = null;
 
                             }
                         }
 
+                        // if staying to run machine...
                         else
                         {
+                            // create a progess bar if starting
                             if (animStart == true)
                             {
                                 animStart = false;
-
-                                if (corpseWork == true)
-                                {
-                                    proglist.Add(new MiniProgressBar(graphicsDevice, position + new Vector2(0, -100), action,floorObject));
-
-                                }
-
-                                else
-                                {
-                                    proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action,floorObject));
-                                }
+                                proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action, floorObject));
+                                progBar = proglist[proglist.Count - 1];
                             }
 
+                            // run animation until finished
                             else
                             {
                                 if (currentFrame++ == numberOfFrames - 1)
@@ -390,18 +406,14 @@ namespace It_sAlive_
                                         action = null;
                                         animStart = true;
 
-                                        if (corpseWork == true)
-                                        {
-                                            corpseWork = false;
-                                        }
                                     }
                                 }
-
 
                             }
                         }
                     }
 
+                    // if not doing anything, stop...
                     else
                     {
                         walking = false;
@@ -412,23 +424,24 @@ namespace It_sAlive_
 
                 }
 
+                // if not walking, do standing anim
                 if (walking == false && doing == false)
                 {
                     anim = 2;
                     currentFrame = 0;
                 }
 
+                // set frame and anim
                 rect.X = currentFrame * width;
                 rect.Y = height * anim;
             }
-
-            return drawPath;
-
+                                    
         }
 
+        // Render!
         public void Render(SpriteBatch sbatch)
         {
-            // scaling from perspective grid class!
+            // scaling from perspective grid class
 
             sbatch.Draw(charTex, position - offset, rect, Color.White, 0, Vector2.Zero, scale * 2.0f, SpriteEffects.None, layer);
 

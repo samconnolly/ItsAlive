@@ -9,6 +9,7 @@ namespace It_sAlive_
     {
         public string name;
         public bool scientist;
+        public bool assistant;
         public float money;
         public float madness;
         public float research;
@@ -30,7 +31,7 @@ namespace It_sAlive_
         private float multiplier;
         public int count;
 
-        public MenuAction(string name, bool scientistJob, int timeTaken, float researchUp, float madnessUp, float moneyChange, float lifeForceUp, float longevityUp, float humanityUp, bool remain, bool turnOn = false, bool turnOff = false, List<NumericalCounter> dependentVariable = null,
+        public MenuAction(string name, bool scientistJob,bool assistantJob, int timeTaken, float researchUp, float madnessUp, float moneyChange, float lifeForceUp, float longevityUp, float humanityUp, bool remain, bool turnOn = false, bool turnOff = false, List<NumericalCounter> dependentVariable = null,
                              float researchUpMultiplier = 0, float madnessUpMultiplier = 0, float moneyChangeMultiplier = 0, float lifeForceUpMultiplier = 0, float longevityUpMultiplier = 0, float humanityUpMultiplier = 0)
         {
             this.name = name;
@@ -50,6 +51,7 @@ namespace It_sAlive_
             this.remain = remain;
             this.dependent = dependentVariable;
             this.scientist = scientistJob;
+            this.assistant = assistantJob;
             this.on = turnOn;
             this.off = turnOff;
         

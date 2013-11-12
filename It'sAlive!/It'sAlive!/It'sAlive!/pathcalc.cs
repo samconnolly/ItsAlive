@@ -30,6 +30,11 @@ namespace It_sAlive_
 
         // check the traversibility of a square on the grid
 
+        public void Update(ReachableArea reachableArea)
+        {
+            reach = reachableArea;
+        }
+
         public bool Check(int x,int y) 
         {
             if (reach.Value(x,y) == 0)

@@ -20,12 +20,11 @@ namespace It_sAlive_
         private Rectangle menuRectangle;
 
 
-        private bool click = false;
-        private bool menu = false;
-        private bool graveMenu = false;
-        private bool corpseMenu = false;
-        private bool mouseOver = false;
-        private bool barMouseover = false;
+        public bool click = false;
+        public bool menu = false;
+        public bool graveMenu = false;
+        public bool corpseMenu = false;
+        public bool mouseOver = false;
         public bool menuMouseover = false;
         public bool buildIconMouseover = false;
         public bool graveMouseOver = false;
@@ -36,13 +35,11 @@ namespace It_sAlive_
         public MenuAction menuHighlightAction = null;
         public MiniProgressBar menuProgBar = null;
 
-        private Vector2 textOffset = new Vector2(20, 20);
+        private Vector2 textOffset = new Vector2(25, 0);
 
         public Vector2 position = Vector2.Zero;
         public Vector2 menuPosition;
         public string text = "none";
-
-        private FloorObject remove;
 
         public Cursor(Texture2D texture,GraphicsDevice graphicsDevice)
         {
@@ -65,83 +62,19 @@ namespace It_sAlive_
 
         }
 
-        public void Update(List<FloorObject> floorObjectList, List<MiniProgressBar> progBars,Scientist scientist, Build build, Graveyard graveyard,FloorObject table, Corpse corpse)
+        public void Update(List<FloorObject> floorObjectList, List<MiniProgressBar> progBars,Scientist scientist, Assistant assistant, Build build, Graveyard graveyard,FloorObject table, Corpse corpse, NumericalCounter money,
+                             Grid grid, Resurrect resurrect, NumericalCounter humanity, NumericalCounter longevity, NumericalCounter research, Random random, float xOffset, float yOffset)
         {
             MouseState mouseState = Mouse.GetState();
 
             // Put the cursor where the mouse is constantly
 
-            position.X = mouseState.X;
-            position.Y = mouseState.Y;
+            position.X = (mouseState.X/xOffset);
+            position.Y = (mouseState.Y/yOffset);
 
             mouseOver = false;
-
-          
-
-            // check if over a progress bar, show values if so
-
-            barMouseover = false;
-
-            foreach (MiniProgressBar bar in progBars)
-            {
-
-                // if menu is off, check if over an object, open menu if clicked
-                                
-                if (menu == false)
-                {
-                    // objects
-                    if (position.X >= bar.position.X && position.X <= (bar.position.X + bar.width)
-                            && position.Y >= bar.position.Y && position.Y <= (bar.position.Y + bar.height))
-                    {
-
-                        barMouseover = true; // add object mouseover text
-                        menuProgBar = bar;
-
-                    }
-
-                }
-            }            
-
-            // check for clicking on/mouseover build icons
-
+                
             
-
-            buildIconMouseover = false;
-
-            foreach (FloorObject curitem in build.buildList)
-            {
-                if (position.X >= curitem.iconPosition.X && position.X <= curitem.iconPosition.X + 60
-                && position.Y >= curitem.iconPosition.Y && position.Y <= curitem.iconPosition.Y + 60)
-                {
-                    if (curitem.onBuildList == true && build.buildList.IndexOf(curitem) < (build.scrollPos + build.buildScreenLength) && build.buildList.IndexOf(curitem) >= build.scrollPos)
-                    {
-                        // tooltip + highlighting on
-                        buildIconMouseover = true;
-                        menuObject = curitem;
-
-                        // build!
-                        if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                        {
-                            if (click == false)
-                            {
-                                remove = curitem;
-                                floorObjectList.Add(curitem);
-                                build.menu = false;
-                            }
-
-                        }
-
-                        click = true;
-
-                    }
-                }
-
-            }
-
-            // remove anything that has been built from build list
-
-            build.Remove(remove);
-
             // check for clicking on objects
 
             
@@ -150,37 +83,7 @@ namespace It_sAlive_
 
                 if (menu == false && graveMenu == false && corpseMenu == false)
                 {
-                    foreach (FloorObject floorObject in floorObjectList)
-                    {
-
-                        // objects
-                        if (position.X >= (floorObject.position.X - floorObject.offset.X) && position.X <= (floorObject.position.X - floorObject.offset.X + ((floorObject.objectTex.Width*floorObject.scale) / floorObject.frames))
-                                && position.Y >= floorObject.position.Y - floorObject.offset.Y && position.Y <= (floorObject.position.Y - floorObject.offset.Y + (floorObject.objectTex.Height*floorObject.scale)))
-                        {
-                            if (floorObject.menuActions.Count > 0)
-                            {
-                                mouseOver = true; // add object mouseover text
-                                menuObject = floorObject;
-
-                                // turn on menu when object is clicked
-
-                                if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                                {
-                                    if (click == false)
-                                    {
-
-                                        menu = true;
-
-                                    }
-
-                                }
-
-                                click = true;
-                            }
-                        }
-              
-                    }
-
+                   
                     graveMouseOver = false;
             
 
@@ -210,26 +113,7 @@ namespace It_sAlive_
                     
 
                     // corpse
-                    if (position.X >= corpse.position.X && position.X <= corpse.position.X + corpse.width
-                            && position.Y >= corpse.position.Y && position.Y <= corpse.position.Y + corpse.height && corpse.visible == true)
-                    {
-
-                        corpseMouseover = true; // add object mouseover text
-
-                        // turn on menu when object is clicked
-
-                        if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                        {
-                            if (click == false)
-                            {
-                                corpseMenu = true;
-                                corpseMouseover = false;
-                            }
-
-                        }
-
-                        click = true;
-                    }
+                   
 
                 }
 
@@ -239,34 +123,7 @@ namespace It_sAlive_
 
 
 
-                if (menu == true)
-                {
-                    
-
-                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                    {
-                        if (click == false)
-                        {
-                            if (menu == true)
-                            {
-                                menu = false;
-
-
-                                if (menuMouseover == true)
-                                {
-                                    scientist.action = menuHighlightAction;
-                                    scientist.floorObject = menuObject;
-                                }
-                            }
-
-                                        
-                        }
-
-                        click = true;
-                    }
-
-                }
-
+               
                 if (graveMenu == true)
                 {
 
@@ -282,7 +139,7 @@ namespace It_sAlive_
                                 {
                                     if (floorObjectList.Contains(table))
                                     {
-                                        scientist.DigUpCorpse(corpse);
+                                        assistant.DigUpCorpse(corpse);
                                     }
                                 }
                             
@@ -293,109 +150,10 @@ namespace It_sAlive_
 
                 }
 
-                if (corpseMenu == true)
-                {
-
-
-                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                    {
-                        if (click == false)
-                        {
-
-                                corpseMenu = false;
-
-                                if (menuMouseover == true)
-                                {
-                                        scientist.action = menuHighlightAction;
-                                        scientist.corpseWork = true;
-                                        //scientist.floorObject = menuObject;
-                                }
-                            
-                        }
-
-                        click = true;
-                    }
-
-                }
-
-              // clicking on build icon
-
-            if (position.X >= build.position.X && position.X < (build.position.X + build.tex.Width) && position.Y >= build.position.Y && position.Y < (build.position.Y + build.tex.Height))
-            {
-                if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                {
-                    if (click == false)
-                    {
-                        build.menu = true;
-                        build.scrollPos = 0;
-                    }
-
-                    click = true;
-
-                }
-
-                
-            }
-
-            else
-            {
-                if ((mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed) && position.Y < build.buildPos.Y)
-                {
-                    if (click == false)
-                    {
-                        build.menu = false;
-                    }
-
-                    click = true;
-
-                }
-
-                
-            }
-
-            // Scrolling build menu....
-
-            // Right
-            if (position.X >= build.rightArrowPos.X - build.arrow.Width && position.X <= build.rightArrowPos.X 
-                                    && position.Y >= build.rightArrowPos.Y && position.Y <= build.rightArrowPos.Y + build.arrow.Height)
-            {
-                if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                {
-                    if (click == false)
-                    {
-
-                        build.ScrollRight();
-                    }
-
-                    click = true;
-
-                }
-
-               
-            }
-
-            // Left
-            if (position.X >= build.leftArrowPos.X && position.X <= build.leftArrowPos.X + build.arrow.Width
-                                    && position.Y >= build.leftArrowPos.Y - build.arrow.Height && position.Y <= build.leftArrowPos.Y)
-            {
-                if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                {
-                    if (click == false)
-                    {
-                        build.ScrollLeft();
-                    }
-
-                    click = true;
-
-                }
-
-                
-            }
-
-            
+                     
             // turn off click flag when no longer clicking
 
-            if (mouseState.LeftButton == ButtonState.Released && mouseState.RightButton == ButtonState.Released)
+            if (mouseState.LeftButton == ButtonState.Released && mouseState.RightButton == ButtonState.Released && click == true)
             {
                 click = false;
             }
@@ -411,7 +169,7 @@ namespace It_sAlive_
 
             // draw menu
 
-            if (menu == true || graveMenu == true || corpseMenu == true)
+            if (graveMenu == true)
             {
                 if (click == true)
                 {                    
@@ -454,21 +212,7 @@ namespace It_sAlive_
                     }
                 }
 
-                //corpse menu
-
-                if (corpseMenu == true)
-                {
-                    foreach (MenuAction action in corpse.menuActions)
-                    {
-                        actions.Add(action);
-
-                        if (action.name.Length > boxWidth)
-                        {
-                            boxWidth = action.name.Length; // set box width for below
-
-                        }
-                    }
-                }
+               
 
                 // boxes and outlines
 
@@ -558,18 +302,14 @@ namespace It_sAlive_
 
             // Mouse-over text
 
-            if (mouseOver == true && menu == false)
+            if (mouseOver == true && menu == false && corpseMouseover == false)
             {
                 //sbatch.DrawString(font, text, position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f);
                 //sbatch.DrawString(font, menu.ToString() + ' ' + click.ToString()+ ' ' + mouseOver.ToString(), position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f);
                 sbatch.DrawString(font, menuObject.name, position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
             }
 
-            if (barMouseover == true && mouseOver == false)
-            {
-                string barText = menuProgBar.value.ToString("#.#") + "/" + menuProgBar.init.ToString("#.#");
-                sbatch.DrawString(font, barText, position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
-            }
+            
 
             if (graveMouseOver == true && menu == false)
             {                
@@ -584,7 +324,7 @@ namespace It_sAlive_
             if (buildIconMouseover == true && menu == false && build.menu == true)
             {   
                 // tooltip
-                sbatch.DrawString(font, menuObject.name, position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
+                sbatch.DrawString(font, menuObject.name + " : " + menuObject.cost.ToString(), position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
 
                 // highlight box
 

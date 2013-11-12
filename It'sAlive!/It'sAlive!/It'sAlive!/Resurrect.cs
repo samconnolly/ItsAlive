@@ -21,11 +21,15 @@ namespace It_sAlive_
         private Texture2D hTex;
         private Rectangle rect;
 
+        // positions
+        public Vector2 assPos = new Vector2(5, 9);
+        public Vector2 sciPos = new Vector2(5, 7);
+
         // bools
         public bool doable = false;
         public bool fail = false;
 
-        private int counter;
+        //private int counter;
 
         public Resurrect(Vector2 iconPosition, Texture2D iconTex, Texture2D highlightTex, GraphicsDevice graphicsDevice)
         {
@@ -39,8 +43,16 @@ namespace It_sAlive_
         }
 
 
-        public void Animate(Corpse corpse, NumericalCounter humanity, NumericalCounter longevity, NumericalCounter research,Random random)
+        public void Animate(Scientist scientist, Assistant assistant)
         {
+            assistant.Animate(this);
+            scientist.Animate(this);
+            
+        }
+
+        public void Alive(Corpse corpse, NumericalCounter humanity, NumericalCounter longevity, NumericalCounter research, Random random, Assistant assistant)
+        {
+
             fail = false;
 
             double rnd = random.NextDouble();            // produce a random number
@@ -61,6 +73,7 @@ namespace It_sAlive_
                 humanity.value = (float)((rnd4 + rnd5 + rnd6) / 3.0 + 0.5) * humanity.value; // create a pseudo-normal random value between 0.5 and 1.5 and multiply by the humanity
 
                 corpse.alive = true;
+                
             }
 
             // else it fails...
@@ -69,15 +82,16 @@ namespace It_sAlive_
                 corpse.visible = false;
                 fail = true;
             }
-
             
         }
 
 
                     
 
-        public void Update(Corpse corpse,NumericalCounter lifeForce, NumericalCounter humanity, NumericalCounter longevity, FloorObject conductor,GameTime gameTime)
+        public void Update(Corpse corpse,NumericalCounter lifeForce, NumericalCounter humanity, NumericalCounter longevity, FloorObject conductor,GameTime gameTime, Cursor cursor,Scientist scientist, Assistant assistant)
         {
+            // check if resurrection is possible
+
             if (lifeForce.value == 100 && conductor.on == true && corpse.visible == true && corpse.alive == false)
             {
                 doable = true;
@@ -88,6 +102,23 @@ namespace It_sAlive_
                 doable = false;
             }
 
+            MouseState mouseState = Mouse.GetState();
+
+            // clicking on animate icon
+
+            if (cursor.position.X >= position.X && cursor.position.X < (position.X + tex.Width) && cursor.position.Y >= position.Y && cursor.position.Y < (position.Y + tex.Height))
+            {
+                if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                {
+                    if (cursor.click == false && doable == true)
+                    {
+                        Animate(scientist, assistant);
+
+                    }
+
+                    cursor.click = true;
+                }
+            }
 
         }
 

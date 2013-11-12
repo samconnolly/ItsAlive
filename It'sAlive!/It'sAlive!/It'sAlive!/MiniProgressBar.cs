@@ -33,6 +33,9 @@ namespace It_sAlive_
         private float elapsed = 0;
         private float timeInterval = 100;
 
+        private bool mouseover;
+        private string barText;
+
         public MenuAction action;
         public FloorObject floorObject;
         
@@ -69,9 +72,24 @@ namespace It_sAlive_
         }
 
 
-        public void Update(GameTime gameTime)
+        public void Update(GameTime gameTime, Cursor cursor)
         {
-          
+            mouseover = false;
+
+            if (cursor.menu == false)
+            {
+                // objects
+                if (cursor.position.X >= position.X && cursor.position.X <= (position.X + width)
+                        && cursor.position.Y >= position.Y && cursor.position.Y <= (position.Y + height)
+                            && cursor.mouseOver == false)
+                {
+                    mouseover = true; // add object mouseover text
+                    cursor.menuProgBar = this;
+                }
+
+            }
+
+            // change bar length according to vlue - decrease value over time
 
             elapsed += (float)gameTime.ElapsedGameTime.Milliseconds;
 
@@ -90,11 +108,17 @@ namespace It_sAlive_
 
            
             bar.Width = (int)(fullWidth * (value / (float)init));
-
+            barText = value.ToString("#.#") + "/" + init.ToString("#.#");
         }
 
-        public void Render(SpriteBatch sbatch)
+        public void Render(SpriteBatch sbatch, SpriteFont font)
         {
+            // text
+            if (mouseover == true)
+            {                
+                sbatch.DrawString(font, barText, position + new Vector2(0,-25), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
+            }
+
             // outline
             sbatch.Draw(dummyTexture, position, box, boxColour, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.115f);
 

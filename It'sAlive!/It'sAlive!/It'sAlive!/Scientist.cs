@@ -15,12 +15,13 @@ namespace It_sAlive_
     class Scientist
     {
 
-
+        // texture
         public Texture2D charTex;
         private Rectangle rect;
-
         public int width = 0;
         public int height = 0;
+
+        // animation
         public int timer = 0;
         public int msecsTweenFrames = 120;
         public int currentFrame = 0;
@@ -30,37 +31,51 @@ namespace It_sAlive_
         private float scale = 1.0f;
         private float layer;
 
+        // bools
         public bool walking = false;
         public bool doing = false;
         public bool corpseWork = false;
         public bool animStart = true;
+        public bool animating = false;
 
+        // walking
+        public List<Vector2> drawPath;
+        public Path path;
+        public Grid grid;
+        
         public Vector2 gridPosition = Vector2.Zero;
         public Vector2 position = Vector2.Zero;
         public Vector2 walkingOffset = Vector2.Zero;
         public Vector2 walkingTarget = Vector2.Zero;
         public Vector2 direction = Vector2.Zero;
+        public Vector2 offset = Vector2.Zero;
+        
         public double targetDistance = 0;
         public double distanceGone = 0;
-        public Vector2 offset = Vector2.Zero;
+        
         public int pathStep = 0;
 
+        // actions
         public MenuAction action = null;
         public FloorObject floorObject = null;
+        public MiniProgressBar progBar;
 
         // The public instance of the object
 
-        public Scientist(Texture2D texture, Vector2 gridPosition, Grid grid)
+        public Scientist(Texture2D texture, Vector2 gridPosition, Grid grid, ReachableArea reachable)
         {
-
+            // texture & position
             this.charTex = texture;
             this.width = texture.Width / numberOfFrames;
             this.height = texture.Height / numberOfAnims;
-
             this.gridPosition = gridPosition;
             this.layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y;
-            // Create rectangle for animation
 
+            // set path to use reachable area
+            this.path = new Path(reachable);
+            this.grid = grid;
+
+            // set rectangle for animation
             rect.X = 0;
             rect.Y = 0;
             rect.Width = width;
@@ -69,14 +84,33 @@ namespace It_sAlive_
 
         }
 
+        // Animate corpse - set to walk behind table and laugh
 
-        public List<Vector2> Update(GameTime gametime, GraphicsDevice graphicsDevice, Grid grid, Cursor cursor, Path path, List<Vector2> drawPath,NumericalCounter research,NumericalCounter money, NumericalCounter madness, List<MiniProgressBar> proglist)
+        public void Animate(Resurrect resurrect)
         {
+            animating = true;
 
+            if (gridPosition != resurrect.sciPos)
+            {
+                walking = true;
+                drawPath = path.PathList(gridPosition, resurrect.sciPos, grid);
+                pathStep = 1;
+                walkingTarget = drawPath[pathStep];
+            }
+
+            else
+            {
+                doing = true;
+            }
+        }
+
+        public void Update(GameTime gametime, GraphicsDevice graphicsDevice, Cursor cursor, NumericalCounter research,NumericalCounter money, NumericalCounter madness, List<MiniProgressBar> proglist, ReachableArea reachable)
+        {
+            // get most recent reachable areas
+            path.Update(reachable);
 
             // update position from grid position
-
-            
+                        
             position = grid.CartesianCoords(gridPosition);
             layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y - 0.01f;
 
@@ -86,7 +120,7 @@ namespace It_sAlive_
 
             if (action != null && walking == false && doing == false)
             {
-
+                // to corpse
                 if (corpseWork == true)
                 {
                     if (gridPosition != new Vector2(5, 4))
@@ -105,15 +139,17 @@ namespace It_sAlive_
                         position = grid.CartesianCoords(gridPosition);
                     }
                 }
-
-                else if (gridPosition != cursor.menuObject.gridPosition + new Vector2(0, -1))
+                    
+                // to machine
+                else if (gridPosition !=  floorObject.gridPosition + new Vector2(0, -1))
                 {
                     walking = true;
-                    drawPath = path.PathList(gridPosition, cursor.menuObject.gridPosition + new Vector2(0, -1), grid);
+                    drawPath = path.PathList(gridPosition, floorObject.gridPosition + new Vector2(0, -1), grid);
                     pathStep = 1;
                     walkingTarget = drawPath[pathStep];
                 }
 
+                // arrived at destination, start doing
                 else
                 {                    
                     doing = true;
@@ -121,8 +157,6 @@ namespace It_sAlive_
                     gridPosition = drawPath[pathStep - 1];
                     position = grid.CartesianCoords(gridPosition);
                 }
-
-                //cursor.scientistAction = "none";
             }
 
             if (walking == true)
@@ -224,76 +258,99 @@ namespace It_sAlive_
                 {
                     anim = 4;
 
-                    if (action.remain == false)
+                    if (action != null)
                     {
-                        if (currentFrame++ == numberOfFrames - 1)
-                        {
-                            doing = false;
-                            proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action, floorObject));
-
-                            action = null;
-                            
-                        }
-                    }
-
-                    else
-                    {
-                        if (animStart == true)
-                        {
-                            animStart = false;
-
-                            if (corpseWork == true)
-                            {
-                                proglist.Add(new MiniProgressBar(graphicsDevice, position + new Vector2(0, -100), action,floorObject));
-
-                            }
-
-                            else
-                            {
-                                proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action,floorObject));
-                            }
-                        }
-
-                        else
+                        // if not staying, run anim once, start progress bar
+                        if (action.remain == false)
                         {
                             if (currentFrame++ == numberOfFrames - 1)
                             {
-                                currentFrame = 0;
+                                doing = false;
+                                proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action, floorObject));
+                                progBar = proglist[-1];
+                                action = null;
 
-                                if (action.done == true)
+                            }
+                        }
+
+                        // if staying to work machine...
+                        else
+                        {
+                            // if starting, create progress bar and start anim
+                            if (animStart == true)
+                            {
+                                animStart = false;
+
+                                if (corpseWork == true)
                                 {
-                                    doing = false;
-                                    action.done = false;
-                                    action = null;
-                                    animStart = true;
-                                    
-                                    if (corpseWork == true)
-                                    {
-                                        corpseWork = false;
-                                    }
+                                    proglist.Add(new MiniProgressBar(graphicsDevice, position + new Vector2(0, -100), action, null));
+                                    progBar = proglist[proglist.Count -1];
+                                }
+
+                                else
+                                {
+                                    proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action, floorObject));
+                                    progBar = proglist[proglist.Count -1];
                                 }
                             }
 
+                            // run anim until machine work is finished
+                            else
+                            {
+                                if (currentFrame++ == numberOfFrames - 1)
+                                {
+                                    currentFrame = 0;
 
+                                    if (action.done == true)
+                                    {
+                                        doing = false;
+                                        action.done = false;
+                                        action = null;
+                                        animStart = true;
+
+                                        if (corpseWork == true)
+                                        {
+                                            corpseWork = false;
+                                        }
+                                    }
+                                }
+
+
+                            }
                         }
+
                     }
 
+                    // animate animation if animating....
+                    else if (animating == true)
+                    {
+                        anim = 4;
+
+                        if (currentFrame++ == numberOfFrames - 1)
+                        {
+                            doing = false;
+                            animating = false;
+
+                        }
+
+                    }
                 }
 
+                // if not walking, stand!
                 if (walking == false && doing == false)
                 {
                     anim = 2;
                     currentFrame = 0;
                 }
 
+                // set anim and frame
                 rect.X = currentFrame * width;
                 rect.Y = height * anim;
             }
-
-            return drawPath;
-
+            
         }
 
+        // Render!
         public void Render(SpriteBatch sbatch)
         {
             // scaling from perspective grid class!
