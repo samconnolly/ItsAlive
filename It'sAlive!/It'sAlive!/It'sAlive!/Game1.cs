@@ -177,8 +177,8 @@ namespace It_sAlive_
             // HUD
 
             // buttons
-            build = new Build(new Vector2(5, 1015), Content.Load<Texture2D>("buildIcon"), Content.Load<Texture2D>("buildIconH"), GraphicsDevice);
-            resurrect = new Resurrect(new Vector2(1750, 900), Content.Load<Texture2D>("reanimate"), Content.Load<Texture2D>("reanimateHigh"), GraphicsDevice);
+            build = new Build(new Vector2(5, 900), Content.Load<Texture2D>("build_icon_standard"), Content.Load<Texture2D>("build_icon_highlight"), Content.Load<Texture2D>("build_icon_pressed"), GraphicsDevice);
+            resurrect = new Resurrect(new Vector2(1750, 900), Content.Load<Texture2D>("raise_icon_standard"), Content.Load<Texture2D>("raise_icon_highlight"), Content.Load<Texture2D>("raise_icon_pressed"), GraphicsDevice);
             
             // counters
             research = new NumericalCounter("Research", new Vector2(10, 170), 0, 100, 0, 0, cursorFont, Color.Green);
@@ -323,7 +323,7 @@ namespace It_sAlive_
             resurrect.Update(corpse,lifeForce,humanity,longevity,lightningAbsorber,gameTime,cursor,Simon,Jeremy);
 
             // build menu
-            build.Update(cursor);
+            build.Update(cursor,gameTime);
 
             // the corpse!
             corpse.Update(gameTime, dissectCorpse,studyCorpse,longevity,humanity,lifeForce,Simon,talk,cursor,progBars);

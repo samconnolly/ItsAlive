@@ -19,7 +19,13 @@ namespace It_sAlive_
         public float layer = 0.1f;
         public Texture2D tex;
         private Texture2D hTex;
+        private Texture2D cTex;
         private Rectangle rect;
+        private bool clickOn = false;
+        private int clickCount = 0;
+        private float scale = 0.5f;
+        private int width;
+        private int height;
 
         // positions
         public Vector2 assPos = new Vector2(5, 9);
@@ -31,14 +37,17 @@ namespace It_sAlive_
 
         //private int counter;
 
-        public Resurrect(Vector2 iconPosition, Texture2D iconTex, Texture2D highlightTex, GraphicsDevice graphicsDevice)
+        public Resurrect(Vector2 iconPosition, Texture2D iconTex, Texture2D highlightTex,Texture2D clickTexture, GraphicsDevice graphicsDevice)
         {
             this.position = iconPosition;
 
             this.tex = iconTex;
             this.hTex = highlightTex;
+            this.cTex = clickTexture;
             this.rect.Width = tex.Width;
             this.rect.Height = tex.Height;
+            this.width = (int) (tex.Width * scale);
+            this.height = (int) (tex.Height * scale);
 
         }
 
@@ -88,7 +97,8 @@ namespace It_sAlive_
 
                     
 
-        public void Update(Corpse corpse,NumericalCounter lifeForce, NumericalCounter humanity, NumericalCounter longevity, FloorObject conductor,GameTime gameTime, Cursor cursor,Scientist scientist, Assistant assistant)
+        public void Update(Corpse corpse,NumericalCounter lifeForce, NumericalCounter humanity, NumericalCounter longevity, FloorObject conductor,
+                                GameTime gameTime, Cursor cursor,Scientist scientist, Assistant assistant)
         {
             // check if resurrection is possible
 
@@ -113,10 +123,21 @@ namespace It_sAlive_
                     if (cursor.click == false && doable == true)
                     {
                         Animate(scientist, assistant);
-
+                        clickOn = true;
                     }
 
                     cursor.click = true;
+                }
+            }
+
+            if (clickOn == true)
+            {
+                clickCount += gameTime.ElapsedGameTime.Milliseconds;
+
+                if (clickCount > 100)
+                {
+                    clickCount = 0;
+                    clickOn = false;
                 }
             }
 
@@ -128,14 +149,19 @@ namespace It_sAlive_
 
             if (cursor.position.X >= position.X && cursor.position.X < (position.X + tex.Width) 
                 && cursor.position.Y >= position.Y && cursor.position.Y < (position.Y + tex.Height)
-                && doable == true)
+                && doable == true && clickOn == false)
             {
-                sbatch.Draw(hTex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, layer);
+                sbatch.Draw(hTex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layer);
+            }
+
+            else if (clickOn == true)
+            {
+                sbatch.Draw(cTex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layer);
             }
 
             else
             {
-                sbatch.Draw(tex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, layer);
+                sbatch.Draw(tex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layer);
             }
  
             }

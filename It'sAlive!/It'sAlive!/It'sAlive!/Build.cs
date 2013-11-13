@@ -19,7 +19,13 @@ namespace It_sAlive_
         public float layer = 0.1f;
         public Texture2D tex;
         private Texture2D hTex;
+        private Texture2D cTex;
         private Rectangle rect;
+        private bool clickOn = false;
+        private int clickCount = 0;
+        private float scale = 0.5f;
+        private int width;
+        private int height;
 
         //  menu
         public bool menu = false;
@@ -36,15 +42,18 @@ namespace It_sAlive_
 
         public List<FloorObject> buildList = new List<FloorObject>();
 
-        public Build(Vector2 iconPosition, Texture2D iconTex, Texture2D highlightTex, GraphicsDevice graphicsDevice)
+        public Build(Vector2 iconPosition, Texture2D iconTex, Texture2D highlightTex, Texture2D clickTex, GraphicsDevice graphicsDevice)
         {          
             this.tex = iconTex;
             this.hTex = highlightTex;
+            this.cTex = clickTex;
             this.rect.Width = tex.Width;
             this.rect.Height = tex.Height;
+            this.width = (int)(tex.Width * scale);
+            this.height = (int)(tex.Height * scale);
 
             this.position = iconPosition;
-            this.menuPosition = iconPosition + new Vector2(tex.Width, tex.Height);
+            this.menuPosition = iconPosition + new Vector2(width, height);
 
             this.dummyTexture = new Texture2D(graphicsDevice, 1, 1);
             this.dummyTexture.SetData(new Color[] { Color.Gray });
@@ -73,27 +82,37 @@ namespace It_sAlive_
             }
         }
 
-        public void Update(Cursor cursor)
+        public void Update(Cursor cursor, GameTime gameTime)
         {
             // clicking on build icon
 
             MouseState mouseState = Mouse.GetState();
 
-            if (cursor.position.X >= position.X && cursor.position.X < (position.X + tex.Width) && cursor.position.Y >= position.Y && cursor.position.Y < (position.Y + tex.Height))
+            if (cursor.position.X >= position.X && cursor.position.X < (position.X + width) && cursor.position.Y >= position.Y && cursor.position.Y < (position.Y + height))
             {
                 if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
                 {
                     if (cursor.click == false)
                     {
                         menu = true;
+                        clickOn = true;
                     }
 
                     cursor.click = true;
-
                 }
-
-
             }
+
+            if (clickOn == true)
+            {
+                clickCount += gameTime.ElapsedGameTime.Milliseconds;
+
+                if (clickCount > 100)
+                {
+                    clickCount = 0;
+                    clickOn = false;
+                }
+            }
+
         }
 
                
@@ -101,15 +120,23 @@ namespace It_sAlive_
         {
             // draw icon - highlighted
 
-            if (cursor.position.X >= position.X && cursor.position.X < (position.X + tex.Width) && cursor.position.Y >= position.Y && cursor.position.Y < (position.Y + tex.Height))
+            if (cursor.position.X >= position.X && cursor.position.X < (position.X + width) 
+                && cursor.position.Y >= position.Y && cursor.position.Y < (position.Y + height)
+                && clickOn == false)
             {
-                sbatch.Draw(hTex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, layer);
+                sbatch.Draw(hTex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero,scale, SpriteEffects.None, layer);
+            }
+
+            // draw icon - clicked
+            else if (clickOn == true)
+            {
+                sbatch.Draw(cTex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layer);
             }
 
             // draw icon - unhighlighted
             else
             {
-                sbatch.Draw(tex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, layer);
+                sbatch.Draw(tex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layer);
             }
 
             // menu

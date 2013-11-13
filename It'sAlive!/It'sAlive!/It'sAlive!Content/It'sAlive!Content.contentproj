@@ -96,20 +96,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="buildIcon.png">
-      <Name>buildIcon</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="buildIconH.png">
-      <Name>buildIconH</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="highinvarrow.png">
       <Name>highinvarrow</Name>
       <Importer>TextureImporter</Importer>
@@ -202,20 +188,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="reanimate.png">
-      <Name>reanimate</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="reanimateHigh.png">
-      <Name>reanimateHigh</Name>
-      <Importer>TextureImporter</Importer>
-      <Processor>TextureProcessor</Processor>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="lightningconductor.png">
       <Name>lightning</Name>
       <Importer>TextureImporter</Importer>
@@ -232,6 +204,40 @@
   <ItemGroup>
     <Compile Include="switch.png">
       <Name>switch</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="build_icon_highlight.png">
+      <Name>build_icon_highlight</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="build_icon_pressed.png">
+      <Name>build_icon_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="build_icon_standard.png">
+      <Name>build_icon_standard</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="raise_icon_highlight.png">
+      <Name>raise_icon_highlight</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="raise_icon_pressed.png">
+      <Name>raise_icon_pressed</Name>
+      <Importer>TextureImporter</Importer>
+      <Processor>TextureProcessor</Processor>
+    </Compile>
+    <Compile Include="raise_icon_standard.png">
+      <Name>raise_icon_standard</Name>
       <Importer>TextureImporter</Importer>
       <Processor>TextureProcessor</Processor>
     </Compile>
