@@ -77,8 +77,8 @@ namespace It_sAlive_
         public void Update(GameTime gameTime, MenuAction dissect, MenuAction study,NumericalCounter longevity, NumericalCounter humanity, NumericalCounter lifeforce, Scientist scientist, MenuAction talk, Cursor cursor,List<MiniProgressBar> bars)
         {
             if (this.visible == true)
-            {
-                MouseState mouseState = Mouse.GetState();
+            {                
+                cursor.corpseMouseover = false;
 
                 if (cursor.position.X >= position.X && cursor.position.X <= position.X + fwidth
                            && cursor.position.Y >= position.Y && cursor.position.Y <= position.Y + height && visible == true && corpseMenu == false)
@@ -88,7 +88,7 @@ namespace It_sAlive_
 
                     // turn on menu when object is clicked
 
-                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                    if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
                     {
                         if (cursor.click == false)
                         {
@@ -108,7 +108,7 @@ namespace It_sAlive_
                 {
 
 
-                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                    if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
                     {
                         if (cursor.click == false)
                         {
@@ -318,7 +318,7 @@ namespace It_sAlive_
                         int index = menuActions.IndexOf(action);
                         actions[index] = new Tuple<string, Color, Color, Color>(actions[index].Item1, textColour, boxColour, lineColour);
 
-                        if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                        if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
                         {
                             if (cursor.click == false)
                             {

@@ -110,9 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assistant.cs" />
-    <Compile Include="Build.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="BuildNew.cs" />
     <Compile Include="Corpse.cs" />
     <Compile Include="CountBar.cs" />
     <Compile Include="CursorII.cs" />
@@ -126,7 +124,7 @@
       <DependentUpon>DataSet1.xsd</DependentUpon>
     </Compile>
     <Compile Include="FloorObject.cs" />
-    <Compile Include="Graveyard.cs" />
+    <Compile Include="GraveyardNew.cs" />
     <Compile Include="Grid.cs" />
     <Compile Include="MenuAction.cs" />
     <Compile Include="MiniProgressBar.cs" />

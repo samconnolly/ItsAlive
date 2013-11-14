@@ -29,7 +29,7 @@ namespace It_sAlive_
             graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
             graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             
-            graphics.IsFullScreen = true;
+            graphics.IsFullScreen = false;
                         
             Content.RootDirectory = "Content";
         }
@@ -129,6 +129,7 @@ namespace It_sAlive_
         // -- fonts --
 
         SpriteFont cursorFont;
+        SpriteFont counterFont;
 
         // test shizz.............
 
@@ -168,6 +169,7 @@ namespace It_sAlive_
             // fonts
 
             cursorFont = Content.Load<SpriteFont>("font");
+            counterFont = Content.Load<SpriteFont>("font2");
 
             // grid
 
@@ -181,14 +183,14 @@ namespace It_sAlive_
             resurrect = new Resurrect(new Vector2(1750, 900), Content.Load<Texture2D>("raise_icon_standard"), Content.Load<Texture2D>("raise_icon_highlight"), Content.Load<Texture2D>("raise_icon_pressed"), GraphicsDevice);
             
             // counters
-            research = new NumericalCounter("Research", new Vector2(10, 170), 0, 100, 0, 0, cursorFont, Color.Green);
-            madness = new NumericalCounter("Madness", new Vector2(10, 190), 0, 0, 0, 0, cursorFont, Color.Green);
-            money = new NumericalCounter("Money", new Vector2(10, 210), 0, 500, 0, 60, cursorFont, Color.Yellow, true);
-            papers = new NumericalCounter("Papers Published", new Vector2(10, 240), 0, 0, 0, 0, cursorFont, Color.Black);
-            lifeForce = new NumericalCounter("Life Force", new Vector2(10, 270), 100, 100, 0, 0, cursorFont, Color.Black);
-            longevity = new NumericalCounter("Longevity", new Vector2(10, 300), 100, 30, 0, 0, cursorFont, Color.Black);
-            humanity = new NumericalCounter("Humanity", new Vector2(10, 330), 100, 30, 0, 0, cursorFont, Color.Black);
-
+            research = new NumericalCounter("Research", new Vector2(25, 15), 0, 100, 0, 0, counterFont, Color.Green, Color.Green, Content.Load<Texture2D>("counter_box"));
+            madness = new NumericalCounter("Madness", new Vector2(25, 85), 0, 0, 0, 0, counterFont, Color.Red, Color.Green, Content.Load<Texture2D>("counter_box"));
+            money = new NumericalCounter("Money", new Vector2(25, 155), 0, 500, 0, 60, counterFont, Color.Orange, Color.Yellow, Content.Load<Texture2D>("counter_box"), true);
+            papers = new NumericalCounter("Papers Published", new Vector2(10, 300), 0, 0, 0, 0, cursorFont, Color.Black, Color.Black);
+            lifeForce = new NumericalCounter("Life Force", new Vector2(10, 320), 100, 100, 0, 0, cursorFont, Color.Black, Color.Black);
+            longevity = new NumericalCounter("Longevity", new Vector2(10, 340), 100, 30, 0, 0, cursorFont, Color.Black, Color.Black);
+            humanity = new NumericalCounter("Humanity", new Vector2(10, 360), 100, 30, 0, 0, cursorFont, Color.Black, Color.Black);
+            
 
             // dependant actions
 
@@ -210,7 +212,7 @@ namespace It_sAlive_
 
             room = new NonInteractive(Vector2.Zero, 0.6f, Content.Load<Texture2D>("room"));
             door = new NonInteractive(new Vector2(231, 413), 0.59f, Content.Load<Texture2D>("door"),2);
-            graveyard = new Graveyard(Vector2.Zero, 0.8f, Content.Load<Texture2D>("back"),new Vector2(830,200),new Vector2(1340,660),new List<MenuAction>{getCorpse});
+            graveyard = new Graveyard(Vector2.Zero, 0.8f, new Vector2(10,760),Content.Load<Texture2D>("back"), Content.Load<Texture2D>("dig_icon_standard"), Content.Load<Texture2D>("dig_icon_highlight"), Content.Load<Texture2D>("dig_icon_pressed"), GraphicsDevice, 0.5f);
             digger = new NonInteractive(new Vector2(1100, 400), 0.79f, Content.Load<Texture2D>("digger"), 1, 10);
             Switch = new NonInteractive(new Vector2(860,750), 0.58f, Content.Load<Texture2D>("switch"), 2, 1);
 
@@ -306,7 +308,10 @@ namespace It_sAlive_
             
 
             // cursor
-            cursor.Update(floorObjectList,progBars,Simon,Jeremy, build,graveyard,table,corpse,money, grid,resurrect,humanity,longevity,research, random,xScale,yScale);
+            cursor.Update(xScale,yScale);
+
+            // graveyard
+            graveyard.Update(gameTime, cursor, floorObjectList, table, Jeremy, corpse,progBars);
 
             // digging anim
             digger.Update(gameTime);
@@ -318,6 +323,7 @@ namespace It_sAlive_
             longevity.Update(gameTime);
             humanity.Update(gameTime);
             lifeForce.Update(gameTime);
+            papers.Update(gameTime);
 
             // resurrection
             resurrect.Update(corpse,lifeForce,humanity,longevity,lightningAbsorber,gameTime,cursor,Simon,Jeremy);
@@ -392,7 +398,7 @@ namespace It_sAlive_
             cursor.Render(GraphicsDevice, spriteBatch, cursorFont,build,graveyard,corpse);
 
             // inactive objects
-            graveyard.Render(spriteBatch);
+            graveyard.Render(spriteBatch,cursorFont);
             digger.Render(spriteBatch);
             room.Render(spriteBatch);
             door.Render(spriteBatch);
@@ -435,12 +441,12 @@ namespace It_sAlive_
 
             // test things....
 
-            spriteBatch.DrawString(cursorFont, blob.gridPosition.ToString(), new Vector2(300, 0), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // grid position of blob
-            spriteBatch.DrawString(cursorFont, cursor.position.ToString(), new Vector2(300, 30), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // cursor position
+            spriteBatch.DrawString(cursorFont, blob.gridPosition.ToString(), new Vector2(500, 0), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // grid position of blob
+            spriteBatch.DrawString(cursorFont, cursor.position.ToString(), new Vector2(500, 30), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // cursor position
 
-            spriteBatch.DrawString(cursorFont, "Alive: "+corpse.alive.ToString(), new Vector2(300, 90), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // alive?
-            spriteBatch.DrawString(cursorFont, "Fail: "+resurrect.fail.ToString(), new Vector2(300, 60), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // fail?
-            spriteBatch.DrawString(cursorFont, cursor.click.ToString(), new Vector2(300, 120), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // 
+            spriteBatch.DrawString(cursorFont, "Alive: "+corpse.alive.ToString(), new Vector2(500, 90), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // alive?
+            spriteBatch.DrawString(cursorFont, "Fail: "+resurrect.fail.ToString(), new Vector2(500, 60), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // fail?
+            spriteBatch.DrawString(cursorFont, cursor.click.ToString(), new Vector2(500, 120), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // 
             blob.Render(spriteBatch);
 
 

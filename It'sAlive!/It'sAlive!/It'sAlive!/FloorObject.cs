@@ -102,7 +102,7 @@ namespace It_sAlive_
                 this.iconRect.Height = iconTex.Height;
             }
 
-            // menu text
+            // menu tex
             dummyTexture = new Texture2D(graphicsDevice, 1, 1);
             dummyTexture.SetData(new Color[] { Color.Gray });
         }
@@ -112,7 +112,6 @@ namespace It_sAlive_
         {
             // check for mouseover/click
 
-            MouseState mouseState = Mouse.GetState();
             mouseOver = false;
 
             if (cursor.position.X >= (position.X - offset.X) && cursor.position.X <= (position.X - offset.X + ((objectTex.Width * scale) / frames))
@@ -121,7 +120,7 @@ namespace It_sAlive_
             {
                     // turn on menu when object is clicked
 
-                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
                     {
                         if (cursor.click == false)
                         {
@@ -230,7 +229,7 @@ namespace It_sAlive_
                     int index = menuActions.IndexOf(action);
                     actions[index] = new Tuple<string, Color, Color, Color>(actions[index].Item1, textColour, boxColour, lineColour);
 
-                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                    if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
                     {
                         if (cursor.click == false)
                         {
