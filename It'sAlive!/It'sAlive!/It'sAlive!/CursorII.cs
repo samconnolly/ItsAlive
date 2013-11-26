@@ -71,7 +71,10 @@ namespace It_sAlive_
 
             position.X = (mouseState.X/xOffset);
             position.Y = (mouseState.Y/yOffset);
-                            
+
+            // set mouseover false for this pass
+            buildIconMouseover = false;
+
             // turn off click flag when no longer clicking
 
             if (mouseState.LeftButton == ButtonState.Released && mouseState.RightButton == ButtonState.Released && click == true)
@@ -120,37 +123,6 @@ namespace It_sAlive_
 
                 // highlight box
 
-                // top line
-                Tuple<Vector2, Vector2> line = new Tuple<Vector2, Vector2>(menuObject.iconPosition, (menuObject.iconPosition + new Vector2(60, 0)));
-
-                float angle = (float)Math.Atan2(line.Item2.Y - line.Item1.Y, line.Item2.X - line.Item1.X);
-                float length = Vector2.Distance(line.Item1, line.Item2);
-
-                sbatch.Draw(dummyTexture, line.Item1 + new Vector2(0, 0), null, highlightColour, angle, Vector2.Zero, new Vector2(length, 3.0f), SpriteEffects.None, 0.15f);
-
-                // right line
-                Tuple<Vector2, Vector2> line2 = new Tuple<Vector2, Vector2>((menuObject.iconPosition + new Vector2(60, 60)), (menuObject.iconPosition + new Vector2(60, 0)));
-
-                float angle2 = (float)Math.Atan2(line2.Item2.Y - line2.Item1.Y, line2.Item2.X - line2.Item1.X);
-                float length2 = Vector2.Distance(line2.Item1, line2.Item2);
-
-                sbatch.Draw(dummyTexture, line2.Item1 + new Vector2(0, 0), null, highlightColour, angle2, Vector2.Zero, new Vector2(length2, 3.0f), SpriteEffects.None, 0.15f);
-
-                // left line
-                Tuple<Vector2, Vector2> line3 = new Tuple<Vector2, Vector2>(menuObject.iconPosition, (menuObject.iconPosition + new Vector2(0, 60)));
-
-                float angle3 = (float)Math.Atan2(line3.Item2.Y - line3.Item1.Y, line3.Item2.X - line3.Item1.X);
-                float length3 = Vector2.Distance(line3.Item1, line3.Item2);
-
-                sbatch.Draw(dummyTexture, line3.Item1 + new Vector2(0, 0), null, highlightColour, angle3, Vector2.Zero, new Vector2(length3, 3.0f), SpriteEffects.None, 0.15f);
-
-                // bottom line
-                Tuple<Vector2, Vector2> line4 = new Tuple<Vector2, Vector2>((menuObject.iconPosition + new Vector2(60, 60)), (menuObject.iconPosition + new Vector2(0, 60)));
-
-                float angle4 = (float)Math.Atan2(line4.Item2.Y - line4.Item1.Y, line4.Item2.X - line4.Item1.X);
-                float length4 = Vector2.Distance(line4.Item1, line4.Item2);
-
-                sbatch.Draw(dummyTexture, line4.Item1 + new Vector2(0, 0), null, highlightColour, angle4, Vector2.Zero, new Vector2(length4, 3.0f), SpriteEffects.None, 0.15f);
 
             }
 

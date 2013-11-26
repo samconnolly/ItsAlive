@@ -179,7 +179,7 @@ namespace It_sAlive_
             // HUD
 
             // buttons
-            build = new Build(new Vector2(5, 900), Content.Load<Texture2D>("build_icon_standard"), Content.Load<Texture2D>("build_icon_highlight"), Content.Load<Texture2D>("build_icon_pressed"), GraphicsDevice);
+            build = new Build(new Vector2(5, 900), Content.Load<Texture2D>("build_icon_standard"), Content.Load<Texture2D>("build_icon_highlight"), Content.Load<Texture2D>("build_icon_pressed"), Content.Load<Texture2D>("invarrow"), Content.Load<Texture2D>("highinvarrow"), GraphicsDevice);
             resurrect = new Resurrect(new Vector2(1750, 900), Content.Load<Texture2D>("raise_icon_standard"), Content.Load<Texture2D>("raise_icon_highlight"), Content.Load<Texture2D>("raise_icon_pressed"), GraphicsDevice);
             
             // counters
@@ -328,8 +328,6 @@ namespace It_sAlive_
             // resurrection
             resurrect.Update(corpse,lifeForce,humanity,longevity,lightningAbsorber,gameTime,cursor,Simon,Jeremy);
 
-            // build menu
-            build.Update(cursor,gameTime);
 
             // the corpse!
             corpse.Update(gameTime, dissectCorpse,studyCorpse,longevity,humanity,lifeForce,Simon,talk,cursor,progBars);
@@ -338,10 +336,25 @@ namespace It_sAlive_
             Simon.Update(gameTime,GraphicsDevice,cursor,research,money,madness,progBars,reachable);
             Jeremy.Update(gameTime, GraphicsDevice, grid, cursor, research, money, madness, progBars,corpse,door,digger,resurrect,Switch,humanity,longevity,random,reachable);
 
-            // objects
+            // objects to build
+            
+            if (build.menu == true)
+            {
+                // objects
+                foreach (FloorObject floorObject in build.buildList)
+                {
+                    floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList);
+                }
+            }
+
+
+            // build menu
+            build.Update(cursor, gameTime, money);
+
+            // floor objects
             foreach (FloorObject floorObject in floorObjectList)
             {
-                floorObject.Update(gameTime,cursor,Simon,Jeremy,progBars);
+                floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList);
             }
 
             // create progress bars if necessary

@@ -62,7 +62,7 @@ namespace It_sAlive_
             this.position = position;
             this.tex = itemTex;
             this.width = tex.Width/3;
-            this.height = tex.Height/3;
+            this.height = tex.Height/4;
             this.fwidth = tex.Width / 9;
             this.rect.Width = fwidth;
             this.rect.Height = height;

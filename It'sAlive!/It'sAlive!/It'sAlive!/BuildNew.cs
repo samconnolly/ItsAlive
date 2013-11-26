@@ -27,22 +27,36 @@ namespace It_sAlive_
         private int width;
         private int height;
 
+        
         //  menu
         public bool menu = false;
-        public Rectangle menuRectangle;
-        public Vector2 menuPosition;
+
+        public Texture2D arrow;
+        public Texture2D highArrow;
+
+        public bool full = false;
+        public int scrollPos = 0;
+        public int buildScreenLength = 8;
+
+        public Vector2 leftArrowPos = new Vector2(70, 760);
+        public Vector2 rightArrowPos = new Vector2(920, 720);
+        
+        private Texture2D dummyTexture;
+        private Color boxColour = Color.Black;
+        private Rectangle buildRectangle = new Rectangle(0, 0, 1980, 70);
+        public Vector2 buildPos = new Vector2(0, 1010);
+
         public bool menuMouseover = false;
 
-        private Texture2D dummyTexture;
 
         public FloorObject menuHighlightObject = null;
-        
+        private List<FloorObject> remove = new List<FloorObject> { };
 
         // set initial variables on frames
 
         public List<FloorObject> buildList = new List<FloorObject>();
 
-        public Build(Vector2 iconPosition, Texture2D iconTex, Texture2D highlightTex, Texture2D clickTex, GraphicsDevice graphicsDevice)
+        public Build(Vector2 iconPosition, Texture2D iconTex, Texture2D highlightTex, Texture2D clickTex, Texture2D buildArrow, Texture2D highBuildArrow, GraphicsDevice graphicsDevice)
         {          
             this.tex = iconTex;
             this.hTex = highlightTex;
@@ -53,7 +67,8 @@ namespace It_sAlive_
             this.height = (int)(tex.Height * scale);
 
             this.position = iconPosition;
-            this.menuPosition = iconPosition + new Vector2(width, height);
+             this.arrow = buildArrow;
+            this.highArrow = highBuildArrow;
 
             this.dummyTexture = new Texture2D(graphicsDevice, 1, 1);
             this.dummyTexture.SetData(new Color[] { Color.Gray });
@@ -66,23 +81,73 @@ namespace It_sAlive_
             item.onBuildList = true;
 
             int rank = buildList.IndexOf(item);
-                                   
+
+            item.iconPosition = new Vector2(120 + 80 * rank, 1015);
+
+            if (rank > buildScreenLength)
+            {
+                item.onBuildList = false;
+            }         
         }
 
-        // remove object from build list
-        public void Remove(FloorObject item, NumericalCounter money)
-        {
-            buildList.Remove(item);
-            money.value -= item.cost;
+        // Build object - setup to remove object from build list on next update
 
-            foreach (FloorObject curitem in buildList)
+
+         public void BuildThis(List<FloorObject> floorObjectList, FloorObject item)
+        {
+            remove.Add(item);
+            floorObjectList.Add(item);
+            menu = false;
+        }
+
+        public void ScrollLeft()
+        {
+            if (scrollPos > 0)
             {
-                int rank = buildList.IndexOf(curitem);
-                                               
+                scrollPos -= 1;
+
+                foreach (FloorObject curitem in buildList)
+                {
+                    if (buildList.IndexOf(curitem) >= scrollPos && buildList.IndexOf(curitem) < (scrollPos + buildScreenLength))
+                    {
+                        curitem.onBuildList = true;
+                    }
+
+                    else
+                    {
+                        curitem.onBuildList = false;
+                    }
+
+                    curitem.iconPosition = curitem.iconPosition + new Vector2(80, 0);
+                }
             }
         }
 
-        public void Update(Cursor cursor, GameTime gameTime)
+        public void ScrollRight()
+        {
+            if (scrollPos < (buildList.Count - 1))
+            {
+                scrollPos += 1;
+
+                foreach (FloorObject curitem in buildList)
+                {
+                    if (buildList.IndexOf(curitem) >= scrollPos && buildList.IndexOf(curitem) < (scrollPos + buildScreenLength))
+                    {
+                        curitem.onBuildList = true;
+                    }
+
+                    else
+                    {
+                        curitem.onBuildList = false;
+                    }
+
+                    curitem.iconPosition = curitem.iconPosition - new Vector2(80, 0);
+                }
+            }
+        }
+
+
+        public void Update(Cursor cursor, GameTime gameTime, NumericalCounter money)
         {
             // clicking on build icon
             
@@ -100,6 +165,7 @@ namespace It_sAlive_
                 }
             }
 
+            // turn click anim on for a bit
             if (clickOn == true)
             {
                 clickCount += gameTime.ElapsedGameTime.Milliseconds;
@@ -110,6 +176,51 @@ namespace It_sAlive_
                     clickOn = false;
                 }
             }
+
+
+            // turm the menu off
+             if (menuMouseover == false)
+                {
+                    if (cursor.position.Y < buildPos.Y)
+                    {
+                        if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
+                        {
+                            if (cursor.click == false)
+                            {
+                                menu = false;
+                            }
+
+                            cursor.click = true;
+                        }
+                    }
+                }
+
+            // remove objects that have been built
+
+             if (remove.Count > 0)
+             {
+                 buildList.Remove(remove[0]);
+                 money.value -= remove[0].cost;
+
+
+                 foreach (FloorObject curitem in buildList)
+                 {
+                     int rank = buildList.IndexOf(curitem);
+                     curitem.iconPosition = new Vector2(120 + 80 * rank, 1015);
+
+                     if (rank > buildScreenLength)
+                     {
+                         curitem.onBuildList = false;
+                     }
+
+                     else
+                     {
+                         curitem.onBuildList = true;
+                     }
+                 }
+
+                 remove = new List<FloorObject> { };
+             }
 
         }
 
@@ -140,162 +251,113 @@ namespace It_sAlive_
             // menu
             if (menu == true)
             {
-                                                                               
-                // find longest string in menu
-
-                int boxWidth = 0;
-                
-                if (menu == true)
+                // arrows
+                if (buildList.Count > buildScreenLength)
                 {
-                    foreach (FloorObject machine in buildList)
+                    full = true;
+
+
+                    if (scrollPos == (buildList.Count - buildScreenLength))
                     {
-                        
-                        if (machine.name.Length + 5 > boxWidth)
+                        if (cursor.position.X >= leftArrowPos.X && cursor.position.X <= leftArrowPos.X + arrow.Width
+                                    && cursor.position.Y >= leftArrowPos.Y - arrow.Height && cursor.position.Y <= leftArrowPos.Y)
                         {
-                            boxWidth = machine.name.Length + 5; // set box width for below
-                            
+
+                            sbatch.Draw(highArrow, leftArrowPos, null, Color.White, -(float)Math.PI / 2.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
+                        }
+
+                        else
+                        {
+                            sbatch.Draw(arrow, leftArrowPos, null, Color.White, -(float)Math.PI / 2.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
                         }
                     }
-                }
 
-                // draw boxes and outlines for each item, check if highlighted, clicked
-
-                menuRectangle.Width  = boxWidth * 12 + 10;  // set width to widest text from above
-                menuRectangle.Height = 30;                  // menu item height spread
-                Vector2 menuItemPosition = menuPosition - new Vector2(0, menuRectangle.Height);    // position of each text menu item
-
-                menuMouseover = false;
-
-                MouseState mouseState = Mouse.GetState();
-
-                FloorObject remove = null; // built items to remove from build list
-                
-                foreach (FloorObject machine in buildList)
-                {
-                    // declare colours
-                    Color textColour;
-                    Color boxColour;
-                    Color lineColour;
-
-
-                    // IF MOUSE-OVERED change colours, set to highlighted item
-
-                    if (cursor.position.X >= menuItemPosition.X && cursor.position.X < (menuItemPosition.X + menuRectangle.Width) && 
-                        cursor.position.Y >= menuItemPosition.Y && cursor.position.Y < (menuItemPosition.Y + menuRectangle.Height))
+                    if (scrollPos == 0)
                     {
-                        textColour = Color.Black;
-                        boxColour  = Color.LightGray;
-                        lineColour = Color.LimeGreen;
 
-                        menuHighlightObject = machine;
-                        menuMouseover = true;
-
-                        // build item if clicked
-
-                        if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
+                        if (cursor.position.X >= rightArrowPos.X - arrow.Width && cursor.position.X <= rightArrowPos.X 
+                                    && cursor.position.Y >= rightArrowPos.Y && cursor.position.Y <= rightArrowPos.Y + arrow.Height)
                         {
-                            if (cursor.click == false)
-                            {
-                                menu = false;
+                            sbatch.Draw(highArrow, rightArrowPos, null, Color.White, (float)Math.PI/2.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
+                        }
 
-                                if (money.value >= menuHighlightObject.cost)
-                                {
-                                    remove = menuHighlightObject;
-                                }
-                            }
-
-                            cursor.click = true;
-
-                        }                        
-
+                        else
+                        {
+                            sbatch.Draw(arrow, rightArrowPos, null, Color.White, (float)Math.PI / 2.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
+                        }
                     }
 
-                    // IF NOT MOUSE-OVERED
-                    else
+                    if (scrollPos < (buildList.Count - buildScreenLength) && scrollPos > 0)
                     {
-                        // set colours to standard
-                        textColour = Color.White;
-                        boxColour = Color.Gray;
-                        lineColour = Color.DarkGray;
-                                                
+                        if (cursor.position.X >= leftArrowPos.X && cursor.position.X <= leftArrowPos.X + arrow.Width
+                                    && cursor.position.Y >= leftArrowPos.Y - arrow.Height && cursor.position.Y <= leftArrowPos.Y)
+                        {
+
+                            sbatch.Draw(highArrow, leftArrowPos, null, Color.White, -(float)Math.PI / 2.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
+                        }
+
+                        else
+                        {
+                            sbatch.Draw(arrow, leftArrowPos, null, Color.White, -(float)Math.PI / 2.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
+                        }
+
+
+
+                        if (cursor.position.X >= rightArrowPos.X - arrow.Width && cursor.position.X <= rightArrowPos.X
+                                    && cursor.position.Y >= rightArrowPos.Y && cursor.position.Y <= rightArrowPos.Y + arrow.Height)
+                        {
+                            sbatch.Draw(highArrow, rightArrowPos, null, Color.White, (float)Math.PI / 2.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
+                        }
+
+                        else
+                        {
+                            sbatch.Draw(arrow, rightArrowPos, null, Color.White, (float)Math.PI / 2.0f, Vector2.Zero, 1.0f, SpriteEffects.None, 0.1f);
+                        }
                     }
 
-                    // text
-
-                    sbatch.DrawString(font, machine.name + ": $" + machine.cost.ToString(), menuItemPosition + new Vector2(5,0), textColour, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.13f);
-
-
-                    // text rectangle
-                    sbatch.Draw(dummyTexture, menuItemPosition , menuRectangle, boxColour, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.17f);
-
-                    // top line
-                    Tuple<Vector2, Vector2> line = new Tuple<Vector2, Vector2>(menuItemPosition, (menuItemPosition + new Vector2(menuRectangle.Width, 0)));
-
-                    float angle = (float)Math.Atan2(line.Item2.Y - line.Item1.Y, line.Item2.X - line.Item1.X);
-                    float length = Vector2.Distance(line.Item1, line.Item2);
-
-                    sbatch.Draw(dummyTexture, line.Item1 + new Vector2(0, 0), null, lineColour, angle, Vector2.Zero, new Vector2(length, 3.0f), SpriteEffects.None, 0.15f);
-
-                    // right line
-                    Tuple<Vector2, Vector2> line2 = new Tuple<Vector2, Vector2>((menuItemPosition + new Vector2(menuRectangle.Width, menuRectangle.Height)), (menuItemPosition + new Vector2(menuRectangle.Width, 0)));
-
-                    float angle2 = (float)Math.Atan2(line2.Item2.Y - line2.Item1.Y, line2.Item2.X - line2.Item1.X);
-                    float length2 = Vector2.Distance(line2.Item1, line2.Item2);
-
-                    sbatch.Draw(dummyTexture, line2.Item1 + new Vector2(0, 0), null, lineColour, angle2, Vector2.Zero, new Vector2(length2, 3.0f), SpriteEffects.None, 0.15f);
-
-                    // left line
-                    Tuple<Vector2, Vector2> line3 = new Tuple<Vector2, Vector2>(menuItemPosition, (menuItemPosition + new Vector2(0, menuRectangle.Height)));
-
-                    float angle3 = (float)Math.Atan2(line3.Item2.Y - line3.Item1.Y, line3.Item2.X - line3.Item1.X);
-                    float length3 = Vector2.Distance(line3.Item1, line3.Item2);
-
-                    sbatch.Draw(dummyTexture, line3.Item1 + new Vector2(0, 0), null, lineColour, angle3, Vector2.Zero, new Vector2(length3, 3.0f), SpriteEffects.None, 0.15f);
-
-                    // bottom line
-                    Tuple<Vector2, Vector2> line4 = new Tuple<Vector2, Vector2>((menuItemPosition + new Vector2(menuRectangle.Width, menuRectangle.Height)), (menuItemPosition + new Vector2(0, menuRectangle.Height)));
-
-                    float angle4 = (float)Math.Atan2(line4.Item2.Y - line4.Item1.Y, line4.Item2.X - line4.Item1.X);
-                    float length4 = Vector2.Distance(line4.Item1, line4.Item2);
-
-                    sbatch.Draw(dummyTexture, line4.Item1 + new Vector2(0, 0), null, lineColour, angle4, Vector2.Zero, new Vector2(length4, 3.0f), SpriteEffects.None, 0.15f);
-
-                    // set to height of next text item
-                    menuItemPosition -= new Vector2(0, menuRectangle.Height);
-                    
                 }
 
-                // remove anything that has been built from build list, build, update its position
-                if (remove != null)
+
+                else
                 {
-                    floorObjectList.Add(remove);        // add to floor objects (build)
-                    Remove(remove, money);              // remove from build list
-                    reachable.Update(floorObjectList);  // update reachable squares of grid, update character's paths
-                    scientist.path.Update(reachable);   // update path from updated reachable
-                    assistant.path.Update(reachable);   // update path from updated reachable
-                    remove = null;
+                    full = false;
                 }
+
+                // render background
+
+                sbatch.Draw(dummyTexture, buildPos, buildRectangle, boxColour, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.17f);
+
+                // render items
+
+                for (int x = scrollPos; x < (scrollPos + buildScreenLength) && x < buildList.Count; x++)
+                {
+                    FloorObject curitem = buildList[x];
+
+                    curitem.IconRender(sbatch,this);
+                }
+
+            }
+
+                //// remove anything that has been built from build list, build, update its position
+                //if (remove != null)
+                //{
+                //    floorObjectList.Add(remove);        // add to floor objects (build)
+                //    Remove(remove, money);              // remove from build list
+                //    reachable.Update(floorObjectList);  // update reachable squares of grid, update character's paths
+                //    scientist.path.Update(reachable);   // update path from updated reachable
+                //    assistant.path.Update(reachable);   // update path from updated reachable
+                //    remove = null;
+                //}
 
                 // set to close menu if clicking is done outside...
-                if (menuMouseover == false)
-                {
-                    if (mouseState.LeftButton == ButtonState.Pressed | mouseState.RightButton == ButtonState.Pressed)
-                    {
-                        if (cursor.click == false)
-                        {
-                            menu = false;
-                        }
-
-                        cursor.click = true;
-                    }
-                }
+               
                 
             }
 
 
 
 
-            }
+            
         }
     }
 
