@@ -159,9 +159,11 @@ namespace It_sAlive_
                     {
                         menu = true;
                         clickOn = true;
+
+                        cursor.click = true;
                     }
 
-                    cursor.click = true;
+                    
                 }
             }
 
@@ -179,18 +181,17 @@ namespace It_sAlive_
 
 
             // turm the menu off
-             if (menuMouseover == false)
+             if (menuMouseover == false && (cursor.position.X >= position.X && cursor.position.X < (position.X + width) && cursor.position.Y >= position.Y && cursor.position.Y < (position.Y + height)) == false)
                 {
                     if (cursor.position.Y < buildPos.Y)
                     {
                         if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
                         {
-                            if (cursor.click == false)
+                            if (menu == true)
                             {
                                 menu = false;
                             }
-
-                            cursor.click = true;
+                                                        
                         }
                     }
                 }
