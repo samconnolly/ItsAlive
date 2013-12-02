@@ -310,8 +310,8 @@ namespace It_sAlive_
                                         assistant.animStart = true;
                                     }
 
-                                    scientist.action = menuHighlightAction;
-                                    scientist.floorObject = this;
+                                    assistant.action = menuHighlightAction;
+                                    assistant.floorObject = this;
                                 }
 
                                 // both using same machine?

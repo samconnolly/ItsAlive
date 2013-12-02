@@ -25,12 +25,13 @@ namespace It_sAlive_
         public int fwidth;
         public List<MenuAction> aliveMenuActions;
         public List<MenuAction> deadMenuActions;
+        public List<MenuAction> workMenuActions;
         private int frames = 1;
         private int frate = 80;
         private int currentFrame = 0;
 
         private int anim = 0;
-        private List<int> nframes = new List<int>{1, 3, 3};
+        private List<int> nframes = new List<int>{1, 3, 3,1};
 
         private int timer = 0;
         private int rotTimer = 0;
@@ -38,6 +39,7 @@ namespace It_sAlive_
         public int rot = 3;
 
         public bool alive = false;
+        public bool dead = false;
         public bool talking = false;
 
         // menu
@@ -57,7 +59,7 @@ namespace It_sAlive_
         private Color lineColour;
 
 
-        public Corpse(Vector2 position,Texture2D itemTex, List<MenuAction> deadMenuActions, List<MenuAction> aliveMenuActions,GraphicsDevice graphicsDevice)
+        public Corpse(Vector2 position,Texture2D itemTex, List<MenuAction> workMenuActions, List<MenuAction> aliveMenuActions,List<MenuAction> deadMenuActions,GraphicsDevice graphicsDevice)
         {
             this.position = position;
             this.tex = itemTex;
@@ -68,16 +70,29 @@ namespace It_sAlive_
             this.rect.Height = height;
             this.aliveMenuActions = aliveMenuActions;
             this.deadMenuActions = deadMenuActions;
+            this.workMenuActions = workMenuActions;
 
             // menu text
             dummyTexture = new Texture2D(graphicsDevice, 1, 1);
             dummyTexture.SetData(new Color[] { Color.Gray });
         }
 
-        public void Update(GameTime gameTime, MenuAction dissect, MenuAction study,NumericalCounter longevity, NumericalCounter humanity, NumericalCounter lifeforce, Scientist scientist, MenuAction talk, Cursor cursor,List<MiniProgressBar> bars)
+        public void Die()
+        {
+            alive = false;
+            dead = true;
+            anim = 3;
+            frames = nframes[3];
+        }
+
+        public void Update(GameTime gameTime, MenuAction dissect, MenuAction study,NumericalCounter longevity, NumericalCounter humanity, NumericalCounter lifeforce, Scientist scientist, Assistant assistant,
+                                MenuAction talk, Cursor cursor,List<MiniProgressBar> bars, MenuAction clearCorpse)
         {
             if (this.visible == true)
-            {                
+            {        
+                
+                // check for mouseover & click
+
                 cursor.corpseMouseover = false;
 
                 if (cursor.position.X >= position.X && cursor.position.X <= position.X + fwidth
@@ -103,6 +118,8 @@ namespace It_sAlive_
 
                     
                 }
+
+                // check for menu clicks
 
                 if (corpseMenu == true)
                 {
@@ -147,10 +164,12 @@ namespace It_sAlive_
                 }
 
 
+                // rotting timer and count
+
                 timer += gameTime.ElapsedGameTime.Milliseconds;
                 rotTimer += gameTime.ElapsedGameTime.Milliseconds;
 
-                if (rotTimer >= rotTime * 1000.0 && alive == false)
+                if (rotTimer >= rotTime * 1000.0 && alive == false && dead == false)
                 {
                     rotTimer = 0;
 
@@ -164,12 +183,14 @@ namespace It_sAlive_
 
                     else
                     {
-                        this.visible = false;
+                        Die();
                         rot = 3;
                         dissect.research = 54;
                         dissect.madness = 30;
                     }
                 }
+
+                // live corpse dead count && anim change
 
                 if (alive == true)
                 {
@@ -177,8 +198,7 @@ namespace It_sAlive_
 
                     if (longevity.value == 0)
                     {
-                        alive = false;
-                        visible = false;
+                        Die();
                     }
 
                     if (scientist.action == talk && scientist.doing == true)
@@ -197,7 +217,7 @@ namespace It_sAlive_
 
                 }
 
-                else
+                else if (dead == false)
                 {
                     longevity.valueChange = 0;
 
@@ -205,17 +225,22 @@ namespace It_sAlive_
                     frames = nframes[0];
                 }
 
+                // kill if dissected
 
                 if (dissect.done == true)
                 {
-                    this.visible = false;
+                    Die();
                 }
+
+                // kill if studies 3 times
 
                 if (study.count >= 3)
                 {
                     study.count = 0;
-                    this.visible = false;
+                    Die();
                 }
+
+                // update anim
 
                 if (timer >= frate)
                 {
@@ -244,11 +269,11 @@ namespace It_sAlive_
                     int boxWidth = 0;
                     actions = new List<Tuple<string, Color, Color, Color>> { };
 
-                    if (alive == false)
+                    if (alive == false && dead == false)
                     {
-                        menuActions = deadMenuActions;
+                        menuActions = workMenuActions;
 
-                        foreach (MenuAction action in deadMenuActions)
+                        foreach (MenuAction action in workMenuActions)
                         {  
                             // add
                             actions.Add(new Tuple<string, Color, Color, Color>(action.name, Color.White, Color.Gray, Color.DarkGray));
@@ -266,6 +291,23 @@ namespace It_sAlive_
                         menuActions = aliveMenuActions;
                                                 
                         foreach (MenuAction action in aliveMenuActions)
+                        {
+                            // add
+                            actions.Add(new Tuple<string, Color, Color, Color>(action.name, Color.White, Color.Gray, Color.DarkGray));
+
+                            if (action.name.Length > boxWidth)
+                            {
+                                boxWidth = action.name.Length; // set box width for below
+
+                            }
+                        }
+                    }
+
+                    if (dead == true)
+                    {
+                        menuActions = deadMenuActions;
+
+                        foreach (MenuAction action in deadMenuActions)
                         {
                             // add
                             actions.Add(new Tuple<string, Color, Color, Color>(action.name, Color.White, Color.Gray, Color.DarkGray));
@@ -326,6 +368,8 @@ namespace It_sAlive_
 
                                 if (menuMouseover == true)
                                 {
+                                    if (action.scientist == true)
+                                    {
                                         if (scientist.walking == true)
                                         {
                                             scientist.walking = false;
@@ -344,8 +388,32 @@ namespace It_sAlive_
                                         }
 
                                         scientist.action = menuHighlightAction;
-                                        scientist.corpseWork = true;    
-                                    
+                                        scientist.corpseWork = true;
+                                    }
+
+                                    if (action.assistant == true)
+                                    {
+                                        if (assistant.walking == true)
+                                        {
+                                            assistant.walking = false;
+                                            assistant.floorObject = null;
+                                            assistant.action = null;
+                                        }
+
+                                        else if (assistant.doing == true)
+                                        {
+                                            assistant.doing = false;
+                                            assistant.digging = false;
+                                            assistant.floorObject = null;
+                                            bars.Remove(assistant.progBar);
+                                            assistant.action = null;
+                                            assistant.animStart = true;
+                                        }
+
+                                        assistant.action = menuHighlightAction;
+                                        assistant.corpseWork = true;
+
+                                    }
                                                                       
                                 }
 
@@ -358,6 +426,16 @@ namespace It_sAlive_
 
                     }
                 }
+            }
+
+            // check for cleared up dead corpse, reset corpse if so.
+
+            if (clearCorpse.count > 0)
+            {
+                clearCorpse.count = 0;
+                visible = false;
+                dead = false;
+                rot = 3;
             }
         }
 

@@ -40,6 +40,7 @@ namespace It_sAlive_
         public bool corpseCarrying = false;
         public bool animating = false;
         public bool twoWork = false;
+        public bool corpseWork = false;
         
 
         public Vector2 gridPosition = Vector2.Zero;
@@ -148,9 +149,27 @@ namespace It_sAlive_
             if (action != null && walking == false && doing == false)
             {
 
-                
+                // to corpse
+                if (corpseWork == true)
+                {
+                    if (gridPosition != new Vector2(5, 4))
+                    {
+                        walking = true;
+                        drawPath = path.PathList(gridPosition, new Vector2(5, 4), grid);
+                        pathStep = 1;
+                        walkingTarget = drawPath[pathStep];
+                    }
 
-                if (gridPosition != floorObject.gridPosition + new Vector2(0, -1))
+                    else
+                    {
+                        doing = true;
+                        currentFrame = 0;
+                        gridPosition = drawPath[pathStep - 1];
+                        position = grid.CartesianCoords(gridPosition);
+                    }
+                }
+
+                else if (gridPosition != floorObject.gridPosition + new Vector2(0, -1))
                 {
                     walking = true;
 

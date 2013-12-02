@@ -63,14 +63,24 @@ namespace It_sAlive_
 
         }
 
-        public void Update(float xOffset, float yOffset)
+        public void Update(GraphicsDeviceManager graphics, float xOffset, float yOffset, float wxOffset, float wyOffset)
         {
             mouseState = Mouse.GetState();
 
             // Put the cursor where the mouse is constantly
 
-            position.X = (mouseState.X/xOffset);
-            position.Y = (mouseState.Y/yOffset);
+            if (graphics.IsFullScreen == true)
+            {
+                position.X = (mouseState.X / xOffset);
+                position.Y = (mouseState.Y / yOffset);
+            }
+
+
+            if (graphics.IsFullScreen == false)
+            {
+                position.X = (mouseState.X / wxOffset);
+                position.Y = (mouseState.Y / wyOffset);
+            }
 
             // set mouseover false for this pass
             buildIconMouseover = false;

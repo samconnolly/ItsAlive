@@ -11,7 +11,8 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Microsoft.CSharp;
-
+using System.Windows.Forms;
+using System.Diagnostics;
 
 namespace It_sAlive_
 {
@@ -23,15 +24,25 @@ namespace It_sAlive_
 
         public Game1()
         {
-            graphics = new GraphicsDeviceManager(this);
-
-            // set window size
-            graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
-            graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
             
-            graphics.IsFullScreen = false;
-                        
-            Content.RootDirectory = "Content";
+            graphics = new GraphicsDeviceManager(this);
+             
+            graphics.IsFullScreen = false; // initial fullscreen?
+            
+            // set graphics buffer size
+
+            if (graphics.IsFullScreen == true) // set to whole screen if full screen
+            {
+                graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            }
+            if (graphics.IsFullScreen == false) // set to size of dektop if windowed (excluding taskbar and window caption)
+            {
+                graphics.PreferredBackBufferHeight = Screen.PrimaryScreen.WorkingArea.Height - SystemInformation.CaptionHeight - 5;
+                graphics.PreferredBackBufferWidth = Screen.PrimaryScreen.WorkingArea.Width - 5;                                               
+            }
+
+            Content.RootDirectory = "Content"; // content folder (assets here)
         }
 
      
@@ -42,17 +53,38 @@ namespace It_sAlive_
 
         // ====== Declare things... =============
 
-        // viewport
+        // graphics & viewport
+
+        double aspectRatio = (16.0f / 9.0f);
+        int targetWidth = 1920;
+        int targetHeight = 1080;
+        int borderSpace = 5;
+
+        // - fullscreen
+        int width;
+        int height;
+        int xOffset;
+        int yOffset;
 
         float xScale;
         float yScale;
-        bool f1Down = false;
+
+        // - windowed
+        int wwidth;
+        int wheight;
+        int wxOffset;
+        int wyOffset;
+        
+        float wxScale;
+        float wyScale;
+
+        bool f1Down = false; // changing fullscreen/windowed toggle
 
         // Random number seed
         Random random = new Random();
                 
         // Input Data Table
-        DataTable machines;
+        //DataTable machines;
         
         // cursor
         Cursor cursor;
@@ -109,11 +141,13 @@ namespace It_sAlive_
         // --- menu actions ----
 
         // independent
-        MenuAction turnOn = new MenuAction("Turn on",true,false,2,5,1,0,0,0,0,true,true);
-        MenuAction turnOff = new MenuAction("Turn off", true,false, 2, 5, 1, 0, 0, 0, 0, false,false,true);
+        MenuAction turnOn = new MenuAction("Turn On",true,false,2,5,1,0,0,0,0,true,true);
+        MenuAction turnOff = new MenuAction("Turn Off", true,false, 2, 5, 1, 0, 0, 0, 0, false,false,true);
         MenuAction getCorpse = new MenuAction("Exhume Cadaver", true,false, 15, 0, 1, 0, 0, 0, 0, true);
         MenuAction studyCorpse = new MenuAction("Study Corpse", true, false, 5, 10, 6, 0, 0, 0, 0, true);
         MenuAction dissectCorpse = new MenuAction("Dissect Corpse", true,false, 7, 18 * 3, 3 * 10, 0, 0, 0, 0, true);
+        MenuAction clearCorpse = new MenuAction("Clear Up Corpse", false, true, 1, 0 , 0, 0, 0, 0, 0, true);
+        
         MenuAction study = new MenuAction("Study", true,false, 10, 50, 0, 0, 0, 0, 0, true); 
 
         // dependent
@@ -140,15 +174,25 @@ namespace It_sAlive_
 
         protected override void LoadContent()
         {
-            double aspectRatio = (16.0f / 9.0f);
-            int targetWidth = 1920;
-            int targetHeight = 1080;
+            //========== GRAPHICS ==============================================
 
-            GraphicsDevice.Viewport = new Viewport(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
-                                            GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
-           
-            int width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
-            int height = (int)(width / aspectRatio);
+            // set viewport to size of screen, dependant on fullscreen/windowed
+            if (graphics.IsFullScreen == true)
+            {
+                GraphicsDevice.Viewport = new Viewport(0, 0, GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width,
+                                                GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height);
+            }
+            else
+            {
+                GraphicsDevice.Viewport = new Viewport(0, 0, Screen.PrimaryScreen.WorkingArea.Width - borderSpace,
+                                                                Screen.PrimaryScreen.WorkingArea.Height - SystemInformation.CaptionHeight - borderSpace);                
+            }
+
+            // find maximum size of render field with 16:9 aspect ratio when full screen
+
+            width = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+            height = (int)(width / aspectRatio);
+
             if (height > GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height)
             {
                 height = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
@@ -158,13 +202,45 @@ namespace It_sAlive_
             xScale = (float)((double)width / (double)targetWidth);
             yScale = (float)((double)height / (double)targetHeight);
 
-            int xOffset = (int)((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - width) / 2.0);
-            int yOffset = (int)((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - height) / 2.0);
+            xOffset = (int)((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - width) / 2.0);
+            yOffset = (int)((GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - height) / 2.0);
 
-            GraphicsDevice.Viewport = new Viewport(xOffset, yOffset, width,height);
-           
+            // find maximum size of render field with 16:9 aspect ratio when windowed
+
+            wheight = Screen.PrimaryScreen.WorkingArea.Height - SystemInformation.CaptionHeight - borderSpace;
+            wwidth = (int)(wheight * aspectRatio);
+
+            if (wwidth > Screen.PrimaryScreen.WorkingArea.Width - borderSpace)
+            {
+                wwidth = Screen.PrimaryScreen.WorkingArea.Width - borderSpace;
+                wheight = (int)(wwidth / aspectRatio);
+            }
+
+            wxScale = (float)((double)wwidth / (double)targetWidth);
+            wyScale = (float)((double)wheight / (double)targetHeight);
+
+            wxOffset = (int)((Screen.PrimaryScreen.WorkingArea.Width - borderSpace - wwidth) / 2.0);
+            wyOffset = (int)((Screen.PrimaryScreen.WorkingArea.Height - SystemInformation.CaptionHeight - borderSpace - wheight) / 2.0);
+
+            // set viewport to this maximum render size, dependent on fullscreen/windowed
+            if (graphics.IsFullScreen == true)
+            {
+                GraphicsDevice.Viewport = new Viewport(xOffset, yOffset, width, height);
+            }
+
+            if (graphics.IsFullScreen == false)
+            {
+                GraphicsDevice.Viewport = new Viewport(wxOffset, wyOffset, wwidth, wheight);
+
+                var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+                form.Location = new System.Drawing.Point(0, 0);
+            }
+            
+            // spritebatch
 
             spriteBatch = new SpriteBatch(GraphicsDevice);
+
+            // ========= GAME OBJECTS ================================================
 
             // fonts
 
@@ -215,8 +291,7 @@ namespace It_sAlive_
             graveyard = new Graveyard(Vector2.Zero, 0.8f, new Vector2(10,760),Content.Load<Texture2D>("back"), Content.Load<Texture2D>("dig_icon_standard"), Content.Load<Texture2D>("dig_icon_highlight"), Content.Load<Texture2D>("dig_icon_pressed"), GraphicsDevice, 0.5f);
             digger = new NonInteractive(new Vector2(1100, 400), 0.79f, Content.Load<Texture2D>("digger"), 1, 10);
             Switch = new NonInteractive(new Vector2(860,750), 0.58f, Content.Load<Texture2D>("switch"), 2, 1);
-
-
+            
             // cursor
 
             cursor = new Cursor(Content.Load<Texture2D>("cursor"),GraphicsDevice);
@@ -238,7 +313,7 @@ namespace It_sAlive_
 
             // the corpse!
 
-            corpse = new Corpse(new Vector2(800, 865),Content.Load<Texture2D>("corpse"), new List<MenuAction> { studyCorpse, dissectCorpse }, new List<MenuAction> { talk,studyLiveCorpse },GraphicsDevice);
+            corpse = new Corpse(new Vector2(800, 865),Content.Load<Texture2D>("corpse"), new List<MenuAction> { studyCorpse, dissectCorpse }, new List<MenuAction> { talk,studyLiveCorpse }, new List<MenuAction> { clearCorpse },GraphicsDevice);
 
             // populate initial build list
 
@@ -275,29 +350,46 @@ namespace It_sAlive_
             // check for exit key press
             KeyboardState kstate = Keyboard.GetState();
 
-            if (kstate.IsKeyDown(Keys.Escape))
+            if (kstate.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.Escape))
                 {
                    this.Exit();
                 }
 
-            if (kstate.IsKeyDown(Keys.F1))
+            // check for switch from full screen to windowed or back
+
+            if (kstate.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.F1))
             {
                 if (f1Down == false)
                 {
-                    if (graphics.IsFullScreen == true)
+                    if (graphics.IsFullScreen == true) // swap viewport and buffer to appropriate size
                     {
                         graphics.IsFullScreen = false;
 
+                        graphics.PreferredBackBufferHeight = Screen.PrimaryScreen.WorkingArea.Height - SystemInformation.CaptionHeight - borderSpace;
+                        graphics.PreferredBackBufferWidth = Screen.PrimaryScreen.WorkingArea.Width - borderSpace;
+                        graphics.ApplyChanges();
+                        GraphicsDevice.Viewport = new Viewport(wxOffset, wyOffset, wwidth, wheight);
+
+                        var form = (System.Windows.Forms.Form)System.Windows.Forms.Control.FromHandle(this.Window.Handle);
+                        form.Location = new System.Drawing.Point(0, 0);
+
                         f1Down = true;
                     }
-                    else
+
+                    else // swap viewport and buffer to appropriate size
                     {
                         graphics.IsFullScreen = true;
 
+                        graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height;
+                        graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width;
+                        graphics.ApplyChanges();
+                        GraphicsDevice.Viewport = new Viewport(xOffset, yOffset, width, height);
+                        
+
                         f1Down = true;
                     }
 
-                    graphics.ApplyChanges();
+                    graphics.ApplyChanges(); // apply changes!
                 }
             }
 
@@ -308,7 +400,7 @@ namespace It_sAlive_
             
 
             // cursor
-            cursor.Update(xScale,yScale);
+            cursor.Update(graphics, xScale, yScale, wxScale, wyScale);
 
             // graveyard
             graveyard.Update(gameTime, cursor, floorObjectList, table, Jeremy, corpse,progBars);
@@ -330,7 +422,7 @@ namespace It_sAlive_
 
 
             // the corpse!
-            corpse.Update(gameTime, dissectCorpse,studyCorpse,longevity,humanity,lifeForce,Simon,talk,cursor,progBars);
+            corpse.Update(gameTime, dissectCorpse,studyCorpse,longevity,humanity,lifeForce,Simon,Jeremy,talk,cursor,progBars,clearCorpse);
 
             // characters
             Simon.Update(gameTime,GraphicsDevice,cursor,research,money,madness,progBars,reachable);
@@ -394,18 +486,21 @@ namespace It_sAlive_
      
         protected override void Draw(GameTime gameTime)
         {
-            // set whole screen to viewport
-            //GraphicsDevice.Viewport = wholeViewport;
 
             // clear graphics device
             GraphicsDevice.Clear(Color.Black);
-
-            // set drawing to part of screen only
-            //GraphicsDevice.Viewport = aspectViewport;
-
+            
             // ============== Drawing code =============
 
-            spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend,null,null,null,null,Matrix.CreateScale(xScale,yScale,1.0f));
+            if (graphics.IsFullScreen == true)
+            {
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Matrix.CreateScale(xScale, yScale, 1.0f));
+            }
+
+            if (graphics.IsFullScreen == false)
+            {
+                spriteBatch.Begin(SpriteSortMode.BackToFront, BlendState.AlphaBlend, null, null, null, null, Matrix.CreateScale(wxScale, wyScale, 1.0f));
+            }
 
             // cursor
             cursor.Render(GraphicsDevice, spriteBatch, cursorFont,build,graveyard,corpse);
