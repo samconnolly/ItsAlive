@@ -34,6 +34,8 @@ namespace It_sAlive_
         public Vector2 gridPosition = Vector2.Zero;
         public Vector2 offset;
 
+        public Vector2 footprint;
+
         public float layer;
         public float scale = 1.0f;
 
@@ -67,13 +69,15 @@ namespace It_sAlive_
 
         // The public instance of the object
 
-        public FloorObject(Texture2D texture,Texture2D iconTexture, int frameNumber,int animNumber, Vector2 gridPosition, Grid grid, string name,int cost, List<MenuAction> menuActions, GraphicsDevice graphicsDevice)
+        public FloorObject(Texture2D texture,Texture2D iconTexture, int frameNumber,int animNumber, Vector2 gridPosition, Grid grid, string name,int cost, List<MenuAction> menuActions, GraphicsDevice graphicsDevice, Vector2 footprint)
         {
 
             this.objectTex = texture;
             this.gridPosition = gridPosition;
             this.position = grid.EdgeCartesianCoords(gridPosition);
             this.layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y;
+
+            this.footprint = footprint;
 
             this.name = name;
             this.menuActions = menuActions;
@@ -112,7 +116,7 @@ namespace It_sAlive_
         // build this object
  
 
-        public void Update(GameTime gametime,Cursor cursor,Scientist scientist, Assistant assistant, List<MiniProgressBar> bars, Build build, List<FloorObject> floorObjectList)
+        public void Update(GameTime gametime,Cursor cursor,Scientist scientist, Assistant assistant, List<MiniProgressBar> bars, Build build, List<FloorObject> floorObjectList, ReachableArea reachable)
         {
             // check for mouseover/click on machine
 
@@ -162,7 +166,7 @@ namespace It_sAlive_
                     {
                         if (cursor.click == false)
                         {
-                            build.BuildThis(floorObjectList, this);
+                            build.BuildThis(floorObjectList, this,reachable);
                             cursor.click = true;
                         }
                     }
@@ -339,8 +343,6 @@ namespace It_sAlive_
            
             // object itself
             sbatch.Draw(objectTex, position - offset, rect, Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layer);
-
-           
 
             // menu
 

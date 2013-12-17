@@ -125,6 +125,7 @@ namespace It_sAlive_
         FloorObject lightningAbsorber;
         FloorObject steamComputer;
         FloorObject injectionSystem;
+        FloorObject giantMachine;
         
         // the corpse!
         Corpse corpse;
@@ -249,7 +250,7 @@ namespace It_sAlive_
 
             // grid
 
-            grid = new Grid(1900, 1200, 250, 10, 10, new Vector2(10, 1070), false, Content.Load<Texture2D>("rball"),Content.Load<Texture2D>("gball"));
+            grid = new Grid(1900, 1200, 250, 10, 10, new Vector2(10, 1070), true);
             reachable = new ReachableArea(grid, floorObjectList);
 
             // HUD
@@ -303,14 +304,15 @@ namespace It_sAlive_
 
             // objects
 
-            table = new FloorObject(Content.Load<Texture2D>("table"), Content.Load<Texture2D>("tableicon"), 1,1, new Vector2(5, 5), grid, "Operating Table",0, menuActions = new List<MenuAction> {  },GraphicsDevice);
-            desk = new FloorObject(Content.Load<Texture2D>("desk"), null, 1, 1, new Vector2(7, 10), grid, "Desk", 10, menuActions = new List<MenuAction> { partWork, writePaper }, GraphicsDevice);
-            bookcase = new FloorObject(Content.Load<Texture2D>("bookcase"), null, 1, 1, new Vector2(9, 10), grid, "Bookcase", 10, menuActions = new List<MenuAction> { study }, GraphicsDevice);
-            lightningAbsorber = new FloorObject(Content.Load<Texture2D>("lightning"), Content.Load<Texture2D>("lightningicon"), 1, 2, new Vector2(7, 3), grid, "Lightning Absorber", 150, menuActions = new List<MenuAction> { turnOn, turnOff }, GraphicsDevice);
-            electricalTransmitter = new FloorObject(Content.Load<Texture2D>("electric"), Content.Load<Texture2D>("electricicon"), 1, 1, new Vector2(9, 2), grid, "Electrical Transference Device", 150, menuActions = new List<MenuAction> { electric }, GraphicsDevice);
-            steamComputer = new FloorObject(Content.Load<Texture2D>("machine2"), Content.Load<Texture2D>("machine2icon"), 4, 1, new Vector2(1, 9), grid, "Steam Powered Computer", 200, menuActions = new List<MenuAction> { compute }, GraphicsDevice);
-            injectionSystem = new FloorObject(Content.Load<Texture2D>("machine"), Content.Load<Texture2D>("machine2icon"), 1, 1, new Vector2(10, 6), grid, "Injection System", 350, menuActions = new List<MenuAction> { inject }, GraphicsDevice);
-
+            table = new FloorObject(Content.Load<Texture2D>("table"), Content.Load<Texture2D>("tableicon"), 1,1, new Vector2(5, 5), grid, "Operating Table",0, menuActions = new List<MenuAction> {  },GraphicsDevice,Vector2.One);
+            desk = new FloorObject(Content.Load<Texture2D>("desk"), null, 1, 1, new Vector2(7, 10), grid, "Desk", 10, menuActions = new List<MenuAction> { partWork, writePaper }, GraphicsDevice, Vector2.One);
+            bookcase = new FloorObject(Content.Load<Texture2D>("bookcase"), null, 1, 1, new Vector2(10, 10), grid, "Bookcase", 10, menuActions = new List<MenuAction> { study }, GraphicsDevice, Vector2.One);
+            lightningAbsorber = new FloorObject(Content.Load<Texture2D>("lightning"), Content.Load<Texture2D>("lightningicon"), 1, 2, new Vector2(3, 4), grid, "Lightning Absorber", 150, menuActions = new List<MenuAction> { turnOn, turnOff }, GraphicsDevice, Vector2.One);
+            electricalTransmitter = new FloorObject(Content.Load<Texture2D>("electric"), Content.Load<Texture2D>("electricicon"), 1, 1, new Vector2(3, 2), grid, "Electrical Transference Device", 150, menuActions = new List<MenuAction> { electric }, GraphicsDevice, Vector2.One);
+            steamComputer = new FloorObject(Content.Load<Texture2D>("machine2"), Content.Load<Texture2D>("machine2icon"), 4, 1, new Vector2(1, 9), grid, "Steam Powered Computer", 200, menuActions = new List<MenuAction> { compute }, GraphicsDevice, Vector2.One);
+            injectionSystem = new FloorObject(Content.Load<Texture2D>("machine"), Content.Load<Texture2D>("machine2icon"), 1, 1, new Vector2(10, 7), grid, "Injection System", 350, menuActions = new List<MenuAction> { inject }, GraphicsDevice, Vector2.One);
+            giantMachine = new FloorObject(Content.Load<Texture2D>("giantmachine"), Content.Load<Texture2D>("machine2icon"), 1, 1, new Vector2(7, 2), grid, "Giant Machine", 50, menuActions = new List<MenuAction> { compute }, GraphicsDevice, new Vector2(3,4));
+            
             // the corpse!
 
             corpse = new Corpse(new Vector2(800, 865),Content.Load<Texture2D>("corpse"), new List<MenuAction> { studyCorpse, dissectCorpse }, new List<MenuAction> { talk,studyLiveCorpse }, new List<MenuAction> { clearCorpse },GraphicsDevice);
@@ -322,11 +324,16 @@ namespace It_sAlive_
             build.Add(electricalTransmitter);
             build.Add(steamComputer);
             build.Add(injectionSystem);
+            build.Add(giantMachine);
 
            // fill initial existing object list
             
             floorObjectList.Add(desk);
             floorObjectList.Add(bookcase);
+
+            // update reachable area to account for these
+
+            reachable.Update(floorObjectList);
 
             // test items...
 
@@ -435,7 +442,7 @@ namespace It_sAlive_
                 // objects
                 foreach (FloorObject floorObject in build.buildList)
                 {
-                    floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList);
+                    floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList,reachable);
                 }
             }
 
@@ -446,7 +453,7 @@ namespace It_sAlive_
             // floor objects
             foreach (FloorObject floorObject in floorObjectList)
             {
-                floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList);
+                floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList,reachable);
             }
 
             // create progress bars if necessary

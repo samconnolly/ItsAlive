@@ -99,22 +99,13 @@ namespace It_sAlive_
         public void Render(GraphicsDevice graphicsDevice, SpriteBatch sbatch, SpriteFont font, Build build, Graveyard graveyard, Corpse corpse)
         {
             sbatch.Draw(cursorTex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.0f);
-
-           
-
-            
-
-
+                       
             // Mouse-over text
 
             if (mouseOver == true && menu == false && corpseMouseover == false)
             {
-                //sbatch.DrawString(font, text, position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f);
-                //sbatch.DrawString(font, menu.ToString() + ' ' + click.ToString()+ ' ' + mouseOver.ToString(), position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f);
-                sbatch.DrawString(font, menuObject.name, position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
+               sbatch.DrawString(font, menuObject.name, position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
             }
-
-            
 
             if (graveMouseOver == true && menu == false)
             {                
@@ -130,10 +121,7 @@ namespace It_sAlive_
             {   
                 // tooltip
                 sbatch.DrawString(font, menuObject.name + " : " + menuObject.cost.ToString(), position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
-
-                // highlight box
-
-
+                
             }
 
         }

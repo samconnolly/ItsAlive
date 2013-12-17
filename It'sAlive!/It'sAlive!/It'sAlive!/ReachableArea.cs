@@ -91,12 +91,18 @@ namespace It_sAlive_
 
             foreach (FloorObject floorObject in floorObjectList)
             {
-                reachable[(int)floorObject.gridPosition.X-1, (int)floorObject.gridPosition.Y-1] = 1;
+                for (int x = 0; x < floorObject.footprint.X; x++)
+                {
+                    for (int y = 0; y < floorObject.footprint.Y; y++)
+                    {
+                        reachable[(int)floorObject.gridPosition.X - 1 + x, (int)floorObject.gridPosition.Y - 1 + y] = 1;
+                    }
+                }
 
             }
 
         }
-
+        
     }
     
 }

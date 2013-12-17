@@ -93,11 +93,12 @@ namespace It_sAlive_
         // Build object - setup to remove object from build list on next update
 
 
-         public void BuildThis(List<FloorObject> floorObjectList, FloorObject item)
+         public void BuildThis(List<FloorObject> floorObjectList, FloorObject item, ReachableArea reachable)
         {
-            remove.Add(item);
-            floorObjectList.Add(item);
-            menu = false;
+            remove.Add(item);                   // add item to list of items to remove from build list
+            floorObjectList.Add(item);          // add to list of objects on floor
+            reachable.Update(floorObjectList);  // update reachable area to account for this
+            menu = false;                       // close menu
         }
 
         public void ScrollLeft()
