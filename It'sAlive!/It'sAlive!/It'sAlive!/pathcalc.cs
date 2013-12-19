@@ -43,7 +43,7 @@ namespace It_sAlive_
             }
             else
             {
-                return false;
+                return false;   
             }
         }
 
@@ -52,7 +52,7 @@ namespace It_sAlive_
         private Vector2[,] Adjacent(Vector2 position)
         {
             Vector2[,] adjacentList = new Vector2[,]
-                    { { new Vector2(-1,1),  new Vector2(0,1),  new Vector2(1,1) },
+                    { { new Vector2(-1,1),  new Vector2(0,1),  new Vector2(1,1) },      // matrix of adjacencies
                       { new Vector2(-1,0),  new Vector2(0,0),  new Vector2(1,0) },
                       { new Vector2(-1,-1), new Vector2(0,-1), new Vector2(1,-1) }};
 
@@ -60,7 +60,7 @@ namespace It_sAlive_
             {
                 for (int y = 0; y < 3; y++)
                 {
-                    adjacentList[x, y] = adjacentList[x, y] + position;
+                    adjacentList[x, y] = adjacentList[x, y] + position; // create matrix of adjacent positions
                 }
             }
 
@@ -94,10 +94,13 @@ namespace It_sAlive_
 
            int currentIndex;
 
+            // --------- path finding loop -------------------------------
+
            if (startPosition != endPosition)
            {
                while (currentPosition != endPosition)
                {
+                   // calculate adjacent points
                    Vector2[,] currentAdjacent = Adjacent(currentPosition);
 
                    currentIndex = openList.IndexOf(currentPosition);
@@ -113,8 +116,8 @@ namespace It_sAlive_
                            // if the square is on the screen and reachable...
 
                            if (currentAdjacent[x, y] != currentPosition
-                                && currentAdjacent[x, y].X >= 0 && currentAdjacent[x, y].Y >= 0
-                                && currentAdjacent[x, y].X < grid.columns && currentAdjacent[x, y].Y < grid.rows
+                                && currentAdjacent[x, y].X >= 1 && currentAdjacent[x, y].Y >= 1
+                                && currentAdjacent[x, y].X <= grid.columns && currentAdjacent[x, y].Y <= grid.rows
                                 && closedList.IndexOf(currentAdjacent[x, y]) < 0)
                            {
                                if (Check((int)currentAdjacent[x, y].X, (int)currentAdjacent[x, y].Y) == true)
