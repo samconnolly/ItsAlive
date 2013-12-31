@@ -2,6 +2,7 @@ using System;
 using System.Data;
 using System.Data.OleDb;
 using System.Collections.Generic;
+using System.Xml.Linq;
 using System.Linq;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Audio;
@@ -10,6 +11,7 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Microsoft.Xna.Framework.Storage;
 using Microsoft.CSharp;
 using System.Windows.Forms;
 using System.Diagnostics;
@@ -48,6 +50,7 @@ namespace It_sAlive_
      
         protected override void Initialize()
         {
+           
            base.Initialize();
         }
 
@@ -170,7 +173,6 @@ namespace It_sAlive_
 
         positionTextBlob blob;
 
-
         // === load things... ==============
 
         protected override void LoadContent()
@@ -268,6 +270,63 @@ namespace It_sAlive_
             longevity = new NumericalCounter("Longevity", new Vector2(10, 340), 100, 30, 0, 0, cursorFont, Color.Black, Color.Black);
             humanity = new NumericalCounter("Humanity", new Vector2(10, 360), 100, 30, 0, 0, cursorFont, Color.Black, Color.Black);
             
+            //=====================================================
+
+            // load stuff!
+            System.IO.Stream stream = TitleContainer.OpenStream("XMLFloorObjects.xml");
+
+            XDocument doc = XDocument.Load(stream);
+
+            List<FloorObject> testList = new List<FloorObject>();
+
+              testList = (from floorObject in doc.Descendants("FloorObject") select new FloorObject(
+                                        Content.Load<Texture2D>(Convert.ToString(floorObject.Element("texture").Value)),
+                                        Content.Load<Texture2D>(Convert.ToString(floorObject.Element("icon").Value)),
+                                        Convert.ToInt32(floorObject.Element("frameNumber").Value),
+                                        Convert.ToInt32(floorObject.Element("animNumber").Value),
+                                        new Vector2(Convert.ToInt32(floorObject.Element("gridPositionX").Value),Convert.ToInt32(floorObject.Element("gridPositionY").Value)), grid,
+                                        floorObject.Element("name").Value, 
+                                        Convert.ToInt32(floorObject.Element("cost").Value),
+
+                                        (from action in floorObject.Descendants("menuAction")
+                                         select new MenuAction(
+                                             action.Element("name").Value,
+                                             Convert.ToBoolean(action.Element("scientist").Value),
+                                             Convert.ToBoolean(action.Element("assistant").Value),
+                                             Convert.ToInt32(action.Element("time").Value),
+                                             (float)Convert.ToDouble(action.Element("reasearchUp").Value),
+                                             (float)Convert.ToDouble(action.Element("madnessUp").Value),
+                                             (float)Convert.ToDouble(action.Element("moneyChange").Value),
+                                             (float)Convert.ToDouble(action.Element("lifeForceUp").Value),
+                                             (float)Convert.ToDouble(action.Element("longevityUp").Value),
+                                             (float)Convert.ToDouble(action.Element("humanityUp").Value),
+                                             Convert.ToBoolean(action.Element("remain").Value),
+                                             Convert.ToBoolean(action.Element("turnOn").Value),
+                                             Convert.ToBoolean(action.Element("turnOff").Value),
+                                             new List<NumericalCounter>{ research },
+                                             (float)Convert.ToDouble(action.Element("reasearchUpMultiplier").Value),
+                                             (float)Convert.ToDouble(action.Element("madnessUpMultiplier").Value),
+                                             (float)Convert.ToDouble(action.Element("moneyChangeMultiplier").Value),
+                                             (float)Convert.ToDouble(action.Element("lifeForceUpMultiplier").Value),
+                                             (float)Convert.ToDouble(action.Element("longevityUpMultiplier").Value),
+                                             (float)Convert.ToDouble(action.Element("humanityUpMultiplier").Value)
+                                             ) ).ToList(), GraphicsDevice, 
+                                        
+                                        new Vector2(Convert.ToInt32(floorObject.Element("footprintX").Value),Convert.ToInt32(floorObject.Element("footprintY").Value))
+                                                            
+                                   )).ToList();
+
+              table = testList[0];
+
+            // objects
+
+            //table = new FloorObject(Content.Load<Texture2D>("table"), Content.Load<Texture2D>("tableicon"), 1,1, new Vector2(4, 5), grid, "Operating Table",0, menuActions = new List<MenuAction> {  },GraphicsDevice,Vector2.One);
+           
+
+
+
+            //===================================================
+
 
             // dependant actions
 
@@ -304,7 +363,7 @@ namespace It_sAlive_
 
             // objects
 
-            table = new FloorObject(Content.Load<Texture2D>("table"), Content.Load<Texture2D>("tableicon"), 1,1, new Vector2(4, 5), grid, "Operating Table",0, menuActions = new List<MenuAction> {  },GraphicsDevice,Vector2.One);
+            //table = new FloorObject(Content.Load<Texture2D>("table"), Content.Load<Texture2D>("tableicon"), 1,1, new Vector2(4, 5), grid, "Operating Table",0, menuActions = new List<MenuAction> {  },GraphicsDevice,Vector2.One);
             desk = new FloorObject(Content.Load<Texture2D>("desk"), null, 1, 1, new Vector2(7, 10), grid, "Desk", 10, menuActions = new List<MenuAction> { partWork, writePaper }, GraphicsDevice, Vector2.One);
             bookcase = new FloorObject(Content.Load<Texture2D>("bookcase"), null, 1, 1, new Vector2(10, 10), grid, "Bookcase", 10, menuActions = new List<MenuAction> { study }, GraphicsDevice, Vector2.One);
             lightningAbsorber = new FloorObject(Content.Load<Texture2D>("lightning"), Content.Load<Texture2D>("lightningicon"), 1, 2, new Vector2(3, 4), grid, "Lightning Absorber", 150, menuActions = new List<MenuAction> { turnOn, turnOff }, GraphicsDevice, Vector2.One);
@@ -339,6 +398,7 @@ namespace It_sAlive_
 
             blob = new positionTextBlob(Content.Load<Texture2D>("gball"), new Vector2(1, 1));
             
+            // test saving...
 
         }
 
