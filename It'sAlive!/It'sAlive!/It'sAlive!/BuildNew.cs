@@ -147,6 +147,36 @@ namespace It_sAlive_
             }
         }
 
+        public void removeUpdate(NumericalCounter money)
+        {
+            if (remove.Count > 0)
+            {
+                foreach (FloorObject removeItem in remove)
+                {
+                    buildList.Remove(removeItem);
+                    money.value -= removeItem.cost;
+                    removeItem.onBuildList = false;
+
+                    foreach (FloorObject curitem in buildList)
+                    {
+                        int rank = buildList.IndexOf(curitem);
+                        curitem.iconPosition = new Vector2(120 + 80 * rank, 1015);
+
+                        if (rank > buildScreenLength)
+                        {
+                            curitem.onBuildList = false;
+                        }
+
+                        else
+                        {
+                            curitem.onBuildList = true;
+                        }
+                    }
+                }
+
+                remove = new List<FloorObject> { };
+            }
+        }
 
         public void Update(Cursor cursor, GameTime gameTime, NumericalCounter money)
         {
@@ -199,30 +229,7 @@ namespace It_sAlive_
 
             // remove objects that have been built
 
-             if (remove.Count > 0)
-             {
-                 buildList.Remove(remove[0]);
-                 money.value -= remove[0].cost;
-
-
-                 foreach (FloorObject curitem in buildList)
-                 {
-                     int rank = buildList.IndexOf(curitem);
-                     curitem.iconPosition = new Vector2(120 + 80 * rank, 1015);
-
-                     if (rank > buildScreenLength)
-                     {
-                         curitem.onBuildList = false;
-                     }
-
-                     else
-                     {
-                         curitem.onBuildList = true;
-                     }
-                 }
-
-                 remove = new List<FloorObject> { };
-             }
+             removeUpdate(money);
 
         }
 
@@ -339,20 +346,7 @@ namespace It_sAlive_
                 }
 
             }
-
-                //// remove anything that has been built from build list, build, update its position
-                //if (remove != null)
-                //{
-                //    floorObjectList.Add(remove);        // add to floor objects (build)
-                //    Remove(remove, money);              // remove from build list
-                //    reachable.Update(floorObjectList);  // update reachable squares of grid, update character's paths
-                //    scientist.path.Update(reachable);   // update path from updated reachable
-                //    assistant.path.Update(reachable);   // update path from updated reachable
-                //    remove = null;
-                //}
-
-                // set to close menu if clicking is done outside...
-               
+                          
                 
             }
 

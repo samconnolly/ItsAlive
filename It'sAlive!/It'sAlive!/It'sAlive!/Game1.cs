@@ -288,13 +288,13 @@ namespace It_sAlive_
 
             // dependant actions
 
-            studyLiveCorpse = menuActions[2];
-            writePaper = menuActions[10];
+            studyLiveCorpse = menuActions[6];
+            writePaper = menuActions[9];
 
             // independent actions
-            studyCorpse = menuActions[3];
-            dissectCorpse = menuActions[4];
-            clearCorpse = menuActions[5];
+            studyCorpse = menuActions[2];
+            dissectCorpse = menuActions[3];
+            clearCorpse = menuActions[4];
             talk = menuActions[7];
 
             // load in multiplying counters
@@ -392,6 +392,8 @@ namespace It_sAlive_
                     build.BuildThis(floorObjectList, machine, reachable);
                 }
             }
+
+            build.removeUpdate(money);
 
             // objects
 

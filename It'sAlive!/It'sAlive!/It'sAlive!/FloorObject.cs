@@ -141,9 +141,10 @@ namespace It_sAlive_
                         }
                     }
 
-                    if (menu == false)
+                    if (menu == false && mouseOver == false && cursor.mouseOver == false)
                     {
                         mouseOver = true; // add object mouseover text if no menu
+                        cursor.mouseOver = true;
                     }
                 
             }
@@ -155,7 +156,7 @@ namespace It_sAlive_
             if (onBuildList == true)
             {
                 if (cursor.position.X >= iconPosition.X && cursor.position.X <= iconPosition.X + iconTex.Width
-                       && cursor.position.Y >= iconPosition.Y && cursor.position.Y <= iconPosition.Y + iconTex.Height)
+                       && cursor.position.Y >= iconPosition.Y && cursor.position.Y <= iconPosition.Y + iconTex.Height && cursor.buildIconMouseover == false)
                 {
 
                     iconMouseover = true;

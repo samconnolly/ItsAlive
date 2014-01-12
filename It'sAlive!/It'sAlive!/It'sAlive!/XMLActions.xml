@@ -145,7 +145,7 @@
 		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
-		<name>Study Corpse</name>
+		<name>Study Zombie</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>5</time>

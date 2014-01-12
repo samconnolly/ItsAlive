@@ -26,7 +26,7 @@ namespace It_sAlive_
         public int msecsTweenFrames = 120;
         public int currentFrame = 0;
         public int numberOfFrames = 4;
-        public int numberOfAnims = 5;
+        public int numberOfAnims = 6;
         public int anim = 0;
         private float scale = 5.0f;
         private float layer;
@@ -327,12 +327,14 @@ namespace It_sAlive_
                                 CarryCorpse();
                                 doing = false;
                                 dug = false;
+                                outside = false;
                             }
 
                             else
                             {
                                 outside = true;
-                                layer = 0.61f;                                
+                                layer = 0.61f;
+                                position += new Vector2(0, -20);
                             }
 
                             currentFrame = 0;
@@ -341,8 +343,8 @@ namespace It_sAlive_
 
                         else if (dug == true)
                         {
-                            layer = 0.61f;
-                            position += new Vector2(0, -20);
+                            layer = 0.595f;
+                            anim = 5;
                         }
                     }
 
@@ -351,7 +353,7 @@ namespace It_sAlive_
                     {
                         outTimer += gametime.ElapsedGameTime.Milliseconds;
 
-                        position += new Vector2(0, -20);                        
+                                                
 
                         if (outTimer >= 100 && dug == false)
                         {
@@ -364,7 +366,7 @@ namespace It_sAlive_
                         {
                             digging = true;
                             outTimer = 0;
-                            outside = false; 
+                             
                         }
                     }
 

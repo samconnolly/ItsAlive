@@ -82,9 +82,11 @@ namespace It_sAlive_
                 position.Y = (mouseState.Y / wyOffset);
             }
 
-            // set mouseover false for this pass
+            // set mouseover false for this pass if no longer over the icon
+            
             buildIconMouseover = false;
-
+            mouseOver = false;
+                
             // turn off click flag when no longer clicking
 
             if (mouseState.LeftButton == ButtonState.Released && mouseState.RightButton == ButtonState.Released && click == true)
