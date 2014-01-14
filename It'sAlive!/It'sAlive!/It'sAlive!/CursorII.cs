@@ -84,7 +84,7 @@ namespace It_sAlive_
 
             // set mouseover false for this pass if no longer over the icon
             
-            buildIconMouseover = false;
+            buildIconMouseover = false; 
             mouseOver = false;
                 
             // turn off click flag when no longer clicking

@@ -29,7 +29,7 @@ namespace It_sAlive_
             
             graphics = new GraphicsDeviceManager(this);
              
-            graphics.IsFullScreen = false; // initial fullscreen?
+            graphics.IsFullScreen = true; // initial fullscreen?
             
             // set graphics buffer size  
 

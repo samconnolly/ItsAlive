@@ -143,6 +143,7 @@ namespace It_sAlive_
 
                     if (menu == false && mouseOver == false && cursor.mouseOver == false)
                     {
+                        cursor.menuObject = this;
                         mouseOver = true; // add object mouseover text if no menu
                         cursor.mouseOver = true;
                     }
