@@ -8,7 +8,7 @@
 		<animNumber>1</animNumber>
 		<gridPositionX>9</gridPositionX>
 		<gridPositionY>8</gridPositionY>
-		<cost>50</cost>
+		<cost>0</cost>
 		<footprintX>3</footprintX>
 		<footprintY>5</footprintY>
 		<prebuilt>false</prebuilt>
@@ -24,7 +24,7 @@
 		<animNumber>2</animNumber>
 		<gridPositionX>5</gridPositionX>
 		<gridPositionY>12</gridPositionY>
-		<cost>75</cost>
+		<cost>150</cost>
 		<footprintX>1</footprintX>
 		<footprintY>1</footprintY>
 		<prebuilt>false</prebuilt>
@@ -40,7 +40,7 @@
 		<animNumber>1</animNumber>
 		<gridPositionX>2</gridPositionX>
 		<gridPositionY>20</gridPositionY>
-		<cost>0</cost>
+		<cost>100</cost>
 		<footprintX>1</footprintX>
 		<footprintY>1</footprintY>
 		<prebuilt>true</prebuilt>
@@ -56,11 +56,43 @@
 		<animNumber>1</animNumber>
 		<gridPositionX>18</gridPositionX>
 		<gridPositionY>20</gridPositionY>
-		<cost>0</cost>
+		<cost>100</cost>
 		<footprintX>1</footprintX>
 		<footprintY>1</footprintY>
 		<prebuilt>true</prebuilt>
 		<menuAction>Study</menuAction>
+		<menuAction2>null</menuAction2>
+		<menuAction3>null</menuAction3>
+	</FloorObject>
+	<FloorObject>
+		<name>Electric Transmitter</name>
+		<texture>electric</texture>
+		<icon>electricicon</icon>
+		<frameNumber>1</frameNumber>
+		<animNumber>1</animNumber>
+		<gridPositionX>5</gridPositionX>
+		<gridPositionY>10</gridPositionY>
+		<cost>100</cost>
+		<footprintX>1</footprintX>
+		<footprintY>1</footprintY>
+		<prebuilt>false</prebuilt>
+		<menuAction>Transfer Electrical Discharge</menuAction>
+		<menuAction2>null</menuAction2>
+		<menuAction3>null</menuAction3>
+	</FloorObject>
+	<FloorObject>
+		<name>Steam Computer</name>
+		<texture>machine2</texture>
+		<icon>machine2icon</icon>
+		<frameNumber>4</frameNumber>
+		<animNumber>1</animNumber>
+		<gridPositionX>4</gridPositionX>
+		<gridPositionY>14</gridPositionY>
+		<cost>100</cost>
+		<footprintX>1</footprintX>
+		<footprintY>1</footprintY>
+		<prebuilt>false</prebuilt>
+		<menuAction>Compute</menuAction>
 		<menuAction2>null</menuAction2>
 		<menuAction3>null</menuAction3>
 	</FloorObject>
@@ -72,11 +104,27 @@
 		<animNumber>1</animNumber>
 		<gridPositionX>8</gridPositionX>
 		<gridPositionY>20</gridPositionY>
-		<cost>150</cost>
+		<cost>100</cost>
 		<footprintX>1</footprintX>
 		<footprintY>1</footprintY>
 		<prebuilt>false</prebuilt>
 		<menuAction>Inject</menuAction>
+		<menuAction2>null</menuAction2>
+		<menuAction3>null</menuAction3>
+	</FloorObject>
+	<FloorObject>
+		<name>Giant Machine</name>
+		<texture>giantmachine</texture>
+		<icon>machine2icon</icon>
+		<frameNumber>1</frameNumber>
+		<animNumber>1</animNumber>
+		<gridPositionX>13</gridPositionX>
+		<gridPositionY>18</gridPositionY>
+		<cost>100</cost>
+		<footprintX>5</footprintX>
+		<footprintY>3</footprintY>
+		<prebuilt>false</prebuilt>
+		<menuAction>Compute</menuAction>
 		<menuAction2>null</menuAction2>
 		<menuAction3>null</menuAction3>
 	</FloorObject>

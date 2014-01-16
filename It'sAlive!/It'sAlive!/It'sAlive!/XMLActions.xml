@@ -5,7 +5,7 @@
 		<scientist>false</scientist>
 		<assistant>true</assistant>
 		<time>2</time>
-		<reasearchUp>5</reasearchUp>
+		<reasearchUp>0</reasearchUp>
 		<madnessUp>1</madnessUp>
 		<moneyChange>0</moneyChange>
 		<lifeForceUp>0</lifeForceUp>
@@ -29,7 +29,7 @@
 		<scientist>false</scientist>
 		<assistant>true</assistant>
 		<time>2</time>
-		<reasearchUp>5</reasearchUp>
+		<reasearchUp>0</reasearchUp>
 		<madnessUp>1</madnessUp>
 		<moneyChange>0</moneyChange>
 		<lifeForceUp>0</lifeForceUp>
@@ -125,7 +125,7 @@
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>10</time>
-		<reasearchUp>50</reasearchUp>
+		<reasearchUp>10</reasearchUp>
 		<madnessUp>0</madnessUp>
 		<moneyChange>0</moneyChange>
 		<lifeForceUp>0</lifeForceUp>
@@ -148,7 +148,7 @@
 		<name>Study Zombie</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
-		<time>5</time>
+		<time>10</time>
 		<reasearchUp>30</reasearchUp>
 		<madnessUp>4</madnessUp>
 		<moneyChange>0</moneyChange>
@@ -199,7 +199,7 @@
 		<time>10</time>
 		<reasearchUp>15</reasearchUp>
 		<madnessUp>0</madnessUp>
-		<moneyChange>0</moneyChange>
+		<moneyChange>20</moneyChange>
 		<lifeForceUp>0</lifeForceUp>
 		<longevityUp>0</longevityUp>
 		<humanityUp>0</humanityUp>
@@ -209,7 +209,7 @@
 		<multiplyingCounter>none</multiplyingCounter>
 		<multiplyingCounter2>none</multiplyingCounter2>
 		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
+		<reasearchUpMultiplier>0.15</reasearchUpMultiplier>
 		<madnessUpMultiplier>0</madnessUpMultiplier>
 		<moneyChangeMultiplier>0</moneyChangeMultiplier>
 		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
@@ -221,9 +221,9 @@
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>10</time>
-		<reasearchUp>0</reasearchUp>
+		<reasearchUp>10</reasearchUp>
 		<madnessUp>0</madnessUp>
-		<moneyChange>0</moneyChange>
+		<moneyChange>10</moneyChange>
 		<lifeForceUp>0</lifeForceUp>
 		<longevityUp>0</longevityUp>
 		<humanityUp>0</humanityUp>
@@ -233,9 +233,9 @@
 		<multiplyingCounter>research</multiplyingCounter>
 		<multiplyingCounter2>none</multiplyingCounter2>
 		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
+		<reasearchUpMultiplier>0.05</reasearchUpMultiplier>
 		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0.9</moneyChangeMultiplier>
+		<moneyChangeMultiplier>1.5</moneyChangeMultiplier>
 		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
 		<longevityUpMultiplier>0</longevityUpMultiplier>
 		<humanityUpMultiplier>0</humanityUpMultiplier>

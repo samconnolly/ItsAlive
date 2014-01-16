@@ -48,6 +48,7 @@ namespace It_sAlive_
         public bool menuStart = false;
         public bool menuMouseover = false;
         public bool iconMouseover = false;
+        public bool badIconMouseover = false;
         public MenuAction menuHighlightAction = null;
         private Vector2 menuPosition;
         private Vector2 textOffset = new Vector2(25, 0);
@@ -58,6 +59,8 @@ namespace It_sAlive_
         Color textColour;
         Color boxColour;
         Color lineColour;
+        Color goodHighlight = Color.LimeGreen;
+        Color badHighlight = Color.Red;
         Color highlightColour = Color.LimeGreen;
 
         // build icon
@@ -118,7 +121,7 @@ namespace It_sAlive_
         // build this object
  
 
-        public void Update(GameTime gametime,Cursor cursor,Scientist scientist, Assistant assistant, List<MiniProgressBar> bars, Build build, List<FloorObject> floorObjectList, ReachableArea reachable)
+        public void Update(GameTime gametime,Cursor cursor,Scientist scientist, Assistant assistant, List<MiniProgressBar> bars, Build build, List<FloorObject> floorObjectList, ReachableArea reachable, NumericalCounter money)
         {
             // check for mouseover/click on machine
 
@@ -126,7 +129,7 @@ namespace It_sAlive_
 
             if (cursor.position.X >= (position.X - offset.X) && cursor.position.X <= (position.X - offset.X + ((objectTex.Width * scale) / frames))
                     && cursor.position.Y >= position.Y - offset.Y && cursor.position.Y <= (position.Y - offset.Y + (objectTex.Height * scale))
-                        && cursor.corpseMouseover == false && menu == false && menuActions.Count > 0)
+                        && cursor.corpseMouseover == false && menu == false && menuActions.Count > 0 && build.menu == false)
             {
                     // turn on menu when object is clicked
 
@@ -153,6 +156,7 @@ namespace It_sAlive_
             // check for mouseover/click on build menu icon
 
             iconMouseover = false;
+            badIconMouseover = false;
 
             if (onBuildList == true)
             {
@@ -170,8 +174,18 @@ namespace It_sAlive_
                     {
                         if (cursor.click == false)
                         {
-                            build.BuildThis(floorObjectList, this,reachable);
-                            cursor.click = true;
+                            if (money.value >= this.cost)
+                            {
+                                money.value -= this.cost;
+                                build.BuildThis(floorObjectList, this, reachable);
+                                cursor.click = true;
+                            }
+
+                            else
+                            {
+                                iconMouseover = false;
+                                badIconMouseover = true;
+                            }
                         }
                     }
 
@@ -238,8 +252,8 @@ namespace It_sAlive_
 
             if (menu == true)
             {
-
                 menuMouseover = false;
+                
                 Vector2 menuItemPosition = menuPosition;
 
                 foreach (MenuAction action in menuActions)
@@ -256,84 +270,90 @@ namespace It_sAlive_
 
                         menuHighlightAction = action;
                         menuMouseover = true;
+
+                        if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
+                        {
+                            if (cursor.click == false)
+                            {
+                                    if (action.scientist == true)
+                                    {
+                                        if (scientist.walking == true)
+                                        {
+                                            scientist.walking = false;
+                                            scientist.floorObject = null;
+                                            scientist.action = null;
+                                        }
+
+                                        else if (scientist.doing == true)
+                                        {
+                                            scientist.doing = false;
+                                            scientist.corpseWork = false;
+                                            scientist.floorObject = null;
+                                            bars.Remove(scientist.progBar);
+                                            scientist.action = null;
+                                            scientist.animStart = true;
+                                        }
+
+                                        scientist.action = menuHighlightAction;
+                                        scientist.floorObject = this;
+                                    }
+
+                                    if (action.assistant == true && assistant.outside == false && assistant.corpseCarrying == false)
+                                    {
+                                        if (assistant.walking == true)
+                                        {
+                                            assistant.walking = false;
+                                            assistant.floorObject = null;
+                                            assistant.action = null;
+                                        }
+
+                                        else if (assistant.doing == true)
+                                        {
+                                            assistant.doing = false;
+                                            assistant.digging = false;
+                                            assistant.floorObject = null;
+                                            bars.Remove(assistant.progBar);
+                                            assistant.action = null;
+                                            assistant.animStart = true;
+                                        }
+
+                                        assistant.action = menuHighlightAction;
+                                        assistant.floorObject = this;
+                                    }
+
+                                    // both using same machine?
+                                    if (action.assistant == true && action.scientist == true)
+                                    {
+                                        assistant.twoWork = true;
+                                    }                                
+
+                                menu = false;
+
+                            }
+
+                            cursor.click = true;
+                        }
                     }
 
                     else
-                    {
+                    {                        
                         textColour = Color.White;
                         boxColour = Color.Gray;
                         lineColour = Color.DarkGray;
+
+                        if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
+                        {
+                            if (cursor.click == false)
+                            {
+                                menu = false;
+                            }
+                        }
                     }
 
                     int index = menuActions.IndexOf(action);
                     actions[index] = new Tuple<string, Color, Color, Color>(actions[index].Item1, textColour, boxColour, lineColour);
 
-                    if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
-                    {
-                        if (cursor.click == false)
-                        {
-                            menu = false;
-
-                            if (menuMouseover == true)
-                            {
-                                if (action.scientist == true)
-                                {
-                                    if (scientist.walking == true)
-                                    {
-                                        scientist.walking = false;
-                                        scientist.floorObject = null;
-                                        scientist.action = null;
-                                    }
-
-                                    else if (scientist.doing == true)
-                                    {
-                                        scientist.doing = false;
-                                        scientist.corpseWork = false;
-                                        scientist.floorObject = null;
-                                        bars.Remove(scientist.progBar);
-                                        scientist.action = null;
-                                        scientist.animStart = true;
-                                    }
-
-                                    scientist.action = menuHighlightAction;
-                                    scientist.floorObject = this;
-                                }
-
-                                if (action.assistant == true && assistant.outside == false && assistant.corpseCarrying == false)
-                                {
-                                    if (assistant.walking == true)
-                                    {
-                                        assistant.walking = false;
-                                        assistant.floorObject = null;
-                                        assistant.action = null;
-                                    }
-
-                                    else if (assistant.doing == true)
-                                    {
-                                        assistant.doing = false;
-                                        assistant.digging = false;
-                                        assistant.floorObject = null;
-                                        bars.Remove(assistant.progBar);
-                                        assistant.action = null;
-                                        assistant.animStart = true;
-                                    }
-
-                                    assistant.action = menuHighlightAction;
-                                    assistant.floorObject = this;
-                                }
-
-                                // both using same machine?
-                                if (action.assistant == true && action.scientist == true)
-                                {
-                                    assistant.twoWork = true;
-                                }
-
-                            }
-
-                        }
-
-                        cursor.click = true;
-                    }
+                   
 
                     menuItemPosition = menuItemPosition + new Vector2(0, menuRectangle.Height);
 
@@ -425,8 +445,18 @@ namespace It_sAlive_
             
                 sbatch.Draw(iconTex, iconPosition, iconRect, Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, iconLayer);
 
-                if (iconMouseover == true)
+                if (iconMouseover == true | badIconMouseover == true)
                 {
+                    if (iconMouseover == true)
+                    {
+                        highlightColour = goodHighlight;
+                    }
+
+                    if (badIconMouseover == true)
+                    {
+                        highlightColour = badHighlight;
+                    }
+
                     // top line
                     Tuple<Vector2, Vector2> line = new Tuple<Vector2, Vector2>(iconPosition, (iconPosition + new Vector2(60, 0)));
 

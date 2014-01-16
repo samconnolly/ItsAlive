@@ -89,12 +89,13 @@ namespace It_sAlive_
         public void Update(GameTime gameTime, MenuAction dissect, MenuAction study,NumericalCounter longevity, NumericalCounter humanity, NumericalCounter lifeforce, Scientist scientist, Assistant assistant,
                                 MenuAction talk, Cursor cursor,List<MiniProgressBar> bars, MenuAction clearCorpse)
         {
+            cursor.corpseMouseover = false;
+
             if (this.visible == true)
             {        
                 
                 // check for mouseover & click
-
-                cursor.corpseMouseover = false;
+                               
 
                 if (cursor.position.X >= position.X && cursor.position.X <= position.X + fwidth*scale
                            && cursor.position.Y >= position.Y + height && cursor.position.Y <= position.Y + height*2 && visible == true && corpseMenu == false)
@@ -114,55 +115,8 @@ namespace It_sAlive_
                         }
 
                         cursor.click = true;
-
-                    }
-
-                    
-                }
-
-                // check for menu clicks
-
-                if (corpseMenu == true)
-                {
-
-
-                    if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
-                    {
-                        if (cursor.click == false)
-                        {
-
-                            corpseMenu = false;
-
-                            if (menuMouseover == true)
-                            {
-                                if (scientist.walking == true)
-                                {
-                                    scientist.walking = false;
-                                    scientist.floorObject = null;
-                                    scientist.action = null;
-                                }
-
-                                else if (scientist.doing == true)
-                                {
-                                    scientist.doing = false;
-                                    scientist.corpseWork = false;
-                                    scientist.floorObject = null;
-                                    bars.Remove(scientist.progBar);
-                                    scientist.action = null;
-                                    scientist.animStart = true;
-                                }
-
-
-                                scientist.action = menuHighlightAction;
-                                scientist.corpseWork = true;
-                            }
-
-                        }
-
-                        cursor.click = true;
-                    }
-
-                }
+                    }                    
+                }                
 
 
                 // rotting timer and count
@@ -349,6 +303,66 @@ namespace It_sAlive_
 
                             menuHighlightAction = action;
                             menuMouseover = true;
+
+                            if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
+                            {
+                                if (cursor.click == false)
+                                {
+                                    corpseMenu = false;
+                                    
+                                        if (action.scientist == true)
+                                        {
+                                            if (scientist.walking == true)
+                                            {
+                                                scientist.walking = false;
+                                                scientist.floorObject = null;
+                                                scientist.action = null;
+                                            }
+
+                                            else if (scientist.doing == true)
+                                            {
+                                                scientist.doing = false;
+                                                scientist.corpseWork = false;
+                                                scientist.floorObject = null;
+                                                bars.Remove(scientist.progBar);
+                                                scientist.action = null;
+                                                scientist.animStart = true;
+                                            }
+
+                                            scientist.action = menuHighlightAction;
+                                            scientist.corpseWork = true;
+                                        }
+
+                                        if (action.assistant == true)
+                                        {
+                                            if (assistant.walking == true)
+                                            {
+                                                assistant.walking = false;
+                                                assistant.floorObject = null;
+                                                assistant.action = null;
+                                            }
+
+                                            else if (assistant.doing == true)
+                                            {
+                                                assistant.doing = false;
+                                                assistant.digging = false;
+                                                assistant.floorObject = null;
+                                                bars.Remove(assistant.progBar);
+                                                assistant.action = null;
+                                                assistant.animStart = true;
+                                            }
+
+                                            assistant.action = menuHighlightAction;
+                                            assistant.corpseWork = true;
+
+                                        }
+
+                                    }
+
+                                
+
+                                cursor.click = true;
+                            }
                         }
 
                         else
@@ -356,72 +370,20 @@ namespace It_sAlive_
                             textColour = Color.White;
                             boxColour = Color.Gray;
                             lineColour = Color.DarkGray;
+
+                            if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
+                            {
+                                if (cursor.click == false)
+                                {
+                                    corpseMenu = false;
+                                }
+                            }
                         }
 
                         int index = menuActions.IndexOf(action);
                         actions[index] = new Tuple<string, Color, Color, Color>(actions[index].Item1, textColour, boxColour, lineColour);
 
-                        if (cursor.mouseState.LeftButton == ButtonState.Pressed | cursor.mouseState.RightButton == ButtonState.Pressed)
-                        {
-                            if (cursor.click == false)
-                            {
-                                corpseMenu = false;
-
-                                if (menuMouseover == true)
-                                {
-                                    if (action.scientist == true)
-                                    {
-                                        if (scientist.walking == true)
-                                        {
-                                            scientist.walking = false;
-                                            scientist.floorObject = null;
-                                            scientist.action = null;
-                                        }
-
-                                        else if (scientist.doing == true)
-                                        {
-                                            scientist.doing = false;
-                                            scientist.corpseWork = false;
-                                            scientist.floorObject = null;
-                                            bars.Remove(scientist.progBar);
-                                            scientist.action = null;
-                                            scientist.animStart = true;
-                                        }
-
-                                        scientist.action = menuHighlightAction;
-                                        scientist.corpseWork = true;
-                                    }
-
-                                    if (action.assistant == true)
-                                    {
-                                        if (assistant.walking == true)
-                                        {
-                                            assistant.walking = false;
-                                            assistant.floorObject = null;
-                                            assistant.action = null;
-                                        }
-
-                                        else if (assistant.doing == true)
-                                        {
-                                            assistant.doing = false;
-                                            assistant.digging = false;
-                                            assistant.floorObject = null;
-                                            bars.Remove(assistant.progBar);
-                                            assistant.action = null;
-                                            assistant.animStart = true;
-                                        }
-
-                                        assistant.action = menuHighlightAction;
-                                        assistant.corpseWork = true;
-
-                                    }
-                                                                      
-                                }
-
-                            }
-
-                            cursor.click = true;
-                        }
+                       
 
                         menuItemPosition = menuItemPosition + new Vector2(0, menuRectangle.Height);
 

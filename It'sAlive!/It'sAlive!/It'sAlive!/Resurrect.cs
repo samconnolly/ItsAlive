@@ -14,6 +14,9 @@ namespace It_sAlive_
 {
     class Resurrect
     {
+        // numbers
+        private float raiseResearch = 300f;
+
         // icon
         public Vector2 position;
         public float layer = 0.1f;
@@ -57,20 +60,19 @@ namespace It_sAlive_
         public void Animate(Scientist scientist, Assistant assistant)
         {
             assistant.Animate(this);
-            scientist.Animate(this);
-            
+            scientist.Animate(this); 
         }
 
-        public void Alive(Corpse corpse, NumericalCounter humanity, NumericalCounter longevity, NumericalCounter research, Random random, Assistant assistant)
+        public void Alive(Corpse corpse, NumericalCounter humanity, NumericalCounter longevity, NumericalCounter lifeForce, NumericalCounter research, NumericalCounter madness, Random random, Assistant assistant)
         {
 
             fail = false;
-
+            
             double rnd = random.NextDouble();            // produce a random number
-            float chance = 1.0f * (research.value/50.0f)* (corpse.rot/3.0f) * (float) rnd; // calculate a resurrection chance based on amount of research done and corpse freshness
+            float chance = 1.0f * (research.value/raiseResearch)* (corpse.rot/3.0f) * (float) rnd; // calculate a resurrection chance based on amount of research done and corpse freshness
             
             // resurrect if successful
-            if (chance > 0.9f && longevity.value > 0)
+            if (chance > 0.9f && longevity.value > 0 && lifeForce.value == 100)
             {
 
                 double rnd1 = random.NextDouble(); // create a set of random numbers
@@ -84,7 +86,9 @@ namespace It_sAlive_
                 humanity.value = (float)((rnd4 + rnd5 + rnd6) / 3.0 + 0.5) * humanity.value; // create a pseudo-normal random value between 0.5 and 1.5 and multiply by the humanity
 
                 corpse.alive = true;
-                
+
+                research.value += 150;
+                madness.value += 20;
             }
 
             // else it fails...
@@ -92,6 +96,9 @@ namespace It_sAlive_
             {
                 corpse.visible = false;
                 fail = true;
+
+                research.value += 50;
+                madness.value += 5;
             }
             
         }
@@ -104,7 +111,7 @@ namespace It_sAlive_
         {
             // check if resurrection is possible
 
-            if (lifeForce.value == 100 && conductor.on == true && corpse.visible == true && corpse.alive == false)
+            if (conductor.on == true && corpse.visible == true && corpse.alive == false)
             {
                 doable = true;
             }

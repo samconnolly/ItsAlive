@@ -132,7 +132,7 @@ namespace It_sAlive_
 
         public void Update(GameTime gametime, GraphicsDevice graphicsDevice, Grid grid, Cursor cursor, NumericalCounter research, NumericalCounter money, 
                                         NumericalCounter madness, List<MiniProgressBar> proglist, Corpse corpse,NonInteractive door,NonInteractive digger, Resurrect resurrect, NonInteractive Switch,
-                                        NumericalCounter humanity, NumericalCounter longevity, Random random, ReachableArea reachable)
+                                        NumericalCounter humanity, NumericalCounter longevity,NumericalCounter lifeForce, Random random, ReachableArea reachable)
         {
 
             path.Update(reachable);            
@@ -154,10 +154,10 @@ namespace It_sAlive_
                 // to corpse
                 if (corpseWork == true)
                 {
-                    if (gridPosition != new Vector2(5, 4))
+                    if (gridPosition != tableLocation)
                     {
                         walking = true;
-                        drawPath = path.PathList(gridPosition, new Vector2(5, 4), grid);
+                        drawPath = path.PathList(gridPosition, tableLocation, grid);
                         pathStep = 1;
                         walkingTarget = drawPath[pathStep];
                     }
@@ -212,7 +212,6 @@ namespace It_sAlive_
                 
                 direction = (grid.CartesianCoords(walkingTarget) - grid.CartesianCoords(gridPosition));
                 
-
                 targetDistance = direction.Length();
                 direction.Normalize();
 
@@ -355,14 +354,14 @@ namespace It_sAlive_
 
                                                 
 
-                        if (outTimer >= 100 && dug == false)
+                        if (outTimer >= 150 && dug == false)
                         {
                             digger.anim = true;
                             dug = true;
                             outTimer = 0;
                         }
 
-                        if (dug == true && digger.anim == false && outTimer >= 150)
+                        if (dug == true && digger.anim == false && outTimer >= 350)
                         {
                             digging = true;
                             outTimer = 0;
@@ -389,7 +388,7 @@ namespace It_sAlive_
                             doing = false;
                             animating = false;
                             Switch.SetAnim(1);
-                            resurrect.Alive(corpse, humanity, longevity, research, random, this);                           
+                            resurrect.Alive(corpse, humanity, longevity,lifeForce, research,madness, random, this);                           
                         }                        
                     }
 
@@ -420,8 +419,19 @@ namespace It_sAlive_
                                 if (animStart == true)
                                 {
                                     animStart = false;
-                                    proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action, floorObject));
-                                    progBar = proglist[proglist.Count - 1];
+
+                                    if (corpseWork == true)
+                                    {
+                                        proglist.Add(new MiniProgressBar(graphicsDevice, corpse.position + new Vector2(-5, -105), action, floorObject));
+                                        progBar = proglist[proglist.Count - 1];
+                                        corpseWork = false;     
+                                    }
+
+                                    else
+                                    {
+                                        proglist.Add(new MiniProgressBar(graphicsDevice, floorObject.position + new Vector2(-5, -105), action, floorObject));
+                                        progBar = proglist[proglist.Count - 1];
+                                    }
                                 }
 
                                 // run animation until finished

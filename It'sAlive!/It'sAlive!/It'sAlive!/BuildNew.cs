@@ -93,12 +93,15 @@ namespace It_sAlive_
         // Build object - setup to remove object from build list on next update
 
 
-         public void BuildThis(List<FloorObject> floorObjectList, FloorObject item, ReachableArea reachable)
+        public void BuildThis(List<FloorObject> floorObjectList, FloorObject item, ReachableArea reachable)
         {
+          
+            
             remove.Add(item);                   // add item to list of items to remove from build list
             floorObjectList.Add(item);          // add to list of objects on floor
             reachable.Update(floorObjectList);  // update reachable area to account for this
             menu = false;                       // close menu
+            
         }
 
         public void ScrollLeft()
@@ -147,14 +150,13 @@ namespace It_sAlive_
             }
         }
 
-        public void removeUpdate(NumericalCounter money)
+        public void removeUpdate()
         {
             if (remove.Count > 0)
             {
                 foreach (FloorObject removeItem in remove)
                 {
-                    buildList.Remove(removeItem);
-                    money.value -= removeItem.cost;
+                    buildList.Remove(removeItem);                    
                     removeItem.onBuildList = false;
 
                     foreach (FloorObject curitem in buildList)
@@ -229,7 +231,7 @@ namespace It_sAlive_
 
             // remove objects that have been built
 
-             removeUpdate(money);
+             removeUpdate();
 
         }
 
