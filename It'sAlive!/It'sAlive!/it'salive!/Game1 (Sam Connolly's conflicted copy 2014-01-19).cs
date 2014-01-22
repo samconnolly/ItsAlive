@@ -115,6 +115,9 @@ namespace It_sAlive_
         // buttons
         Build build;
         Resurrect resurrect;
+
+        // controls
+        Knob knob;
         
         // characters
         Scientist Simon;
@@ -158,21 +161,6 @@ namespace It_sAlive_
         // test shizz.............
 
         positionTextBlob blob;
-
-        MachineControlParameter pressure;
-        MachineControlParameter volume;
-
-        MachineControlParameter aggression;
-        MachineDependentParameter temperature;
-        MachineDependentParameter meltPercentage;
-        MachineDependentParameter dogNumbers ;
-        MachineDependentParameter viscosity;
-
-        List<MachineControlParameter> machineparams;
-        List<MachineDependentParameter> machineDisplays;
-
-        MachineControls machineControls;
-
 
         // === load things... ==============
 
@@ -257,13 +245,13 @@ namespace It_sAlive_
             reachable = new ReachableArea(grid, floorObjectList);
                         
             // counters
-            research = new NumericalCounter("Research", new Vector2(25, 15), 0, 0, 0, 0, counterFont, Color.Green, Color.Green, Content.Load<Texture2D>("counter_box"));
+            research = new NumericalCounter("Research", new Vector2(25, 15), 0, 100, 0, 0, counterFont, Color.Green, Color.Green, Content.Load<Texture2D>("counter_box"));
             madness = new NumericalCounter("Madness", new Vector2(25, 85), 0, 0, 0, 0, counterFont, Color.Red, Color.Green, Content.Load<Texture2D>("counter_box"));
-            money = new NumericalCounter("Money", new Vector2(25, 155), 0, 50, 0, 60, counterFont, Color.Orange, Color.Yellow, Content.Load<Texture2D>("counter_box"), true);
+            money = new NumericalCounter("Money", new Vector2(25, 155), 0, 500, 0, 60, counterFont, Color.Orange, Color.Yellow, Content.Load<Texture2D>("counter_box"), true);
             papers = new NumericalCounter("Papers Published", new Vector2(10, 300), 0, 0, 0, 0, cursorFont, Color.Black, Color.Black);
-            lifeForce = new NumericalCounter("Life Force", new Vector2(10, 320), 100, 0, 0, 0, cursorFont, Color.Black, Color.Black);
-            longevity = new NumericalCounter("Longevity", new Vector2(10, 340), 100, 0, 0, 0, cursorFont, Color.Black, Color.Black);
-            humanity = new NumericalCounter("Humanity", new Vector2(10, 360), 100, 0, 0, 0, cursorFont, Color.Black, Color.Black);
+            lifeForce = new NumericalCounter("Life Force", new Vector2(10, 320), 100, 100, 0, 0, cursorFont, Color.Black, Color.Black);
+            longevity = new NumericalCounter("Longevity", new Vector2(10, 340), 100, 30, 0, 0, cursorFont, Color.Black, Color.Black);
+            humanity = new NumericalCounter("Humanity", new Vector2(10, 360), 100, 30, 0, 0, cursorFont, Color.Black, Color.Black);
 
             counters = new List<NumericalCounter>{research,madness,money,papers,lifeForce,longevity,humanity};
 
@@ -408,7 +396,7 @@ namespace It_sAlive_
                 }
             }
 
-            build.removeUpdate();
+            build.removeUpdate(money);
 
             // objects
 
@@ -449,25 +437,7 @@ namespace It_sAlive_
 
             blob = new positionTextBlob(Content.Load<Texture2D>("gball"), new Vector2(1, 1));
 
-            // machine parameters...
-
-            pressure = new MachineControlParameter("Pressure", 100, 0, 20, 1);
-            volume = new MachineControlParameter("Volume", 50, 0, 10, 2);
-            aggression = new MachineControlParameter("Aggression", 1000, 0, 10, 1);
-
-            temperature = new MachineDependentParameter("Temperature", 0, 100, 20, pressure, 1);
-            meltPercentage = new MachineDependentParameter("Melt Percentage", 0, 50, 10, volume, 2);
-            dogNumbers = new MachineDependentParameter("Number of Dogs", 0, 10, 1, volume, 2);
-            viscosity = new MachineDependentParameter("Viscosity", 0, 30, 5, pressure, 2);
-
-            machineparams = new List<MachineControlParameter> { pressure, volume, aggression };
-            machineDisplays = new List<MachineDependentParameter> { temperature, meltPercentage,dogNumbers,viscosity };
-
-            // machine controls...
-
-            machineControls = new MachineControls(Content.Load<Texture2D>("knob"), Content.Load<Texture2D>("gauge"), Content.Load<Texture2D>("hand"), Content.Load<Texture2D>("slider"), 
-                                                    Content.Load<Texture2D>("sliderknob"), Content.Load<Texture2D>("slidegauge"), Content.Load<Texture2D>("slidegaugeknob"));
-
+            knob = new Knob(new Vector2(300, 300), 0.2f, Content.Load<Texture2D>("knob"));
 
             // test saving...
 
@@ -492,18 +462,6 @@ namespace It_sAlive_
                 {
                    this.Exit();
                 }
-
-            // test controls menu...
-
-            if (kstate.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.A))
-            {
-                machineControls.OpenMenu(machineparams, machineDisplays);
-            }
-
-            if (kstate.IsKeyDown(Microsoft.Xna.Framework.Input.Keys.B))
-            {
-                machineControls.CloseMenu();
-            }
 
             // check for switch from full screen to windowed or back
 
@@ -573,7 +531,7 @@ namespace It_sAlive_
 
             // characters
             Simon.Update(gameTime,GraphicsDevice,cursor,research,money,madness,progBars,reachable);
-            Jeremy.Update(gameTime, GraphicsDevice, grid, cursor, research, money, madness, progBars,corpse,door,digger,resurrect,Switch,humanity,longevity,lifeForce, random,reachable);
+            Jeremy.Update(gameTime, GraphicsDevice, grid, cursor, research, money, madness, progBars,corpse,door,digger,resurrect,Switch,humanity,longevity,random,reachable);
 
             // objects to build
             
@@ -582,7 +540,7 @@ namespace It_sAlive_
                 // objects
                 foreach (FloorObject floorObject in build.buildList)
                 {
-                    floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList,reachable,money);
+                    floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList,reachable);
                 }
             }
 
@@ -593,7 +551,7 @@ namespace It_sAlive_
             // floor objects
             foreach (FloorObject floorObject in floorObjectList)
             {
-                floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList,reachable,money);
+                floorObject.Update(gameTime, cursor, Simon, Jeremy, progBars, build, floorObjectList,reachable);
             }
 
             // create progress bars if necessary
@@ -624,9 +582,8 @@ namespace It_sAlive_
 
             // test things....
             blob.Update(gameTime, grid);
-            
-            machineControls.Update(cursor, random, gameTime);
-            
+            knob.Update(cursor);
+
             // UPDATE!   
             base.Update(gameTime);
         }
@@ -694,21 +651,14 @@ namespace It_sAlive_
 
             // test things....
 
-            //knob.Render(spriteBatch, cursorFont);
-
-            //gauge.Render(spriteBatch,cursorFont);
-
-            //slider.Render(spriteBatch,cursorFont);
-            //slideGauge.Render(spriteBatch,cursorFont);
-
-            machineControls.Render(spriteBatch, cursorFont);
+            knob.Render(spriteBatch, cursorFont);
 
             spriteBatch.DrawString(cursorFont, blob.gridPosition.ToString(), new Vector2(500, 0), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // grid position of blob
             spriteBatch.DrawString(cursorFont, cursor.position.ToString(), new Vector2(500, 30), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // cursor position
 
             spriteBatch.DrawString(cursorFont, "Alive: "+corpse.alive.ToString(), new Vector2(500, 90), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // alive?
             spriteBatch.DrawString(cursorFont, "Fail: "+resurrect.fail.ToString(), new Vector2(500, 60), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // fail?
-            spriteBatch.DrawString(cursorFont, floorObjectList[0].menuMouseover.ToString(), new Vector2(500, 120), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // 
+            spriteBatch.DrawString(cursorFont, cursor.click.ToString(), new Vector2(500, 120), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // 
             blob.Render(spriteBatch);
 
 

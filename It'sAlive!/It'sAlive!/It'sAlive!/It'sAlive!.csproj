@@ -122,8 +122,13 @@
     <Compile Include="CursorII.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="FloorObject.cs" />
+    <Compile Include="Gauge.cs" />
     <Compile Include="GraveyardNew.cs" />
     <Compile Include="Grid.cs" />
+    <Compile Include="Knob.cs" />
+    <Compile Include="MachineControlParameter.cs" />
+    <Compile Include="MachineControls.cs" />
+    <Compile Include="MachineDependentParameter.cs" />
     <Compile Include="MenuAction.cs" />
     <Compile Include="MiniProgressBar.cs" />
     <Compile Include="NonInteractive.cs" />
@@ -137,6 +142,8 @@
     <Compile Include="ReachableArea.cs" />
     <Compile Include="Resurrect.cs" />
     <Compile Include="Scientist.cs" />
+    <Compile Include="SlideGauge.cs" />
+    <Compile Include="Slider.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Game.ico" />
