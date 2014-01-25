@@ -13,9 +13,10 @@ namespace It_sAlive_
         public float value;
         public MachineControlParameter dependent;
         public int type;
+        private Func<double, double> func;
 
         // should eventually have some kind of dependence function on the dependent param (or more than one!) - delta function??
-        public MachineDependentParameter(string name, int min, int max, int initial, MachineControlParameter dependent, int appearanceType)
+        public MachineDependentParameter(string name, int min, int max, int initial, MachineControlParameter dependent, Func<double, double> function, int appearanceType)
         {
             this.name = name;
             this.max = max;
@@ -23,11 +24,12 @@ namespace It_sAlive_
             this.value = initial;
             this.dependent = dependent;
             this.type = appearanceType;
+            this.func = function;
         }
 
         public void Update()
         {
-            value = dependent.value;
+            value = (float) func(dependent.value);
         }
 
     }

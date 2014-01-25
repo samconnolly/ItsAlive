@@ -257,9 +257,9 @@ namespace It_sAlive_
             reachable = new ReachableArea(grid, floorObjectList);
                         
             // counters
-            research = new NumericalCounter("Research", new Vector2(25, 15), 0, 0, 0, 0, counterFont, Color.Green, Color.Green, Content.Load<Texture2D>("counter_box"));
+            research = new NumericalCounter("Research", new Vector2(25, 15), 0, 500, 0, 0, counterFont, Color.Green, Color.Green, Content.Load<Texture2D>("counter_box"));
             madness = new NumericalCounter("Madness", new Vector2(25, 85), 0, 0, 0, 0, counterFont, Color.Red, Color.Green, Content.Load<Texture2D>("counter_box"));
-            money = new NumericalCounter("Money", new Vector2(25, 155), 0, 50, 0, 60, counterFont, Color.Orange, Color.Yellow, Content.Load<Texture2D>("counter_box"), true);
+            money = new NumericalCounter("Money", new Vector2(25, 155), 0, 1000, 0, 60, counterFont, Color.Orange, Color.Yellow, Content.Load<Texture2D>("counter_box"), true);
             papers = new NumericalCounter("Papers Published", new Vector2(10, 300), 0, 0, 0, 0, cursorFont, Color.Black, Color.Black);
             lifeForce = new NumericalCounter("Life Force", new Vector2(10, 320), 100, 0, 0, 0, cursorFont, Color.Black, Color.Black);
             longevity = new NumericalCounter("Longevity", new Vector2(10, 340), 100, 0, 0, 0, cursorFont, Color.Black, Color.Black);
@@ -358,7 +358,9 @@ namespace It_sAlive_
                                     Content.Load<Texture2D>(Convert.ToString(floorObject.Element("icon").Value)),                                       
                                     Convert.ToInt32(floorObject.Element("frameNumber").Value),
                                     Convert.ToInt32(floorObject.Element("animNumber").Value),
-                                    new Vector2(Convert.ToInt32(floorObject.Element("gridPositionX").Value),Convert.ToInt32(floorObject.Element("gridPositionY").Value)), grid,
+                                    new Vector2(Convert.ToInt32(floorObject.Element("gridPositionX").Value),Convert.ToInt32(floorObject.Element("gridPositionY").Value)),
+                                    new Vector2(Convert.ToInt32(floorObject.Element("offsetX").Value), Convert.ToInt32(floorObject.Element("offsetY").Value)),
+                                    new Vector2(Convert.ToInt32(floorObject.Element("operationPositionX").Value), Convert.ToInt32(floorObject.Element("operationPositionY").Value)), grid,
                                     floorObject.Element("name").Value, 
                                     Convert.ToInt32(floorObject.Element("cost").Value), 
                                     new List<MenuAction>{}, GraphicsDevice, 
@@ -423,7 +425,7 @@ namespace It_sAlive_
             // background stuff
 
             room = new NonInteractive(Vector2.Zero, 0.6f, Content.Load<Texture2D>("room"));
-            door = new NonInteractive(new Vector2(380, 200), 0.59f, Content.Load<Texture2D>("door"),2);
+            door = new NonInteractive(new Vector2(245, 200), 0.59f, Content.Load<Texture2D>("door"),2);
             graveyard = new Graveyard(new Vector2(1140,200), 0.8f, new Vector2(10,760),Content.Load<Texture2D>("back"), Content.Load<Texture2D>("dig_icon_standard"), Content.Load<Texture2D>("dig_icon_highlight"), Content.Load<Texture2D>("dig_icon_pressed"), GraphicsDevice, 0.5f);
             digger = new NonInteractive(new Vector2(1200, 300), 0.79f, Content.Load<Texture2D>("digger"), 1, 10);
             Switch = new NonInteractive(new Vector2(860,400), 0.58f, Content.Load<Texture2D>("switch"), 2, 1);
@@ -453,16 +455,18 @@ namespace It_sAlive_
 
             pressure = new MachineControlParameter("Pressure", 100, 0, 20, 1);
             volume = new MachineControlParameter("Volume", 50, 0, 10, 2);
-            aggression = new MachineControlParameter("Aggression", 1000, 0, 10, 1);
+            aggression = new MachineControlParameter("Aggression", 1000, 0, 10, 1);    
 
-            temperature = new MachineDependentParameter("Temperature", 0, 100, 20, pressure, 1);
-            meltPercentage = new MachineDependentParameter("Melt Percentage", 0, 50, 10, volume, 2);
-            dogNumbers = new MachineDependentParameter("Number of Dogs", 0, 10, 1, volume, 2);
-            viscosity = new MachineDependentParameter("Viscosity", 0, 30, 5, pressure, 2);
+            Func<double, double> tempFunction = delegate(double x) { return 3 * x + 1; };
+
+            temperature = new MachineDependentParameter("Temperature", 0, 100, 20, pressure,tempFunction, 1);
+            meltPercentage = new MachineDependentParameter("Melt Percentage", 0, 50, 10, volume, Math.Exp, 2);
+            dogNumbers = new MachineDependentParameter("Number of Dogs", 0, 10, 1, volume, Math.Exp, 2);
+            viscosity = new MachineDependentParameter("Viscosity", 0, 30, 5, pressure, Math.Exp, 2);
 
             machineparams = new List<MachineControlParameter> { pressure, volume, aggression };
             machineDisplays = new List<MachineDependentParameter> { temperature, meltPercentage,dogNumbers,viscosity };
-
+            
             // machine controls...
 
             machineControls = new MachineControls(Content.Load<Texture2D>("knob"), Content.Load<Texture2D>("gauge"), Content.Load<Texture2D>("hand"), Content.Load<Texture2D>("slider"), 

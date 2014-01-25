@@ -33,6 +33,7 @@ namespace It_sAlive_
         public Vector2 position = Vector2.Zero;
         public Vector2 gridPosition = Vector2.Zero;
         public Vector2 offset;
+        public Vector2 opPos;
 
         public Vector2 footprint;
 
@@ -73,16 +74,18 @@ namespace It_sAlive_
 
         // The public instance of the object
 
-        public FloorObject(Texture2D texture,Texture2D iconTexture, int frameNumber,int animNumber, Vector2 gridPosition, Grid grid, string name,int cost, List<MenuAction> menuActions, GraphicsDevice graphicsDevice, Vector2 footprint, bool prebuilt)
+        public FloorObject(Texture2D texture,Texture2D iconTexture, int frameNumber,int animNumber, Vector2 gridPosition,Vector2 gridOffset,Vector2 operationPosition, Grid grid, string name,int cost, List<MenuAction> menuActions, GraphicsDevice graphicsDevice, Vector2 footprint, bool prebuilt)
         {
 
             this.objectTex = texture;
             this.gridPosition = gridPosition;
-            this.position = grid.EdgeCartesianCoords(gridPosition);
+            this.position = grid.EdgeCartesianCoords(gridPosition) + gridOffset;
             this.layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y;
 
             this.footprint = footprint;
             this.prebuilt = prebuilt;
+
+            this.opPos = gridPosition + operationPosition;
 
             this.name = name;
             this.menuActions = menuActions;

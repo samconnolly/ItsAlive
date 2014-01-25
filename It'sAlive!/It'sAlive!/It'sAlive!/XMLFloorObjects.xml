@@ -7,10 +7,14 @@
 		<frameNumber>1</frameNumber>
 		<animNumber>1</animNumber>
 		<gridPositionX>9</gridPositionX>
-		<gridPositionY>8</gridPositionY>
+		<gridPositionY>10</gridPositionY>
+		<offsetX>-25</offsetX>
+		<offsetY>0</offsetY>
 		<cost>50</cost>
 		<footprintX>3</footprintX>
 		<footprintY>5</footprintY>
+		<operationPositionX>0</operationPositionX>
+		<operationPositionY>-1</operationPositionY>
 		<prebuilt>false</prebuilt>
 		<menuAction>null</menuAction>
 		<menuAction2>null</menuAction2>
@@ -22,11 +26,15 @@
 		<icon>lightningicon</icon>
 		<frameNumber>1</frameNumber>
 		<animNumber>2</animNumber>
-		<gridPositionX>5</gridPositionX>
-		<gridPositionY>12</gridPositionY>
+		<gridPositionX>12</gridPositionX>
+		<gridPositionY>19</gridPositionY>
+		<offsetX>-50</offsetX>
+		<offsetY>30</offsetY>
 		<cost>75</cost>
-		<footprintX>1</footprintX>
-		<footprintY>1</footprintY>
+		<footprintX>2</footprintX>
+		<footprintY>2</footprintY>
+		<operationPositionX>0</operationPositionX>
+		<operationPositionY>-1</operationPositionY>
 		<prebuilt>false</prebuilt>
 		<menuAction>Turn On</menuAction>
 		<menuAction2>Turn Off</menuAction2>
@@ -38,11 +46,15 @@
 		<icon>tableicon</icon>
 		<frameNumber>1</frameNumber>
 		<animNumber>1</animNumber>
-		<gridPositionX>2</gridPositionX>
-		<gridPositionY>20</gridPositionY>
+		<gridPositionX>13</gridPositionX>
+		<gridPositionY>1</gridPositionY>
+		<offsetX>-65</offsetX>
+		<offsetY>10</offsetY>
 		<cost>0</cost>
-		<footprintX>1</footprintX>
-		<footprintY>1</footprintY>
+		<footprintX>6</footprintX>
+		<footprintY>3</footprintY>
+		<operationPositionX>1</operationPositionX>
+		<operationPositionY>3</operationPositionY>
 		<prebuilt>true</prebuilt>
 		<menuAction>Part Time Work</menuAction>
 		<menuAction2>Write Paper</menuAction2>
@@ -54,11 +66,15 @@
 		<icon>tableicon</icon>
 		<frameNumber>1</frameNumber>
 		<animNumber>1</animNumber>
-		<gridPositionX>18</gridPositionX>
-		<gridPositionY>20</gridPositionY>
+		<gridPositionX>20</gridPositionX>
+		<gridPositionY>16</gridPositionY>
+		<offsetX>-265</offsetX>
+		<offsetY>30</offsetY>
 		<cost>0</cost>
 		<footprintX>1</footprintX>
-		<footprintY>1</footprintY>
+		<footprintY>5</footprintY>
+		<operationPositionX>-1</operationPositionX>
+		<operationPositionY>2</operationPositionY>
 		<prebuilt>true</prebuilt>
 		<menuAction>Study</menuAction>
 		<menuAction2>null</menuAction2>
@@ -68,15 +84,59 @@
 		<name>Injection System</name>
 		<texture>machine2</texture>
 		<icon>machine2icon</icon>
-		<frameNumber>4</frameNumber>
+		<frameNumber>1</frameNumber>
 		<animNumber>1</animNumber>
 		<gridPositionX>8</gridPositionX>
 		<gridPositionY>20</gridPositionY>
+		<offsetX>0</offsetX>
+		<offsetY>0</offsetY>
 		<cost>150</cost>
 		<footprintX>1</footprintX>
 		<footprintY>1</footprintY>
+		<operationPositionX>0</operationPositionX>
+		<operationPositionY>-1</operationPositionY>
 		<prebuilt>false</prebuilt>
 		<menuAction>Inject</menuAction>
+		<menuAction2>null</menuAction2>
+		<menuAction3>null</menuAction3>
+	</FloorObject>
+	<FloorObject>
+		<name>Steam Computer</name>
+		<texture>steampc</texture>
+		<icon>machine2icon</icon>
+		<frameNumber>1</frameNumber>
+		<animNumber>1</animNumber>
+		<gridPositionX>1</gridPositionX>
+		<gridPositionY>19</gridPositionY>
+		<offsetX>0</offsetX>
+		<offsetY>0</offsetY>
+		<cost>300</cost>
+		<footprintX>4</footprintX>
+		<footprintY>2</footprintY>
+		<operationPositionX>0</operationPositionX>
+		<operationPositionY>-1</operationPositionY>
+		<prebuilt>false</prebuilt>
+		<menuAction>null</menuAction>
+		<menuAction2>null</menuAction2>
+		<menuAction3>null</menuAction3>
+	</FloorObject>
+	<FloorObject>
+		<name>Electrical Transference Device</name>
+		<texture>electric</texture>
+		<icon>machine2icon</icon>
+		<frameNumber>1</frameNumber>
+		<animNumber>1</animNumber>
+		<gridPositionX>14</gridPositionX>
+		<gridPositionY>14</gridPositionY>
+		<offsetX>-60</offsetX>
+		<offsetY>0</offsetY>
+		<cost>400</cost>
+		<footprintX>2</footprintX>
+		<footprintY>2</footprintY>
+		<operationPositionX>0</operationPositionX>
+		<operationPositionY>-1</operationPositionY>
+		<prebuilt>false</prebuilt>
+		<menuAction>Transfer Electrical Discharge</menuAction>
 		<menuAction2>null</menuAction2>
 		<menuAction3>null</menuAction3>
 	</FloorObject>

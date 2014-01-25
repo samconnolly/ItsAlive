@@ -171,11 +171,11 @@ namespace It_sAlive_
                     }
                 }
 
-                else if (gridPosition != floorObject.gridPosition + new Vector2(0, -1))
+                else if (gridPosition != floorObject.opPos)
                 {
                     walking = true;
 
-                    drawPath = path.PathList(gridPosition, floorObject.gridPosition + new Vector2(0, -1), grid);
+                    drawPath = path.PathList(gridPosition, floorObject.opPos, grid);
 
                     pathStep = 1;
 
