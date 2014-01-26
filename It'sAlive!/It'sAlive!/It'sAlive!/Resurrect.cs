@@ -69,7 +69,7 @@ namespace It_sAlive_
             fail = false;
             
             double rnd = random.NextDouble();            // produce a random number
-            float chance = 1.0f * (research.value/raiseResearch)* (corpse.rot/3.0f) * (float) rnd; // calculate a resurrection chance based on amount of research done and corpse freshness
+            float chance = 1.0f * (research.value/raiseResearch)* (corpse.rot.value/3.0f) * (float) rnd; // calculate a resurrection chance based on amount of research done and corpse freshness
             
             // resurrect if successful
             if (chance > 0.9f && longevity.value > 0 && lifeForce.value == 100)
@@ -94,7 +94,7 @@ namespace It_sAlive_
             // else it fails...
             else
             {
-                corpse.visible = false;
+                corpse.Die();
                 fail = true;
 
                 research.value += 50;

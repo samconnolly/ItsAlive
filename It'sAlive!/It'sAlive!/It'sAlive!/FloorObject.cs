@@ -80,7 +80,7 @@ namespace It_sAlive_
             this.objectTex = texture;
             this.gridPosition = gridPosition;
             this.position = grid.EdgeCartesianCoords(gridPosition) + gridOffset;
-            this.layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y;
+            this.layer = 0.22f + (0.2f / (float)grid.rows) * gridPosition.Y + (0.2f / ((float)grid.columns*(float)grid.rows + 1)) * Math.Abs(gridPosition.X - (float)grid.columns/2.0f);
 
             this.footprint = footprint;
             this.prebuilt = prebuilt;

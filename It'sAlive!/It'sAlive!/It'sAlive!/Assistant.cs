@@ -75,7 +75,7 @@ namespace It_sAlive_
 
             this.gridPosition = startGridPosition;
             this.defaultGridPosition = startGridPosition;
-            this.layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y;
+            this.layer = 0.21f + (0.2f / (float)grid.rows) * gridPosition.Y + (0.2f / ((float)grid.columns * (float)grid.rows + 1)) * Math.Abs(gridPosition.X - (float)grid.columns / 2.0f);
 
             this.tableLocation = table.gridPosition + new Vector2(1,-1);
 
@@ -94,7 +94,7 @@ namespace It_sAlive_
         }
 
         // dig up corpse!
-        public void DigUpCorpse(Corpse corpse)
+        public void DigUpCorpse(Corpse corpse, MenuAction dissect, MenuAction study)
         {
             if (corpse.visible == false)
             {
@@ -103,7 +103,11 @@ namespace It_sAlive_
                 drawPath = path.PathList(gridPosition, doorLocation, grid);
                 pathStep = 1;
                 walkingTarget = drawPath[pathStep];
-                corpse.rot = 3;
+                corpse.rot.value = 3;
+                corpse.cut = 0;
+
+                dissect.count = 0;
+                study.count = 0;
             }          
 
         }
@@ -140,7 +144,16 @@ namespace It_sAlive_
             if (outside == false)
             {
                 position = grid.CartesianCoords(gridPosition);
-                layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y - 0.01f;
+
+                if (walking == true)
+                {
+                    layer = 0.21f + (0.2f / (float)grid.rows) * walkingTarget.Y + (0.2f / ((float)grid.columns * (float)grid.rows + 1)) * Math.Abs(walkingTarget.X - (float)grid.columns / 2.0f);
+                }
+
+                else
+                {
+                    layer = 0.21f + (0.2f / (float)grid.rows) * gridPosition.Y + (0.2f / ((float)grid.columns * (float)grid.rows + 1)) * Math.Abs(gridPosition.X - (float)grid.columns / 2.0f);
+                }
             }
 
             offset = new Vector2((width * scale) / 2.0f, height * scale); // factor of 2 here and in the draw command are just for this test anim, so it's a decent size...
@@ -275,11 +288,6 @@ namespace It_sAlive_
                         {
                             anim = 0;
                         }
-
-                        if (direction.Y >= 0)
-                        {
-                            layer -= 0.2f / (float)grid.rows + 0.01f;
-                        }
                     }
 
                     if (Math.Abs(direction.Y) >= Math.Abs(direction.X))
@@ -287,7 +295,6 @@ namespace It_sAlive_
                         if (direction.Y >= 0)
                         {
                             anim = 2;
-                            layer -= 0.2f / (float)grid.rows + 0.01f;
                         }
 
                         else
@@ -314,6 +321,7 @@ namespace It_sAlive_
                         if (door.animNum == 0)
                         {
                             door.SetAnim(1);
+                            door.layer -= 0.3f;
                         }
                            
                         if (currentFrame++ == 2)
@@ -338,6 +346,7 @@ namespace It_sAlive_
 
                             currentFrame = 0;
                             door.SetAnim(0);
+                            door.layer += 0.3f;
                         }
 
                         else if (dug == true)

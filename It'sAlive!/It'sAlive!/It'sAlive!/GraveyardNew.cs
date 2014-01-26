@@ -54,7 +54,7 @@ namespace It_sAlive_
 
         }
 
-        public void Update(GameTime gameTime, Cursor cursor, List<FloorObject> floorObjectList, FloorObject table, Assistant assistant, Corpse corpse, List<MiniProgressBar> bars)
+        public void Update(GameTime gameTime, Cursor cursor, List<FloorObject> floorObjectList, FloorObject table, Assistant assistant, Corpse corpse, List<MiniProgressBar> bars,MenuAction dissect,MenuAction study)
         {
             if (floorObjectList.Contains(table) && assistant.digging == false && corpse.visible == false && assistant.outside == false && assistant.corpseCarrying == false)
             {
@@ -79,7 +79,7 @@ namespace It_sAlive_
                     {
                         if (doable == true)
                         {
-                            assistant.DigUpCorpse(corpse);
+                            assistant.DigUpCorpse(corpse,dissect,study);
                             clickOn = true;
                         }
 

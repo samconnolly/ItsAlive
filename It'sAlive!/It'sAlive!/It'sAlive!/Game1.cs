@@ -441,7 +441,7 @@ namespace It_sAlive_
 
             // the corpse!
 
-            corpse = new Corpse(new Vector2(725, 540),Content.Load<Texture2D>("corpse"), new List<MenuAction> { studyCorpse, dissectCorpse }, new List<MenuAction> { talk,studyLiveCorpse }, new List<MenuAction> { clearCorpse },GraphicsDevice);
+            corpse = new Corpse(new Vector2(660, 600),Content.Load<Texture2D>("corpse"), new List<MenuAction> { studyCorpse, dissectCorpse }, new List<MenuAction> { talk,studyLiveCorpse }, new List<MenuAction> { clearCorpse },GraphicsDevice,cursorFont);
                        
             // update reachable area to account for these
 
@@ -557,7 +557,7 @@ namespace It_sAlive_
             cursor.Update(graphics, xScale, yScale, wxScale, wyScale);
 
             // graveyard
-            graveyard.Update(gameTime, cursor, floorObjectList, table, Jeremy, corpse,progBars);
+            graveyard.Update(gameTime, cursor, floorObjectList, table, Jeremy, corpse, progBars, menuActions[3], menuActions[2]);
 
             // digging anim
             digger.Update(gameTime);

@@ -19,7 +19,7 @@ namespace It_sAlive_
         private Texture2D tex;
         private Rectangle rect;
         public bool visible;
-        private float scale = 3.0f;
+        private float scale = 1.0f;
 
         public int width;
         public int height;
@@ -32,12 +32,13 @@ namespace It_sAlive_
         private int currentFrame = 0;
 
         private int anim = 0;
-        private List<int> nframes = new List<int>{1, 3, 3,1};
+        private List<int> nframes = new List<int>{1, 1, 1,1};
 
         private int timer = 0;
         private int rotTimer = 0;
         private int rotTime = 60;
-        public int rot = 3;
+        public NumericalCounter rot;
+        public int cut = 0;
 
         public bool alive = false;
         public bool dead = false;
@@ -60,13 +61,13 @@ namespace It_sAlive_
         private Color lineColour;
 
 
-        public Corpse(Vector2 position,Texture2D itemTex, List<MenuAction> workMenuActions, List<MenuAction> aliveMenuActions,List<MenuAction> deadMenuActions,GraphicsDevice graphicsDevice)
+        public Corpse(Vector2 position,Texture2D itemTex, List<MenuAction> workMenuActions, List<MenuAction> aliveMenuActions,List<MenuAction> deadMenuActions,GraphicsDevice graphicsDevice, SpriteFont font)
         {
             this.position = position;
             this.tex = itemTex;
-            this.width = tex.Width/3;
+            this.width = tex.Width/1;
             this.height = tex.Height/4;
-            this.fwidth = tex.Width / 9;
+            this.fwidth = tex.Width / 1;
             this.rect.Width = fwidth;
             this.rect.Height = height;
             this.aliveMenuActions = aliveMenuActions;
@@ -76,14 +77,17 @@ namespace It_sAlive_
             // menu text
             dummyTexture = new Texture2D(graphicsDevice, 1, 1);
             dummyTexture.SetData(new Color[] { Color.Gray });
+
+            // rot counter
+            this.rot = new NumericalCounter("Rot", new Vector2(10, 380), 4, 3, 0, 0, font, Color.Red, Color.Red);
         }
 
         public void Die()
         {
             alive = false;
             dead = true;
-            anim = 3;
-            frames = nframes[3];
+            cut = 3;
+            frames = nframes[3];            
         }
 
         public void Update(GameTime gameTime, MenuAction dissect, MenuAction study,NumericalCounter longevity, NumericalCounter humanity, NumericalCounter lifeforce, Scientist scientist, Assistant assistant,
@@ -92,13 +96,26 @@ namespace It_sAlive_
             cursor.corpseMouseover = false;
 
             if (this.visible == true)
-            {        
-                
+            {
+
+
+                // update cut up-ness
+                if (dead == false)
+                {
+                    cut = dissect.count * 3 + study.count;
+                }
+
+                if (cut > 3)
+                {
+                    cut = 3;
+                }
+
+
                 // check for mouseover & click
                                
 
                 if (cursor.position.X >= position.X && cursor.position.X <= position.X + fwidth*scale
-                           && cursor.position.Y >= position.Y + height && cursor.position.Y <= position.Y + height*2 && visible == true && corpseMenu == false)
+                           && cursor.position.Y >= position.Y  && cursor.position.Y <= position.Y + height  && visible == true && corpseMenu == false)
                 {
 
                     cursor.corpseMouseover = true; // add object mouseover text
@@ -128,20 +145,15 @@ namespace It_sAlive_
                 {
                     rotTimer = 0;
 
-                    if (rot > 1)
+                    if (rot.value > 1)
                     {
-                        rot -= 1;
-                        dissect.research -= 18;
-                        dissect.madness -= 10;
-
+                        rot.value -= 1;
                     }
 
                     else
                     {
                         Die();
-                        rot = 3;
-                        dissect.research = 54;
-                        dissect.madness = 30;
+                        rot.value = 3;
                     }
                 }
 
@@ -191,7 +203,6 @@ namespace It_sAlive_
 
                 if (study.count >= 3)
                 {
-                    study.count = 0;
                     Die();
                 }
 
@@ -206,8 +217,7 @@ namespace It_sAlive_
                         currentFrame = 0;
                     }
 
-                    rect.X = (3 - rot) * width + currentFrame * fwidth;
-                    rect.Y = anim * height;
+                    rect.Y = cut * height + currentFrame; // * fwidth
                 }
 
 
@@ -398,8 +408,11 @@ namespace It_sAlive_
                 clearCorpse.count = 0;
                 visible = false;
                 dead = false;
-                rot = 3;
+                rot.value = 3;                
             }
+            
+            // update the rot counter
+            rot.Update(gameTime);
         }
 
         public void Render(SpriteBatch sbatch,SpriteFont font)

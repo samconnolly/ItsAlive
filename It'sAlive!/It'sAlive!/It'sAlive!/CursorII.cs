@@ -116,7 +116,7 @@ namespace It_sAlive_
 
             if (corpseMouseover == true && menu == false)
             {
-                sbatch.DrawString(font, "Corpse: rot = " + corpse.rot.ToString(), position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
+                sbatch.DrawString(font, "Corpse: rot = " + corpse.rot.value.ToString(), position + textOffset, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.01f);
             }
 
             if (buildIconMouseover == true && menu == false && build.menu == true)

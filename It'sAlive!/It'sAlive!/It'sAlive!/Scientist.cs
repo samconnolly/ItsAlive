@@ -70,7 +70,7 @@ namespace It_sAlive_
             this.width = texture.Width / numberOfFrames;
             this.height = texture.Height / numberOfAnims;
             this.gridPosition = gridPosition;
-            this.layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y;
+            this.layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y + (0.2f / ((float)grid.columns*(float)grid.rows + 1)) * Math.Abs(gridPosition.X - (float)grid.columns/2.0f);
             this.corpsePosition = table.gridPosition + new Vector2(1, -1);
 
             // set path to use reachable area
@@ -114,7 +114,18 @@ namespace It_sAlive_
             // update position from grid position
                         
             position = grid.CartesianCoords(gridPosition);
-            layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y - 0.01f;
+
+            // determine later from position and direction of movement
+
+            if (walking == true)
+            {
+                layer = 0.2f + (0.2f / (float)grid.rows) * walkingTarget.Y + (0.2f / ((float)grid.columns * (float)grid.rows + 1)) * Math.Abs(walkingTarget.X - (float)grid.columns / 2.0f);          
+            }
+
+            else
+            {
+                layer = 0.2f + (0.2f / (float)grid.rows) * gridPosition.Y + (0.2f / ((float)grid.columns * (float)grid.rows + 1)) * Math.Abs(gridPosition.X - (float)grid.columns / 2.0f);
+            }
 
             offset = new Vector2((width * scale) / 2.0f, height * scale); // factor of 2 here and in the draw command are just for this test anim, so it's a decent size...
 
@@ -227,24 +238,19 @@ namespace It_sAlive_
                         {
                             anim = 0;
                         }
-
-                        if (direction.Y >= 0)
-                        {
-                            layer -= 0.2f / (float)grid.rows + 0.01f;
-                        }
+                                              
                     }
 
                     if (Math.Abs(direction.Y) >= Math.Abs(direction.X))
                     {
                         if (direction.Y >= 0)
                         {
-                            anim = 2;
-                            layer -= 0.2f / (float)grid.rows + 0.01f;
+                            anim = 2;                            
                         }
 
                         else
                         {
-                            anim = 3;
+                            anim = 3;                            
                         }
                     }
 
