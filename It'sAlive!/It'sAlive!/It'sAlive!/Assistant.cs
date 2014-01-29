@@ -384,6 +384,7 @@ namespace It_sAlive_
 
                         doing = false;
                         corpseCarrying = false;
+                        corpse.flies.Restart(0);
                         corpse.visible = true;
                     }
 

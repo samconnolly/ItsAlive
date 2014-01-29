@@ -173,6 +173,7 @@ namespace It_sAlive_
 
         MachineControls machineControls;
 
+        FlySwarm flySwarm;
 
         // === load things... ==============
 
@@ -441,7 +442,7 @@ namespace It_sAlive_
 
             // the corpse!
 
-            corpse = new Corpse(new Vector2(660, 600),Content.Load<Texture2D>("corpse"), new List<MenuAction> { studyCorpse, dissectCorpse }, new List<MenuAction> { talk,studyLiveCorpse }, new List<MenuAction> { clearCorpse },GraphicsDevice,cursorFont);
+            corpse = new Corpse(new Vector2(660, 600),Content.Load<Texture2D>("corpse"), new List<MenuAction> { studyCorpse, dissectCorpse }, new List<MenuAction> { talk,studyLiveCorpse }, new List<MenuAction> { clearCorpse },GraphicsDevice,cursorFont,random);
                        
             // update reachable area to account for these
 
@@ -472,6 +473,8 @@ namespace It_sAlive_
             machineControls = new MachineControls(Content.Load<Texture2D>("knob"), Content.Load<Texture2D>("gauge"), Content.Load<Texture2D>("hand"), Content.Load<Texture2D>("slider"), 
                                                     Content.Load<Texture2D>("sliderknob"), Content.Load<Texture2D>("slidegauge"), Content.Load<Texture2D>("slidegaugeknob"));
 
+            // flies
+            
 
             // test saving...
 
@@ -694,10 +697,8 @@ namespace It_sAlive_
             }
 
             // movement grid
-            grid.Draw(GraphicsDevice, spriteBatch,reachable);
-
-            // test things....
-
+            //grid.Draw(GraphicsDevice, spriteBatch,reachable);
+            
             //knob.Render(spriteBatch, cursorFont);
 
             //gauge.Render(spriteBatch,cursorFont);

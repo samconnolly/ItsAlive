@@ -122,6 +122,7 @@
     <Compile Include="CursorII.cs" />
     <Compile Include="Data.cs" />
     <Compile Include="FloorObject.cs" />
+    <Compile Include="FlySwarm.cs" />
     <Compile Include="Gauge.cs" />
     <Compile Include="GraveyardNew.cs" />
     <Compile Include="Grid.cs" />

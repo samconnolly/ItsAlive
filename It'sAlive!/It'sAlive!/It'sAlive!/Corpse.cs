@@ -37,6 +37,11 @@ namespace It_sAlive_
         private int timer = 0;
         private int rotTimer = 0;
         private int rotTime = 60;
+        private int flyTimer = 0;
+        private int flyTime = 5000;
+        private int flyLossTime = 500;
+        private int colorTimer = 0;
+        private int colorTime;
         public NumericalCounter rot;
         public int cut = 0;
 
@@ -60,8 +65,12 @@ namespace It_sAlive_
         private Color boxColour;
         private Color lineColour;
 
+        private Color corpseColor = Microsoft.Xna.Framework.Color.White;
+        
 
-        public Corpse(Vector2 position,Texture2D itemTex, List<MenuAction> workMenuActions, List<MenuAction> aliveMenuActions,List<MenuAction> deadMenuActions,GraphicsDevice graphicsDevice, SpriteFont font)
+        public FlySwarm flies;
+
+        public Corpse(Vector2 position,Texture2D itemTex, List<MenuAction> workMenuActions, List<MenuAction> aliveMenuActions,List<MenuAction> deadMenuActions,GraphicsDevice graphicsDevice, SpriteFont font, Random random)
         {
             this.position = position;
             this.tex = itemTex;
@@ -73,6 +82,10 @@ namespace It_sAlive_
             this.aliveMenuActions = aliveMenuActions;
             this.deadMenuActions = deadMenuActions;
             this.workMenuActions = workMenuActions;
+            this.colorTime = ((3 * rotTime * 1000) / 255);
+
+            this.flies = new FlySwarm(new Vector2(850, 520), 200, 1, 0.1f, graphicsDevice, random);
+            
 
             // menu text
             dummyTexture = new Texture2D(graphicsDevice, 1, 1);
@@ -86,7 +99,7 @@ namespace It_sAlive_
         {
             alive = false;
             dead = true;
-            cut = 3;
+            //cut = 3;
             frames = nframes[3];            
         }
 
@@ -94,6 +107,24 @@ namespace It_sAlive_
                                 MenuAction talk, Cursor cursor,List<MiniProgressBar> bars, MenuAction clearCorpse)
         {
             cursor.corpseMouseover = false;
+
+            if (flyTimer >= flyTime && alive == false)
+            {
+                flyTimer = 0;
+                flies.AddFlies(1);
+            }
+
+
+            flyTimer += gameTime.ElapsedGameTime.Milliseconds;
+
+            if (flyTimer >= flyLossTime && visible == false)
+            {
+                if (flies.flies.Count > 0)
+                {
+                    flyTimer = 0;
+                    flies.RemoveFlies(1);
+                }
+            }
 
             if (this.visible == true)
             {
@@ -136,10 +167,11 @@ namespace It_sAlive_
                 }                
 
 
-                // rotting timer and count
+                // rotting timer and count and flies
 
                 timer += gameTime.ElapsedGameTime.Milliseconds;
                 rotTimer += gameTime.ElapsedGameTime.Milliseconds;
+                colorTimer += gameTime.ElapsedGameTime.Milliseconds;
 
                 if (rotTimer >= rotTime * 1000.0 && alive == false && dead == false)
                 {
@@ -148,12 +180,33 @@ namespace It_sAlive_
                     if (rot.value > 1)
                     {
                         rot.value -= 1;
+                        flyTime -= 1500;
                     }
 
                     else
                     {
                         Die();
+                        corpseColor = Microsoft.Xna.Framework.Color.Brown;
                         rot.value = 3;
+                    }
+                }
+
+          
+
+                if (colorTimer >= colorTime)
+                {
+                    colorTimer = 0;
+                    if (corpseColor.R > 90)
+                    {
+                        this.corpseColor.R -= 1;
+                    }
+                    if (corpseColor.B > 0)
+                    {
+                        this.corpseColor.B -= 1;
+                    }
+                    if (corpseColor.G > 60)
+                    {
+                        this.corpseColor.G -= 1;
                     }
                 }
 
@@ -196,7 +249,7 @@ namespace It_sAlive_
 
                 if (dissect.done == true)
                 {
-                    Die();
+                    Die();                    
                 }
 
                 // kill if studies 3 times
@@ -408,11 +461,17 @@ namespace It_sAlive_
                 clearCorpse.count = 0;
                 visible = false;
                 dead = false;
+                corpseColor = Color.White;
                 rot.value = 3;                
             }
             
             // update the rot counter
             rot.Update(gameTime);
+
+            // update fly swarm
+            
+            flies.Update();
+            
         }
 
         public void Render(SpriteBatch sbatch,SpriteFont font)
@@ -420,8 +479,12 @@ namespace It_sAlive_
             // corpse
             if (visible == true)
             {
-                sbatch.Draw(tex, position, rect, Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, scale, SpriteEffects.None, layer);
+                sbatch.Draw(tex, position, rect, corpseColor, 0, Vector2.Zero, scale, SpriteEffects.None, layer);
             }
+
+
+            // flies
+            flies.Render(sbatch);
 
             // menu
 
