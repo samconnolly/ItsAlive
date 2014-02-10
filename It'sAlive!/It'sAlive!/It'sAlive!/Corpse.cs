@@ -84,7 +84,7 @@ namespace It_sAlive_
             this.workMenuActions = workMenuActions;
             this.colorTime = ((3 * rotTime * 1000) / 255);
 
-            this.flies = new FlySwarm(new Vector2(850, 520), 200, 1, 0.1f, graphicsDevice, random);
+            this.flies = new FlySwarm(new Vector2(850, 520), 200, 0, 0.1f, graphicsDevice, random);
             
 
             // menu text

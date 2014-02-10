@@ -5,311 +5,506 @@
 		<scientist>false</scientist>
 		<assistant>true</assistant>
 		<time>2</time>
-		<reasearchUp>0</reasearchUp>
-		<madnessUp>1</madnessUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
+		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>true</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>none</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Turn Off</name>
 		<scientist>false</scientist>
 		<assistant>true</assistant>
 		<time>2</time>
-		<reasearchUp>0</reasearchUp>
-		<madnessUp>1</madnessUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
+		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>true</turnOff>
-		<multiplyingCounter>none</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Study Corpse</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>5</time>
-		<reasearchUp>10</reasearchUp>
-		<madnessUp>6</madnessUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
+		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>none</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Dissect Corpse</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>7</time>
-		<reasearchUp>54</reasearchUp>
-		<madnessUp>30</madnessUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
+		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>none</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Clear Up Corpse</name>
 		<scientist>false</scientist>
 		<assistant>true</assistant>
 		<time>1</time>
-		<reasearchUp>0</reasearchUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
 		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>none</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Study</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>10</time>
-		<reasearchUp>10</reasearchUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
 		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>none</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Study Zombie</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>10</time>
-		<reasearchUp>30</reasearchUp>
-		<madnessUp>4</madnessUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
+		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>humanity</multiplyingCounter>
-		<multiplyingCounter2>longevity</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0.1</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Talk</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>10</time>
-		<reasearchUp>20</reasearchUp>
-		<madnessUp>1</madnessUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
+		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>humanity</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0.5</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Part Time Work</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>10</time>
-		<reasearchUp>15</reasearchUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
 		<madnessUp>0</madnessUp>
-		<moneyChange>20</moneyChange>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
+		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>none</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0.15</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Write Paper</name>
 		<scientist>true</scientist>
 		<assistant>false</assistant>
 		<time>10</time>
-		<reasearchUp>10</reasearchUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
 		<madnessUp>0</madnessUp>
-		<moneyChange>10</moneyChange>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
+		<moneyChange>0</moneyChange>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
 		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
 		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
 		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>research</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0.05</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>1.5</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0</longevityUpMultiplier>
-		<humanityUpMultiplier>0</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Transfer Electrical Discharge</name>
 		<scientist>false</scientist>
 		<assistant>true</assistant>
 		<time>5</time>
-		<reasearchUp>0</reasearchUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
 		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
-		<lifeForceUp>5</lifeForceUp>
-		<longevityUp>10</longevityUp>
-		<humanityUp>2</humanityUp>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
+		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
+		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
+		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>research</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0.1</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0.1</longevityUpMultiplier>
-		<humanityUpMultiplier>0.1</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Inject</name>
 		<scientist>false</scientist>
 		<assistant>true</assistant>
 		<time>5</time>
-		<reasearchUp>0</reasearchUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
 		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
-		<lifeForceUp>15</lifeForceUp>
-		<longevityUp>10</longevityUp>
-		<humanityUp>5</humanityUp>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
+		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
+		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
+		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>research</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0.1</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0.1</longevityUpMultiplier>
-		<humanityUpMultiplier>0.1</humanityUpMultiplier>
 	</menuAction>
 	<menuAction>
 		<name>Compute</name>
 		<scientist>false</scientist>
 		<assistant>true</assistant>
 		<time>5</time>
-		<reasearchUp>0</reasearchUp>
+		<researchUp>0</researchUp>
+		<researchMultiplier>none</researchMultiplier>
+		<researchPower>0</researchPower>
+		<researchMultiplier2>none</researchMultiplier2>
+		<researchPower2>0</researchPower2>
 		<madnessUp>0</madnessUp>
+		<madnessMultiplier>none</madnessMultiplier>
+		<madnessPower>0</madnessPower>
+		<madnessMultiplier2>none</madnessMultiplier2>
+		<madnessPower2>0</madnessPower2>
 		<moneyChange>0</moneyChange>
-		<lifeForceUp>10</lifeForceUp>
-		<longevityUp>20</longevityUp>
-		<humanityUp>20</humanityUp>
+		<moneyMultiplier>none</moneyMultiplier>
+		<moneyPower>0</moneyPower>
+		<moneyMultiplier2>none</moneyMultiplier2>
+		<moneyPower2>0</moneyPower2>
+		<lifeForceUp>0</lifeForceUp>
+		<lifeForceMultiplier>none</lifeForceMultiplier>
+		<lifeForcePower>0</lifeForcePower>
+		<lifeForceMultiplier2>none</lifeForceMultiplier2>
+		<lifeForcePower2>0</lifeForcePower2>
+		<longevityUp>0</longevityUp>
+		<longevityMultiplier>none</longevityMultiplier>
+		<longevityPower>0</longevityPower>
+		<longevityMultiplier2>none</longevityMultiplier2>
+		<longevityPower2>0</longevityPower2>
+		<humanityUp>0</humanityUp>
+		<humanityMultiplier>none</humanityMultiplier>
+		<humanityPower>0</humanityPower>
+		<humanityMultiplier2>none</humanityMultiplier2>
+		<humanityPower2>0</humanityPower2>
 		<remain>true</remain>
 		<turnOn>false</turnOn>
 		<turnOff>false</turnOff>
-		<multiplyingCounter>research</multiplyingCounter>
-		<multiplyingCounter2>none</multiplyingCounter2>
-		<multiplyingCounter3>none</multiplyingCounter3>
-		<reasearchUpMultiplier>0</reasearchUpMultiplier>
-		<madnessUpMultiplier>0</madnessUpMultiplier>
-		<moneyChangeMultiplier>0</moneyChangeMultiplier>
-		<lifeForceUpMultiplier>0.1</lifeForceUpMultiplier>
-		<longevityUpMultiplier>0.1</longevityUpMultiplier>
-		<humanityUpMultiplier>0.1</humanityUpMultiplier>
 	</menuAction>
 </menuActions>

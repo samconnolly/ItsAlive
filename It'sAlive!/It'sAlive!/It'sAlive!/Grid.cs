@@ -76,6 +76,15 @@ namespace It_sAlive_
 
         }
 
+        public Vector2 reverseCoords(Vector2 position)
+        {
+            int yTile = (int) (((roomPosition.Y - position.Y) / tileHeight) + 1.0);
+            tileWidth = (widthScale * (rows - (yTile - 1)) + farWidth) / columns;
+            int xTile = (int)((position.X - roomPosition.X - 0.5 * nearWidth) / tileWidth + 1 + columns/2);
+
+            return new Vector2(xTile, yTile);
+        }
+
         public void Draw(GraphicsDevice graphicsDevice, SpriteBatch sbatch,ReachableArea reach)
         {
             // draw the grid

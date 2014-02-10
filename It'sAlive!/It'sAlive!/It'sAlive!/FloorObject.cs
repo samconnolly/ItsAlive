@@ -130,8 +130,8 @@ namespace It_sAlive_
 
             mouseOver = false;
 
-            if (cursor.position.X >= (position.X - offset.X) && cursor.position.X <= (position.X - offset.X + ((objectTex.Width * scale) / frames))
-                    && cursor.position.Y >= position.Y - offset.Y && cursor.position.Y <= (position.Y - offset.Y + (objectTex.Height * scale))
+            if (cursor.position.X >= (position.X - offset.X) && cursor.position.X <= (position.X - offset.X + ((rect.Width * scale) / frames))
+                    && cursor.position.Y >= position.Y - offset.Y && cursor.position.Y <= (position.Y - offset.Y + (rect.Height * scale))
                         && cursor.corpseMouseover == false && menu == false && menuActions.Count > 0 && build.menu == false)
             {
                     // turn on menu when object is clicked

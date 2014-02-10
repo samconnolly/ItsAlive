@@ -156,9 +156,7 @@ namespace It_sAlive_
         SpriteFont counterFont;
 
         // test shizz.............
-
-        positionTextBlob blob;
-
+        
         MachineControlParameter pressure;
         MachineControlParameter volume;
 
@@ -172,9 +170,8 @@ namespace It_sAlive_
         List<MachineDependentParameter> machineDisplays;
 
         MachineControls machineControls;
-
-        FlySwarm flySwarm;
-
+        MenuAction testAction;
+        
         // === load things... ==============
 
         protected override void LoadContent()
@@ -255,7 +252,7 @@ namespace It_sAlive_
             // grid
 
             grid = new Grid(3600, 1750, 450, 20, 20, new Vector2(-850, 1070), true);
-            reachable = new ReachableArea(grid, floorObjectList);
+            reachable = new ReachableArea(grid, floorObjectList,graphics);
                         
             // counters
             research = new NumericalCounter("Research", new Vector2(25, 15), 0, 500, 0, 0, counterFont, Color.Green, Color.Green, Content.Load<Texture2D>("counter_box"));
@@ -272,34 +269,52 @@ namespace It_sAlive_
            
             //=====================================================
 
+            testAction = new MenuAction("test", true, false, 2, 2, null, 2, null, 2, null, 2, null, 2, null, 2, null, true, false, false);
+
             // load menu actions from XML
             System.IO.Stream stream = TitleContainer.OpenStream("XMLActions.xml");
 
             XDocument doc = XDocument.Load(stream);
 
             menuActions = (from action in doc.Descendants("menuAction")
-                           select new MenuAction(
-                                                           action.Element("name").Value,
-                                                           Convert.ToBoolean(action.Element("scientist").Value),
-                                                           Convert.ToBoolean(action.Element("assistant").Value),
-                                                           Convert.ToInt32(action.Element("time").Value),
-                                                           (float)Convert.ToDouble(action.Element("reasearchUp").Value),
-                                                           (float)Convert.ToDouble(action.Element("madnessUp").Value),
-                                                           (float)Convert.ToDouble(action.Element("moneyChange").Value),
-                                                           (float)Convert.ToDouble(action.Element("lifeForceUp").Value),
-                                                           (float)Convert.ToDouble(action.Element("longevityUp").Value),
-                                                           (float)Convert.ToDouble(action.Element("humanityUp").Value),
-                                                           Convert.ToBoolean(action.Element("remain").Value),
-                                                           Convert.ToBoolean(action.Element("turnOn").Value),
-                                                           Convert.ToBoolean(action.Element("turnOff").Value),
-                                                           new List<NumericalCounter> { research },
-                                                           (float)Convert.ToDouble(action.Element("reasearchUpMultiplier").Value),
-                                                           (float)Convert.ToDouble(action.Element("madnessUpMultiplier").Value),
-                                                           (float)Convert.ToDouble(action.Element("moneyChangeMultiplier").Value),
-                                                           (float)Convert.ToDouble(action.Element("lifeForceUpMultiplier").Value),
-                                                           (float)Convert.ToDouble(action.Element("longevityUpMultiplier").Value),
-                                                           (float)Convert.ToDouble(action.Element("humanityUpMultiplier").Value)
-                                                           )).ToList();
+                           select new MenuAction(action.Element("name").Value,
+                                                    Convert.ToBoolean(action.Element("scientist").Value),
+                                                    Convert.ToBoolean(action.Element("assistant").Value),
+                                                    Convert.ToInt32(action.Element("time").Value),
+                                                    (float)Convert.ToDouble(action.Element("researchUp").Value), new List<Tuple<NumericalCounter, int>> { },
+                                                    (float)Convert.ToDouble(action.Element("madnessUp").Value), new List<Tuple<NumericalCounter, int>> { },
+                                                    (float)Convert.ToDouble(action.Element("moneyChange").Value), new List<Tuple<NumericalCounter, int>> { },
+                                                    (float)Convert.ToDouble(action.Element("lifeForceUp").Value), new List<Tuple<NumericalCounter, int>> { },
+                                                    (float)Convert.ToDouble(action.Element("longevityUp").Value), new List<Tuple<NumericalCounter, int>> { },
+                                                    (float)Convert.ToDouble(action.Element("humanityUp").Value), new List<Tuple<NumericalCounter, int>> { },
+                                                    Convert.ToBoolean(action.Element("remain").Value),
+                                                    Convert.ToBoolean(action.Element("turnOn").Value),
+                                                    Convert.ToBoolean(action.Element("turnOff").Value))).ToList();
+                                                          
+                                                           ////new List<Tuple<NumericalCounter, int>> { 
+                                                           //    //new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("researchPower").Value)), 
+                                                           //    //new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("researchPower2").Value)) },
+                                                                       
+                                                           ////new List<Tuple<NumericalCounter, int>> { 
+                                                           //  //  new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("madnessPower").Value)), 
+                                                           //    //new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("madnessPower2").Value)) },
+
+                                                           ////new List<Tuple<NumericalCounter, int>> { 
+                                                           ////    new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("moneyPower").Value)), 
+                                                           ////    new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("moneyPower2").Value)) },
+
+                                                           ////new List<Tuple<NumericalCounter, int>> { 
+                                                           ////    new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("lifeForcePower").Value)), 
+                                                           ////    new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("lifeForcePower2").Value)) },
+
+                                                           ////new List<Tuple<NumericalCounter, int>> { 
+                                                           ////    new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("longevityPower").Value)), 
+                                                           ////    new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("longevityPower2").Value)) },
+
+                                                           ////new List<Tuple<NumericalCounter, int>> { 
+                                                           ////    new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("humanityPower").Value)), 
+                                                           ////    new Tuple<NumericalCounter, int>(null, Convert.ToInt16(action.Element("humanityPower2").Value)) },
+
 
 
             // dependant actions
@@ -315,36 +330,210 @@ namespace It_sAlive_
 
             // load in multiplying counters
 
-            List<Tuple<string, string, string, string>> multipliers = new List<Tuple<string, string, string, string>>();
-            
-            multipliers = (from floorObject in doc.Descendants("menuAction")
-                           select new Tuple<string, string, string, string>(
-                            floorObject.Element("name").Value,
-                            floorObject.Element("multiplyingCounter").Value,
-                            floorObject.Element("multiplyingCounter2").Value,
-                            floorObject.Element("multiplyingCounter3").Value)
-                               ).ToList();
+            List<Tuple<string,int,string,int>> researchMs = new List<Tuple<string,int,string,int>>{};
+            List<Tuple<string,int,string,int>> madnessMs = new List<Tuple<string,int,string,int>>{};
+            List<Tuple<string,int,string,int>> moneyMs = new List<Tuple<string,int,string,int>>{};
+            List<Tuple<string,int,string,int>> lifeForceMs = new List<Tuple<string,int,string,int>>{};
+            List<Tuple<string,int,string,int>> longevityMs = new List<Tuple<string,int,string,int>>{};
+            List<Tuple<string,int,string,int>> humanityMs = new List<Tuple<string,int,string,int>>{};
+
+            foreach (MenuAction menuaction in menuActions)
+            {
+
+                researchMs = (from action in doc.Descendants("menuAction")
+                              select new Tuple<string, int, string, int>(
+                                  Convert.ToString(action.Element("researchMultiplier").Value),
+                                  (int)Convert.ToDouble(action.Element("researchPower").Value),
+                                  Convert.ToString(action.Element("researchMultiplier2").Value),
+                                  (int)Convert.ToDouble(action.Element("researchPower2").Value))).ToList();
+
+                madnessMs = (from action in doc.Descendants("menuAction")
+                              select new Tuple<string, int, string, int>(
+                                  Convert.ToString(action.Element("madnessMultiplier").Value),
+                                  (int)Convert.ToDouble(action.Element("madnessPower").Value),
+                                  Convert.ToString(action.Element("madnessMultiplier2").Value),
+                                  (int)Convert.ToDouble(action.Element("madnessPower2").Value))).ToList();
+
+                moneyMs = (from action in doc.Descendants("menuAction")
+                              select new Tuple<string, int, string, int>(
+                                  Convert.ToString(action.Element("moneyMultiplier").Value),
+                                  (int)Convert.ToDouble(action.Element("moneyPower").Value),
+                                  Convert.ToString(action.Element("moneyMultiplier2").Value),
+                                  (int)Convert.ToDouble(action.Element("moneyPower2").Value))).ToList();
+
+                lifeForceMs = (from action in doc.Descendants("menuAction")
+                              select new Tuple<string, int, string, int>(
+                                  Convert.ToString(action.Element("lifeForceMultiplier").Value),
+                                  (int)Convert.ToDouble(action.Element("lifeForcePower").Value),
+                                  Convert.ToString(action.Element("lifeForceMultiplier2").Value),
+                                  (int)Convert.ToDouble(action.Element("lifeForcePower2").Value))).ToList();
+
+                longevityMs = (from action in doc.Descendants("menuAction")
+                              select new Tuple<string, int, string, int>(
+                                  Convert.ToString(action.Element("longevityMultiplier").Value),
+                                  (int)Convert.ToDouble(action.Element("longevityPower").Value),
+                                  Convert.ToString(action.Element("longevityMultiplier2").Value),
+                                  (int)Convert.ToDouble(action.Element("longevityPower2").Value))).ToList();
+
+                humanityMs = (from action in doc.Descendants("menuAction")
+                              select new Tuple<string, int, string, int>(
+                                  Convert.ToString(action.Element("humanityMultiplier").Value),
+                                  (int)Convert.ToDouble(action.Element("humanityPower").Value),
+                                  Convert.ToString(action.Element("humanityMultiplier2").Value),
+                                  (int)Convert.ToDouble(action.Element("humanityPower2").Value))).ToList();
+            }
+
+            int index = 0;
 
             foreach (MenuAction action in menuActions)
             {
-                foreach (Tuple<string, string, string, string> tuple in multipliers)
+                // research
+                List<Tuple<NumericalCounter, int>> researchM;
+
+                if (researchMs[index].Item1 != "none")
                 {
-                    if (tuple.Item1 == action.name)
+                    researchM = new List<Tuple<NumericalCounter, int>> { };
+
+                    foreach (NumericalCounter counter in counters)
                     {
-                        foreach (NumericalCounter counter in counters)
+                        if (counter.name == researchMs[index].Item1)
                         {
-                            foreach (string name in new List<string> { tuple.Item2, tuple.Item3, tuple.Item4 })
-                            {
-                                if (counter.name == name)
-                                {
-                                    action.dependent.Add(counter);
-                                }
-                            }
+                            researchM.Add(new Tuple<NumericalCounter, int>(counter, researchMs[index].Item2));
+                        }
+                        else if (counter.name == researchMs[index].Item3)
+                        {
+                            researchM.Add(new Tuple<NumericalCounter, int>(counter, researchMs[index].Item4));
                         }
                     }
                 }
-            }
+                else
+                {
+                    researchM = new List<Tuple<NumericalCounter, int>> {new Tuple<NumericalCounter,int>(null,0) };
+                }
 
+                // madness
+                List<Tuple<NumericalCounter, int>> madnessM;
+
+                if (madnessMs[index].Item1 != "none")
+                {
+                    madnessM = new List<Tuple<NumericalCounter, int>> { };
+
+                    foreach (NumericalCounter counter in counters)
+                    {
+                        if (counter.name == madnessMs[index].Item1)
+                        {
+                            madnessM.Add(new Tuple<NumericalCounter, int>(counter, madnessMs[index].Item2));
+                        }
+                        else if (counter.name == researchMs[index].Item3)
+                        {
+                            madnessM.Add(new Tuple<NumericalCounter, int>(counter, madnessMs[index].Item4));
+                        }
+                    }
+                }
+                else
+                {
+                    madnessM = new List<Tuple<NumericalCounter, int>> { new Tuple<NumericalCounter, int>(null, 0) };
+                }
+
+                // money
+                List<Tuple<NumericalCounter, int>> moneyM;
+
+                if (moneyMs[index].Item1 != "none")
+                {
+                    moneyM = new List<Tuple<NumericalCounter, int>> { };
+
+                    foreach (NumericalCounter counter in counters)
+                    {
+                        if (counter.name == moneyMs[index].Item1)
+                        {
+                            moneyM.Add(new Tuple<NumericalCounter, int>(counter, moneyMs[index].Item2));
+                        }
+                        else if (counter.name == moneyMs[index].Item3)
+                        {
+                            moneyM.Add(new Tuple<NumericalCounter, int>(counter, moneyMs[index].Item4));
+                        }
+                    }
+                }
+                else
+                {
+                    moneyM = new List<Tuple<NumericalCounter, int>> { new Tuple<NumericalCounter, int>(null, 0) };
+                }
+
+                // lifeforce
+                List<Tuple<NumericalCounter, int>> lifeForceM;
+
+                if (lifeForceMs[index].Item1 != "none")
+                {
+                    lifeForceM = new List<Tuple<NumericalCounter, int>> { };
+
+                    foreach (NumericalCounter counter in counters)
+                    {
+                        if (counter.name == lifeForceMs[index].Item1)
+                        {
+                            lifeForceM.Add(new Tuple<NumericalCounter, int>(counter, lifeForceMs[index].Item2));
+                        }
+                        else if (counter.name == lifeForceMs[index].Item3)
+                        {
+                            lifeForceM.Add(new Tuple<NumericalCounter, int>(counter, lifeForceMs[index].Item4));
+                        }
+                    }
+                }
+                else
+                {
+                    lifeForceM = new List<Tuple<NumericalCounter, int>> { new Tuple<NumericalCounter, int>(null, 0) };
+                }
+
+                // longevity
+                List<Tuple<NumericalCounter, int>> longevityM;
+                
+                if (longevityMs[index].Item1 != "none")
+                {
+                    longevityM = new List<Tuple<NumericalCounter, int>> { };
+
+                    foreach (NumericalCounter counter in counters)
+                    {
+                        if (counter.name == longevityMs[index].Item1)
+                        {
+                            longevityM.Add(new Tuple<NumericalCounter, int>(counter, longevityMs[index].Item2));
+                        }
+                        else if (counter.name == longevityMs[index].Item3)
+                        {
+                            longevityM.Add(new Tuple<NumericalCounter, int>(counter, longevityMs[index].Item4));
+                        }
+                    }
+                }
+                else
+                {
+                    longevityM = new List<Tuple<NumericalCounter, int>> { new Tuple<NumericalCounter, int>(null, 0) };
+                }
+
+                // humanity
+                List<Tuple<NumericalCounter, int>> humanityM;
+
+                if (humanityMs[index].Item1 != "none")
+                {
+                    humanityM = new List<Tuple<NumericalCounter, int>> { };
+
+                    foreach (NumericalCounter counter in counters)
+                    {
+                        if (counter.name == humanityMs[index].Item1)
+                        {
+                            humanityM.Add(new Tuple<NumericalCounter, int>(counter, humanityMs[index].Item2));
+                        }
+                        else if (counter.name == humanityMs[index].Item3)
+                        {
+                            humanityM.Add(new Tuple<NumericalCounter, int>(counter, humanityMs[index].Item4));
+                        }
+                    }
+                }
+                else
+                {
+                    humanityM = new List<Tuple<NumericalCounter, int>> { new Tuple<NumericalCounter, int>(null, 0) };
+                }
+                
+                action.multipliers = new List<List<Tuple<NumericalCounter, int>>> { researchM, madnessM, moneyM, lifeForceM, longevityM, humanityM };
+
+            }
             
 
 
@@ -449,8 +638,6 @@ namespace It_sAlive_
             reachable.Update(floorObjectList);
 
             // test items...
-
-            blob = new positionTextBlob(Content.Load<Texture2D>("gball"), new Vector2(1, 1));
 
             // machine parameters...
 
@@ -630,7 +817,6 @@ namespace It_sAlive_
             money.valueChange = papers.value * 0.1f;
 
             // test things....
-            blob.Update(gameTime, grid);
             
             machineControls.Update(cursor, random, gameTime);
             
@@ -697,26 +883,15 @@ namespace It_sAlive_
             }
 
             // movement grid
-            //grid.Draw(GraphicsDevice, spriteBatch,reachable);
+            grid.Draw(GraphicsDevice, spriteBatch,reachable);
             
-            //knob.Render(spriteBatch, cursorFont);
-
-            //gauge.Render(spriteBatch,cursorFont);
-
-            //slider.Render(spriteBatch,cursorFont);
-            //slideGauge.Render(spriteBatch,cursorFont);
-
             machineControls.Render(spriteBatch, cursorFont);
 
-            spriteBatch.DrawString(cursorFont, blob.gridPosition.ToString(), new Vector2(500, 0), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // grid position of blob
             spriteBatch.DrawString(cursorFont, cursor.position.ToString(), new Vector2(500, 30), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // cursor position
-
+            spriteBatch.DrawString(cursorFont, grid.reverseCoords(cursor.position).ToString(), new Vector2(500, 50), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // 
             spriteBatch.DrawString(cursorFont, "Alive: "+corpse.alive.ToString(), new Vector2(500, 90), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // alive?
-            spriteBatch.DrawString(cursorFont, "Fail: "+resurrect.fail.ToString(), new Vector2(500, 60), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // fail?
-            spriteBatch.DrawString(cursorFont, floorObjectList[0].menuMouseover.ToString(), new Vector2(500, 120), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // 
-            blob.Render(spriteBatch);
-
-
+            spriteBatch.DrawString(cursorFont, "Fail: "+resurrect.fail.ToString(), new Vector2(500, 70), Microsoft.Xna.Framework.Color.White, 0, Vector2.Zero, 1.0f, SpriteEffects.None, 0.2f); // fail?
+          
             spriteBatch.End();
 
             // DRAW!

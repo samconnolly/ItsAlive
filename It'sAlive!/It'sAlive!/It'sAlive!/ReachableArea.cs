@@ -26,7 +26,7 @@ namespace It_sAlive_
 
         // The public instance class
 
-        public ReachableArea(Grid grid, List<FloorObject> objectList)
+        public ReachableArea(Grid grid, List<FloorObject> objectList, GraphicsDeviceManager graphics)
         {
             
             this.width  = (int)grid.columns;
@@ -38,7 +38,16 @@ namespace It_sAlive_
             {
                 for (int y = 0; y < (height); y++)
                 {
-                    reachable[x, y] = 0;
+                    if (grid.reverseCoords(new Vector2(x,y)).X < 0 |(grid.reverseCoords(new Vector2(x,y)).X < graphics.PreferredBackBufferWidth) |
+                        grid.reverseCoords(new Vector2(x,y)).Y < 0 |(grid.reverseCoords(new Vector2(x,y)).Y < graphics.PreferredBackBufferHeight))
+                    {
+
+                    }
+
+                    else
+                    {
+                        reachable[x, y] = 0;
+                    }
                 }
             }
 

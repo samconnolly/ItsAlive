@@ -130,13 +130,12 @@
     <Compile Include="MachineControlParameter.cs" />
     <Compile Include="MachineControls.cs" />
     <Compile Include="MachineDependentParameter.cs" />
-    <Compile Include="MenuAction.cs" />
+    <Compile Include="MenuActionII.cs" />
     <Compile Include="MiniProgressBar.cs" />
     <Compile Include="NonInteractive.cs" />
     <Compile Include="NumericalCounter.cs" />
     <Compile Include="pathcalc.cs" />
     <Compile Include="PerspectiveGrid.cs" />
-    <Compile Include="positionTextBlob.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Game1.cs" />
